@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<style>
+
+    .mob-country-code{
+        border-top-left-radius: 0px !important;
+        border-bottom-right-radius: 6px !important;
+        border-bottom-left-radius: 0px !important;
+    }
+
+    .form-group-dob select {
+        -webkit-appearance: auto !important;
+        appearance: auto !important;
+        -moz-appearance: auto !important;
+    }
+
+    .form-group-dob fieldset {
+        display:flex;
+    }
+
+    .form-group-dob .form-control-month {
+        width: 35% !important;
+        margin-right: 12px;
+    }
+    .form-group-dob .form-control-day {
+        width: 27% !important;
+    }
+
+    .form-group-dob .form-control-year {
+        width: 35% !important;
+        margin-right: 12px;
+    }
+
+
+</style>
+
+
+<div th:fragment="signup_signin">
+
+    <!-- Sign Up Modal -->
+
+    <div id="overlay" style="display:none;">
+        <div class="spinner"></div>
+        <br/>
+        <span th:text="#{loading.spinner.signin.signup.modal}"></span>
+    </div>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header pb-0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="sign_in">
+                    <!--                    <form id="sign_in">-->
+                    <h5 class="sign-title" id="sign-title" th:text="#{sign_in.modal.sign_in.button.label}"></h5>
+                    <div class="alert alert-warning hide" id="reset_password_sent_div">
+                        <p id="reset_password_sent" th:text="#{forgot_password_recover_account.message.recover}">
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signin_username" th:text="#{sign_in.modal.email.label}"></label>
+                        <input id="signin_username" class="form-control" type="email  " name="username"
+                               onfocusout="validateUserName(this,'email_empty_span','invalid_email_span')">
+                        <div class="help-block help-error hide" id="signin-username-div">
+                            <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                            <span id="email_empty_span"
+                                  th:text="#{sign_in.modal.validation.email.address.empty.label}"></span>
+                            <span id="invalid_email_span"
+                                  th:text="#{sign_in.modal.validation.email.address.invalid.label}"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signin_password" th:text="#{sign_in.modal.password.label}"></label>
+                        <input id="signin_password" class="form-control" type="password"
+                               name="password">
+                        <div class="help-block help-error hide" id="signin-password-div">
+                            <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                            <span id="signin_password_empty_span"
+                                  th:text="#{sign_up.modal.validation.password.empty.label}"></span>
+                            <span id="signin_invalid_password_span"
+                                  th:text="#{sign_up.modal.validation.password.invalid.label}"></span>
+                            <span id="sign_in_falied_text"
+                                  th:text="#{sign_in.modal.validation.password.label}+' '"></span>
+                            <span id="sign_in_falied_reason"
+                                  th:text="#{sign_in.modal.validation.password.label}+' '+ #{sign_in.modal.validation.autentication.failed}"></span>
+                            <span id="consumer_not_found"
+                                  th:text="#{sign_in.modal.validation.password.label}+' '+#{sign_in.modal.validation.consumer.not.found}"></span>
+
+                        </div>
+                    </div>
+                    <a class="mb-0 d-block forgot-link" href="#" data-toggle="modal"
+                       data-dismiss="modal" data-target="#forget_password_modal"
+                       th:text="#{sign_in.modal.forget_password.label}">
+                    </a>
+
+
+                </div>
+
+                <div class="modal-footer sign-footer justify-content-center pt-0">
+
+                    <button type="submit" class="btn btn-primary w-100" onclick="signIn(false)" id="sign-in-button"
+                            th:text="#{sign_in.modal.sign_in.button.label}">
+
+                    </button>
+                    <button type="submit" class="btn btn-primary w-100 hide" onclick="signIn(false)"
+                            id="sign-in-spin-button" disabled>
+                        <i class='fa fa-spinner fa-spin'></i><span
+                            th:text="#{sign_in.modal.signing_in.button.label}"></span>
+                    </button>
+
+
+                    <p class="mt-3 mb-0"><span th:text="#{sign_in.modal.dont_have_an_account.label}"></span>
+                        <a href="#" data-toggle="modal" data-target="#registerModal"
+                           th:text="#{sign_in.modal.register_now.label}"
+                           class="font-weight-bold register-link" onclick="hideLoginAndFetchCountryCode()"></a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Sign Up Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-modal="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header pb-0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="sign_up">
+                    <h5 class="sign-title text-secondary secondary-title" th:text="#{sign_up.modal.label}"></h5>
+                    <div class="form-group">
+                        <label for="signup_firstName" th:text="#{sign_up.modal.name.label}"></label>
+                        <input class="form-control" type="text" name="firstName"
+                               onfocusout="validateName(this,'firstName_empty_span')" id="signup_firstName">
+                        <div class="help-block help-error hide" id="reg-firstName-div">
+                            <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                            <span id="firstName_empty_span"
+                                  th:text="#{sign_up.modal.validation.name.empty.label}"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup_email" th:text="#{sign_up.modal.email.label}"></label>
+                        <input class="form-control" type="text" name="username"
+                               onfocusout="validateUserName(this,'username_empty_span','username_invalid_span')"
+                               id="signup_email">
+                        <div class="help-block help-error hide" id="reg-username-div">
+                            <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                            <span id="username_empty_span"
+                                  th:text="#{sign_up.modal.validation.email.address.empty.label}"></span>
+                            <span id="username_invalid_span"
+                                  th:text="#{sign_up.modal.validation.email.address.invalid.label}"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="msisdn" th:text="#{sign_up.modal.mobile.label}"></label>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-text"
+                                 style="display:grid; place-items:center; width: 55px; height: 38px;
+                                        border-top-right-radius: 0px !important;
+                                        border-bottom-right-radius: 0px !important;
+                                        border-top-left-radius: 6px !important;
+                                        border-bottom-left-radius: 6px !important;" >
+                                <div class="input-group-prepend" >
+                                    <div th:value="${countryCodeId}" id="countryCodeId"></div>
+                                </div>
+                            </div>
+                            <input id="msisdn" class="form-control " style="border-top-left-radius: 0px !important;
+                                            border-top-right-radius: 6px !important;
+                                            border-bottom-right-radius: 6px !important;
+                                            border-bottom-left-radius: 0px !important;"
+                                   onfocusout="validateMobileNo(this,'msisdn_empty_span', 'reg-msisdn-div')"
+                                   type="text" name="msisdn">
+                        </div>
+                        <div class="help-block help-error hide" id="reg-msisdn-div">
+                            <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                            <span class="multiline" id="msisdn_empty_span"
+                                  th:text="#{sign_up.modal.validation.mobile.empty.label}"></span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="modal-footer sign-footer justify-content-center pt-0">
+
+                    <button type="submit" class="btn btn-primary w-100" onclick="signUp()"
+                            th:text="#{sign_up.modal.create_account.button.label}"></button>
+
+                    <p class="mt-3 mb-0" fa>
+                        <span th:text="#{sign_up.modal.have_account.label}"></span>
+                        <a href="#" class="font-weight-bold"
+                           data-toggle="modal" data-target="#loginModal" onclick="hideRegister()"
+                           th:text="#{sign_in.modal.sign_in.button.label}"></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="forget_password_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title font-weight-bold"
+                        th:text="#{forgot_password_recover_account_modal_heading}"></h5>
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <!--                    <form id="sign_inn">-->
+                    <div class="form-group">
+                        <label for="recover_email" th:text="#{forgot_password_recover_account_email}"></label>
+                        <input id="recover_email" class="form-control" type="email  " name="username"
+                               onfocusout="validateUserName(this,'recover_email_empty_span','recover_invalid_email_span')">
+                        <div class="help-block help-error hide" id="recover_email_span">
+                            <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                            <span id="recover_email_empty_span"
+                                  th:text="#{sign_in.modal.validation.email.address.empty.label}"></span>
+                            <span id="recover_invalid_email_span"
+                                  th:text="#{sign_in.modal.validation.email.address.invalid.label}"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100" id="forget_password_button"
+                            onclick="resetPassword()" th:text="#{forgot_password_recover_account.reset.password}">
+                    </button>
+
+                    <button type="submit" class="btn btn-primary w-100 hide" id="forget-password-spin-button" disabled>
+                        <i class='fa fa-spinner fa-spin'></i><span
+                            th:text="#{forget.password.new.password.request}"></span>
+                    </button>
+
+                    <!--                    </form>-->
+
+                </div>
+
+                <div class="modal-footer sign-footer justify-content-center pt-0">
+                    <p><span th:text="#{forgot_password_recover_account.message.one}"></span>
+                        <a href="#" data-toggle="modal" data-target="#loginModal"
+                           class="font-weight-bold" data-dismiss="modal"
+                           th:text="#{forgot_password_recover_account.signin.link}"></a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="reset_password_modal" tabindex="-1" role="dialog"
+         aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-sm" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title font-weight-bold" th:text="#{reset.password.label}"></h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <p th:text="#{reset.password.change.request}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recover_password" th:text="#{reset.new_password.label}"></label>
+                        <input id="recover_password" class="form-control" type="password" name="password">
+                        <!--                        onfocusout="validatePassword(this)"-->
+                        <div class="help-block help-error" id="recover_password_span"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="reset_password_button"
+                            onclick="changePassword()" th:text="#{reset.change_password.btn}">
+                    </button>
+                </div>
+
+                <div class="modal-footer sign-footer justify-content-center pt-0">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Guest mode -->
+
+    <!-- verify email modal-->
+    <div class="modal fade" id="verify_your_account_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div id="verify-token" class="hide"></div>
+                <div id="verify-first-name" class="hide"></div>
+                <div id="verification-type" class="hide"></div>
+                <div class="modal-header justify-content-left" style="padding: 20px 0px 0px 20px;">
+                    <h5 class="sign-title text-secondary secondary-title" id="verify-modal-title"
+                        th:text="#{sign_up.email.verification.title}"></h5>
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div id="verify-now-content">
+                    <div class="modal-body text-left">
+
+                        <h5 id="verify-sub-title" th:text="#{sign_up.email.verification.account.creation}"></h5>
+                        <label><span th:text="#{sign_up.email.verification.user.message}"></span>
+                            <span id="verify-type"
+                                  th:text="#{sign_up.email.verification.verify.email.label}">Email</span> (<b><span
+                                    class="verify-name"></span></b>)</label>
+                        <div style="color: red;"
+                             id="verify-error-text" class="help-block help-error"></div>
+
+                        <button id="verify-now-btn" class="btn btn-primary w-100 text-uppercase"
+                                style="margin-top: 20px"
+                                onclick="verifyCustomerAccount('send')"
+                                th:text="#{sign_up.email.verification.verifynow.btn.text}">
+                        </button>
+                    </div>
+                </div>
+
+                <div id="verify-code-content" class="hide">
+                    <div class="modal-body text-left">
+                        <label>
+                            <span th:text="#{sign_up.email.verification.verifynow.message1}"></span>
+                            <span id="verify-msg-type"
+                                  th:text="#{sign_up.email.verification.verify.email.label2}"></span>
+                            <span th:text="#{sign_up.email.verification.verifynow.message2}"></span>
+                            <b><span class="verify-name"></span></b>.<br/>
+                        </label>
+                        <label style="margin-bottom: 0;font-weight: 600;"
+                               th:text="#{sign_up.email.verification.verifynow.message3}"></label>
+                        <label style="font-size: 14px;color: gray;"
+                               th:text="#{sign_up.email.verification.code.expiry.message}"></label>
+                        <div id="verify-code" style="margin-top: 10px">
+                            <input id="verification-code" type="text" class="form-control" data-number="true"/>
+                            <div style="color: red;" id="verify-code-error" class="help-block help-error hide"><i
+                                    class="fa fa-exclamation-circle fa-lg mr-2"></i> Please Enter The Code
+                            </div>
+                            <div style="color: red;" id="verify-code-error-text" class="help-block help-error"></div>
+                            <div class="hide" id="verify-retry-attempt"></div>
+                        </div>
+                        <div>
+                            <button id="verify-btn" class="btn btn-primary w-100 text-uppercase"
+                                    onclick="onCodeVerification()"
+                                    th:text="#{sign_up.email.verification.verify.btn.text}">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-footer sign-footer justify-content-center pt-0 text-center">
+                        <div class=""><span th:text="#{sign_up.email.verification.code.resend.message}"></span>
+                            <a href="#!" id='resend-code' onclick="verifyCustomerAccount('resend')">
+                                <b><span th:text="#{sign_up.email.verification.code.resend}"></span></b>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<input type="hidden" id="isTermChecked" value="false">
+
+</body>
+</html>

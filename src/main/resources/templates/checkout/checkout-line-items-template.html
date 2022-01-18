@@ -1,0 +1,366 @@
+
+
+<div xmlns:th="http://www.thymeleaf.org" id="totalCostArea"
+     class="col-12 col-lg-9 pr-0 pl-md-3 pl-0">
+
+    <style>
+      .boxed {
+            color : #fff;
+            border: solid 1px;
+            background-color: var(--main-theme-color);
+      }
+
+      .white-theme-support .boxed {
+        color : #ffffff;
+        background-color: #000000;
+      }
+
+      .tipping-section .btn-outline-secondary:hover {
+        color: #fff;
+        background-color: #2b2b2b;
+        border-color: #2b2b2b;
+      }
+
+      .reward-link{
+        color : var(--primary-theme-color);
+        font-weight: 700
+      }
+
+
+    .tipping-row-content .tipping-section {
+      display: flex;
+    }
+
+    .tipping-row-content .tipping-section .tip-btn .percentage {
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .tipping-row-content .title-label {
+      font-size:14px !important;
+      font-weight: 600;
+    }
+
+    .tipping-row-content .tipping-section .tip-btn .btn:hover .text-muted {
+      color:#ffffff !important;
+    }
+
+    .tipping-row-content .tipping-section .tip-btn {
+      width: 20%;
+      margin-right: 8px;
+    }
+
+    .tipping-row-content .tipping-section .tip-btn:last-child {
+      margin-right: 0px;
+    }
+
+    .tipping-section .tip-btn .btn.active {
+      color: #fff !important;
+      background-color: var(--primary-theme-color);
+      border-color: var(--primary-theme-color);
+    }
+
+    .tipping-section .tip-btn .btn.active .text-muted {
+      color: #fff !important;
+    }
+
+    .divider {
+      margin-top: 14px;
+      margin-bottom: 12px;
+    }
+
+    .divider h1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      font-size: 14px;
+      margin: 0px;
+    }
+
+    .divider span {
+      background: transparent;
+      margin: 0 20px;
+    }
+
+    .divider h1:before, .divider h1:after {
+      background: #ced4da;
+      height: 1px;
+      content: '';
+      flex: 1;
+    }
+
+    .tipping-input .input-group-text {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-radius: .25rem;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .tipping-input input.form-control {
+      border-radius: .25rem !important;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+      height: 43px;
+    }
+
+    #tippingModal .modal-body {
+      padding:0;
+    }
+
+    #tippingModal .tipping-row-content {
+      padding:24px;
+    }
+
+    .tipping-info .tip-info-row label {
+      font-weight: 600;
+    }
+
+    .tipping-info .tip-info-row .tip-amount-value {
+      color: #31B752;
+    }
+
+    @media(max-width:576px){
+      .tipping-row-content .tipping-section {
+        display: block;
+      }
+      .tipping-row-content .tipping-section .tip-btn {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 12px;
+      }
+      .tipping-info .tip-info-row label {
+        font-size:14px;
+      }
+    }
+
+  </style>
+
+
+    <div class = "row m-0">
+        <div class="col-12 col-md-6">
+            <h4 class = "page-title" th:text="#{checkout.line.items.template.checkout.label}"></h4>
+            <h5 class="mb-3 item-count-checkout font-size-large">
+                <strong th:text="${#numbers.formatDecimal(totalProduct, 1,'COMMA', 0, 'POINT')}+ ' '"></strong><span
+                    th:text="#{checkout.line.items.template.items.cart.label}"></span>
+            </h5>
+        </div>
+
+        <!-- Hidden values -->
+        <input type="hidden" id="pickupOrderPrepTimeMins"
+               th:value="${pickupOrderPrepTimeMins}">
+
+        <input type="hidden" id="isCashOnCollectEnabled"
+               th:value="${commonResponse.appTheme.isCashOnCollectEnabled}">
+        <input type="hidden" id="shippingDays" th:value="${shippingTime}"/>
+
+        <input type="hidden" id="collectionMethod" th:value="${collectionMethod}"/>
+        <input type="hidden" id="deliveryTimeModal" th:value="${deliveryTime}"/>
+        <input type="hidden" id="disableDatesDelivery" th:value="${disableDatesDelivery}">
+        <input id="country-name" type="hidden" th:value="${commonResponse.appTheme.country}"/>
+        <input type="hidden" id="disableDates" th:value="${disableDatesPickup}">
+        <input type="hidden" id="openHoursId" th:value="${openHours}">
+        <input type="hidden" id="deliveryCurrency" th:value="${commonResponse.appTheme.currency}">
+        <input type="hidden" id="stateIdModal" th:value="${stateIdModal}">
+        <input type="hidden" id="localityIdModal" th:value="${localityIdModal}">
+        <input type="hidden" id="zipCodeModal" th:value="${zipCodeModal}">
+        <input type="hidden" id="addressLineOneModal" th:value="${addressLineOneModal}">
+        <input type="hidden" id="addressLineTwoModal" th:value="${addressLineTwoModal}">
+        <input type="hidden" id="countryIdModal" th:value="${countryIdModal}">
+        <input type="hidden" id="isContactStoreEnabled" th:value="${commonResponse.appTheme.curbSideContactStoreEnabled}">
+        <input id="noOfFutureDatesAllowed" type="hidden"
+               th:value="${commonResponse.appTheme.numberOfFutureShoppingDatesAllowed}"/>
+
+        <input type="hidden" id="deliveryErrorMessage" th:value="${deliveryErrorMessage}"/>
+        <input type="hidden" id="deliveryErrorCode" th:value="${deliveryErrorCode}"/>
+        <input type="hidden" id="isPayOnDeliverySupported" th:value="${isPayOnDeliverySupported}">
+        <input id="deliveryId-for-address" type="hidden"
+               th:value="${cartCheckBillRequest != null
+                        && cartCheckBillRequest.deliveryInfo != null
+                        ? cartCheckBillRequest.deliveryInfo.deliveryArea : ''}">
+
+        <input type="hidden" id="tableNumber" th:value="${commonResponse.tableNumber}"/>
+        <input type="hidden" id="tablePayment" th:value="#{checkout.modal.tab.payment.modal.payment_type.dine_in.label }">
+
+        <input id="cartSyncError" type="hidden" th:value="${cartSyncError}"/>
+        <input type="hidden" id="multiStore" th:value="${commonResponse.multiStore}">
+
+        <div class = "col-12 col-md-6 mb-3" th:if="${commonResponse.multiStore && (commonResponse.tableNumber eq '')}">
+            <div class = "store-area-checkout row m-0 border-radius-6 border align-items-center">
+                <div class = "col-9 px-0">
+                    <div class="dropdown d-flex align-items-center">
+                        <div class="d-flex align-items-center m-0 p-0">
+                            <div class="icon-location mr-2">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="location-label">
+                                <div class="text-left d-flex flex-column">
+                                    <small th:text="#{ordering.from}"></small>
+                                    <span class = "font-weight-600 font-size-medium"
+                                          th:if="${#lists.size(#strings.arraySplit(commonResponse.appTheme.businessName, '-')) > 1}"
+                                          th:text="${#strings.arraySplit(commonResponse.appTheme.businessName, '-')[1]}">Howard Street, CA</span>
+                                    <span class = "font-weight-600 font-size-medium"
+                                          th:if="${#lists.size(#strings.arraySplit(commonResponse.appTheme.businessName, '-')) eq 1}"
+                                          th:text="${commonResponse.appTheme.businessName}">Howard Street, CA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 px-0 d-flex justify-content-end">
+                    <a class = "nav-link theme-background-color p-0 font-weight-600"
+                       href="#" data-toggle="modal"
+                       data-target="#switch_store_modal"
+                       th:text="#{checkout.modal.navigation.modal.change.link}">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="table-responsive-md item-table mb-0 border p-3 border-radius-6">
+                <div class = "row m-0 table-header-checkout font-weight-bold mb-3 pb-3 border-bottom d-none d-md-flex">
+                    <div class = "col-5 pl-0" th:text="#{checkout.line.items.template.name.label}">
+                    </div>
+                    <div class = "col pl-0" th:text="#{checkout.line.items.template.price.label}">
+                    </div>
+                    <div class = "col-2 pl-0" th:text="#{checkout.line.items.template.qty.label}">
+                    </div>
+                    <div class = "col pl-0" th:text="#{checkout.line.items.template.total.label}">
+                    </div>
+                    <div class = "col px-0 text-right" th:text="#{checkout.line.items.template.actions.label}">
+                    </div>
+                </div>
+
+                <input type="hidden" id="shoppingCartId" th:value="${purchasesStr}">
+                <input type="hidden" id="purchaseHistoryEntryId" th:value="${purchaseHistoryEntry}">
+                <input type="hidden" id="taxTotal" th:value="${taxTotal}">
+                <input type="hidden" id="deliveryCharge" th:value="${deliveryCharge}">
+                <input type="hidden" id="currency" th:value="${commonResponse.appTheme.currency}">
+
+                <div class = "table-body-checkout" id="checkout_body">
+
+                    <th:block th:if="${shoppingCart != null}">
+                        <div class = "row item" th:if="${shoppingCart.purchases != null}"
+                             th:each="purchase : ${shoppingCart.purchases}">
+
+                            <div class = "col-12 col-md-5 pl-0 pr-0 pr-md-3">
+                                <div class="card-horizontal">
+                                    <img th:if="${purchase.image != null}" class="cart-img" th:src="${purchase.image}" alt="">
+                                    <img th:if="${purchase.image == null}" class="cart-img placeholder-cart"
+                                         th:classappend="${commonResponse.appTheme.themeColor == '#ffffff'? 'white-theme-support': 'hide'}" th:src="@{/assets/img/placeholder-product-mini.svg}" th:alt="alter">
+                                    <img th:if="${purchase.image == null}" class="cart-img placeholder-cart"
+                                         th:classappend="${commonResponse.appTheme.themeColor == '#ffffff'? 'hide': ''}" th:src="@{/assets/img/product-placeholder-mini-white.svg}" th:alt="alter">
+                                    <div class="card-body pl-3 pr-0">
+                                        <h6 class="card-title mb-2 text-truncate"  th:text="${purchase.productName}"></h6>
+                                        <ul class="item-list">
+                                          <span th:each="variantSizeAndAddOn : ${purchase.variantSizeAndAddOns}">
+                                            <li th:text="${variantSizeAndAddOn}"></li>
+                                          </span>
+                                        </ul>
+                                        <div class = "item-note-container mt-3 mb-3 mb-md-0 mr-0 mr-md-3"
+                                             th:if="${purchase.note != null and purchase.note != ''}">
+                                            <span class = "note-label" th:text="#{shopping.cart.modal.note.label}"></span>
+                                            <span th:text="${purchase.note}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class = "col-6 col-md pl-0 d-flex align-items-end align-items-md-start mb-3 mb-md-0">
+                                <label class = "d-block d-md-none mr-1 mb-0" th:text="#{checkout.line.items.template.price.label}"></label>
+                                <label class = "m-0" th:text="${commonResponse.appTheme.currency}
+                                                    + ${#numbers.formatDecimal(purchase.itemPrice,1,'COMMA', 2, 'POINT')}"></label>
+                                <input type="hidden" th:id="'lineItemPrice'+${purchase.lineItemId}" class="lineItemPriceInp"
+                                       th:value="${#numbers.formatDecimal(purchase.itemPrice,1, 2, 'POINT')}">
+                            </div>
+
+
+                            <div class = "col-6 col-md-2 pl-0 pr-md-3 pr-0 mb-3 mb-md-0">
+                                <div class="td-wrap">
+                                    <div class="input-group input-qty  justify-content-end justify-content-md-start">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-sm btn-light" type="button" th:onclick="changeQuantityAndUpdateBillArea('DECREASE',
+                                                                [[${purchase.lineItemId}]], [[${purchase.count}]]);">-</button>
+                                        </div>
+
+                                        <input type="number" class="form-control lineItemQntInp" th:id="'prodQnt'+${purchase.lineItemId}"
+                                               th:value="${purchase.count}"
+                                               th:oninput="changeItemQuantityInItem(event,[[${purchase.lineItemId}]])"
+                                               th:onkeypress="return allowOnlyNumberInItem(event,this,[[${purchase.lineItemId}]]);"
+                                               th:onchange="changeQuantityAndUpdateBillArea('CHANGE',
+                                                                [[${purchase.lineItemId}]], this.value);"/>
+
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sm btn-light" type="button" th:onclick="changeQuantityAndUpdateBillArea('INCREASE',
+                                                [[${purchase.lineItemId}]], [[${purchase.count}]]);">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class = "col pl-0 total-field">
+                                <label class = "d-block d-md-none mr-1 mb-0"
+                                       th:text="#{checkout.line.items.template.total.label}">
+                                </label>
+                                <label class = "m-0" th:text="${commonResponse.appTheme.currency}
+                                    + ${#numbers.formatDecimal(purchase.itemPrice * purchase.count,
+                                        1,'COMMA', 2, 'POINT')}"></label>
+                            </div>
+
+                            <div class = "col px-0 text-right">
+                                <div class="td-wrap td-buttons">
+
+                                    <button class="btn btn-light mr-2 mr-md-3" data-toggle="tooltip"
+                                            title="" data-original-title="Edit Preferences"
+                                            th:onclick="editCartItem([[${purchase.lineItemId}]],
+                                      [[${purchase.productId}]],
+                                      [[${purchase.variantId}]]);">
+
+                                        <i class="far fa-edit text-muted"></i>
+
+                                    </button>
+
+                                    <button class="btn btn-light mr-2 mr-md-3" data-toggle="tooltip"
+                                        title="" data-original-title="Delete from cart"
+                                        th:onclick="showCartItemRemoveModalInCheckout([[${purchase.lineItemId}]],
+                                                [[${purchase.productName}]],
+                                                [[${purchase}]],
+                                                [[${#lists.size(shoppingCart.purchases)}]]);">
+                                        <i class="far fa-trash-alt text-danger"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+
+            <div id="cart_summary" th:replace="checkout/cart_summary :: cart_summary"></div>
+
+
+            <div class="row items-center mb-5 mb-md-4 checkout-btn-section">
+                <div class="col-12 col-sm-7 mt-3 mt-md-0">
+                    <a class="btn btn-outline-secondary"
+                       th:href="@{'/'+${commonResponse.businessId}+'/menu'}">
+                        <i class="fas fa-long-arrow-alt-left mr-2" style="font-size: 16px;"></i>
+                        <span th:text="' ' + #{checkout.line.items.back.menu}"></span>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-5 checkout-info form-inline items-center justify-content-sm-end justify-content-between"
+                     th:if="${purchaseContinueError != 'SHOP_CLOSED'}">
+                    <button class="btn btn-primary w-100" data-toggle="modal" type="button"
+                            th:onclick="checkAlcoholicThenCheckOut()" th:text="#{checkout.line.items.continue.button}">
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="footer-template :: footer"></div>
+
+</div>
+

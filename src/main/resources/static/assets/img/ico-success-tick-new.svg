@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="76" height="77" viewBox="0 0 76 77">
+  <defs>
+    <clipPath id="clip-ico-success-tick-new">
+      <rect width="76" height="77"/>
+    </clipPath>
+  </defs>
+  <g id="ico-success-tick-new" clip-path="url(#clip-ico-success-tick-new)">
+    <g id="Group_121" data-name="Group 121" transform="translate(-6861.672 240.016)">
+      <g id="Ellipse_1" data-name="Ellipse 1" transform="translate(6872.342 -228.347)" fill="#fff" stroke="#707070" stroke-width="1">
+        <ellipse cx="26.972" cy="27.331" rx="26.972" ry="27.331" stroke="none"/>
+        <ellipse cx="26.972" cy="27.331" rx="26.472" ry="26.831" fill="none"/>
+      </g>
+      <path id="Path_1" data-name="Path 1" d="M234.934,448.942l6.316,6.316,14.475-14.475" transform="translate(6654.119 -649.279)" fill="none" stroke="#28bf2e" stroke-linecap="round" stroke-width="4"/>
+      <g id="Ellipse_2" data-name="Ellipse 2" transform="translate(6862.672 -238.016)" fill="none" stroke="#fff" stroke-width="1">
+        <ellipse cx="36.642" cy="37" rx="36.642" ry="37" stroke="none"/>
+        <ellipse cx="36.642" cy="37" rx="36.142" ry="36.5" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

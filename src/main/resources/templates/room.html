@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="header :: header"></head>
+
+<body class="nav-active">
+
+<div th:replace="navigation :: navigation"></div>
+
+
+<main role="main" class="wrapper">
+    <div class="container page-section-home">
+        <div class="row">
+            <div class="col-4">
+
+                <div th:replace="roomFragment :: roomFragment"></div>
+
+
+            </div>
+
+            <div class="col-6">
+
+                <div th:replace="roomList :: roomList" id="roomList"></div>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+
+<!-- footer -->
+
+<div th:replace="footer :: footer"></div>
+
+<script th:src="@{/assets/js/room.js}"></script>
+
+
+
+</body>
+</html>

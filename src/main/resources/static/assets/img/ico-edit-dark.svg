@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12" viewBox="0 0 12 12">
+  <defs>
+    <clipPath id="clip-ico-edit-dark">
+      <rect width="12" height="12"/>
+    </clipPath>
+  </defs>
+  <g id="ico-edit-dark" clip-path="url(#clip-ico-edit-dark)">
+    <g id="ico-edit-dark-2" data-name="ico-edit-dark" transform="translate(-1.85 1)">
+      <path id="Path_2" data-name="Path 2" d="M3.87,7.626l6.252-6.253,2.016,2.016L5.886,9.645ZM2.85,10.662l2.228-.617L3.467,8.434ZM12.7.313a1.072,1.072,0,0,0-1.514,0l-.454.454L12.75,2.783l.452-.452a1.072,1.072,0,0,0,0-1.514Zm0,0" fill="#2b2b2b"/>
+    </g>
+  </g>
+</svg>

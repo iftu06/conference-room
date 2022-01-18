@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        clip-path: url(#clip-wrong);
+      }
+
+      .cls-2 {
+        fill: #fff;
+        stroke-width: 30px;
+      }
+
+      .cls-2, .cls-3 {
+        stroke: red;
+      }
+
+      .cls-3, .cls-5 {
+        fill: none;
+      }
+
+      .cls-3 {
+        stroke-linecap: round;
+        stroke-width: 35px;
+      }
+
+      .cls-4 {
+        stroke: none;
+      }
+    </style>
+    <clipPath id="clip-wrong">
+      <rect width="1080" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="wrong" class="cls-1">
+    <g id="Ellipse_5" data-name="Ellipse 5" class="cls-2" transform="translate(51 51)">
+      <circle class="cls-4" cx="489" cy="489" r="489"/>
+      <circle class="cls-5" cx="489" cy="489" r="474"/>
+    </g>
+    <path id="Path_7" data-name="Path 7" class="cls-3" d="M937.5,275.5l332.366,332.366m0-332.366L937.5,607.866" transform="translate(-564 98)"/>
+  </g>
+</svg>

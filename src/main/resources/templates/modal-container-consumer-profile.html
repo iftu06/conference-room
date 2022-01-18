@@ -1,0 +1,367 @@
+
+
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="modal-container-consumer-profile">
+
+    <div class="modal fade" id="accountDeactivation" tabindex="-1" role="dialog" aria-modal="true">
+        <div class="modal-dialog general-modal modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title font-weight-bold"
+                        th:text="#{consumer.profile.account.deactivation.label}"></h5>
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row mb-4 error-row">
+                                <div class="error-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="error-text">
+                              <span th:text="#{consumer.profile.account.deactivation.error.description}">
+                              </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-4">
+                            <p class="text-muted m-0" th:text="#{consumer.profile.account.modal.description}">
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="font-weight-600"
+                                       th:text="#{consumer.profile.account.deactivation.input.label}"></label>
+                                <input type="password" class="form-control" id="current-password"
+                                       onclick="hideErrorMsg('#deactivation-password-error')">
+                                <div class="help-block help-error d-none" id="deactivation-password-error-invalid">
+                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                        th:text="#{consumer.profile.deactivation.password.error}"></span>
+                                </div>
+                                <div class="help-block help-error d-none" id="deactivation-password-error-empty">
+                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                        th:text="#{consumer.profile.deactivation.password_empty.error}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row m-0 w-100">
+                        <div class="col-12 px-0 d-flex button-row">
+                            <button type="button" data-dismiss="modal"
+                                    class="btn btn-outline-secondary w-100 mr-0 mr-md-3 mb-3 mb-md-0"
+                                    th:text="#{consumer.profile.account.modal.cancel.btn}"></button>
+                            <button type="button" class="btn btn-primary w-100"
+                                    th:text="#{consumer.profile.account.deactivate.modal.deactivate.btn}"
+                                    onclick="deactivateAccount()">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-modal="true">
+        <div class="modal-dialog general-modal modal-md" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title font-weight-bold"
+                        th:text="#{consumer.profile.account.change.password.label}"></h5>
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form class="row">
+                        <div class="col-12 form-group">
+                            <label th:text="#{consumer.profile.change.password.modal.current.password.label}"></label>
+                            <input type="password" class="form-control" id="change-current-password"
+                                   onclick="hideErrorMsg('#current-password-error')">
+                            <div class="help-block help-error d-none" id="current-password-error-invalid">
+                                <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                    th:text="#{consumer.profile.deactivation.password.error}"></span>
+                            </div>
+                            <div class="help-block help-error d-none" id="current-password-error-empty">
+                                <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                    th:text="#{consumer.profile.deactivation.password_empty.error}"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label><span th:text="#{consumer.profile.change.password.modal.new.password.label}"></span>
+                                <i class="fas fa-question-circle ml-2 text-muted" data-toggle="tooltip"
+                                   data-placement="top"
+                                   th:title="#{consumer.profile.change.password.modal.tooltip.label}"></i> </label>
+                            <input type="password" class="form-control" id="change-new-password"
+                                   onclick="hideErrorMsg('#new-password-error')">
+                            <div class="help-block help-error d-none" id="new-password-error-invalid">
+                                <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                    th:text="#{consumer.profile.change.password.modal.new.password.invalid.error}"></span>
+                            </div>
+                            <div class="help-block help-error d-none" id="new-password-error-empty">
+                                <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                    th:text="#{consumer.profile.change.password.modal.new.password.empty.error}"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label th:text="#{consumer.profile.change.password.modal.re.password.label}"></label>
+                            <input type="password" class="form-control" id="change-re-password"
+                                   onclick="hideErrorMsg('#re-password-error')">
+                            <div class="help-block help-error d-none" id="re-password-error-invalid">
+                                <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                    th:text="#{consumer.profile.change.password.modal.re.password.invalid.error}"></span>
+                            </div>
+                            <div class="help-block help-error d-none" id="re-password-error-empty">
+                                <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                    th:text="#{consumer.profile.change.password.modal.re.password_empty.error}"></span>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="row m-0 w-100">
+                        <div class="col-12 px-0 d-flex button-row">
+                            <button type="button" data-dismiss="modal"
+                                    class="btn btn-outline-secondary w-100 mr-0 mr-md-3 mb-3 mb-md-0"
+                                    th:text="#{consumer.profile.account.modal.cancel.btn}"></button>
+                            <button type="button" onclick="changePasswordForSetting();" class="btn btn-primary w-100"
+                                    th:text="#{consumer.profile.account.modal.confirm.btn}">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="locationModal" tabindex="-1" role="dialog" aria-modal="true">
+        <input id="country-name" type="hidden" th:value="${commonResponse.appTheme.country}"/>
+        <div class="modal-dialog modal-md general-modal" role="document">
+            <input type="hidden" name="id" th:value="${deliverySupportedRange}">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title font-weight-bold hide" id="address-modal-add-head"
+                        th:text="#{consumer.profile.location.modal.add.address.label}"></h5>
+                    <h5 class="modal-title font-weight-bold hide" id="address-modal-edit-head"
+                        th:text="#{consumer.profile.location.modal.edit.address.label}"></h5>
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form class="row">
+                        <input type="hidden" th:value="${deliverySupportedRange}" id="deliverySupportedRange">
+                        <div class="col-12 form-group">
+                            <label for="addressLineOne">
+                                <span th:text="#{delivery_location_picker.modal.address.line1.label}"></span>
+                                <span style="color:red;font-weight:bold"> *</span>
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <input id="addressLineOne" required type="text"
+                                       th:onchange="removeRequiredMessage(this.value)"
+                                       class="form-control data-error"
+                                       th:placeholder="#{delivery_location.selection.modal.address.line1.placeholder}">
+                            <span class="highlightErr ml-2 hide" id="highlightAddressOneErr" style="color:red;font-weight:bold;float:right">
+                                <i class="fa fa-exclamation-circle fa-sm" ></i>
+                            </span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label for="addressLineTwo"
+                                   th:text="#{delivery_location_picker.modal.address.line2.label}"></label>
+                            <input id="addressLineTwo" type="text" class="form-control"
+                                   th:onchange="removeRequiredMessage(this.value)"
+                                   th:placeholder="#{delivery_location_picker.selection.modal.address.line2.placeholder}">
+                        </div>
+
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="stateId">
+                                <span th:text="#{delivery_location_picker.modal.address.province.label}"> </span>
+                                <span style="color:red;font-weight:bold"> *</span>
+                            </label>
+                            <input type="hidden" id="stateLabel" value="Select a ${countryLabels.getStateLabel()}">
+                            <div class="d-flex align-items-center">
+                                <select th:if="${deliverySupportedRange != 'RADIUS_BASED'
+                                 && deliverySupportedRange != 'POLYGON_BASED' && deliverySupportedRange != 'COUNTRY_SPECIFIC'}"
+                                        class="form-control" id="stateId"
+                                        onchange="loadDeliveryLocationForStateDetailsForSetting();removeRequiredMessage(this.value)">
+                                </select>
+                                <input type="hidden"
+                                       th:value="#{delivery_location_picker.modal.address.select.province.label}"
+                                       id="select-province-label">
+
+    <!--                            <select th:if="${deliverySupportedRange != 'ZIPCODE_SPECIFIC'-->
+    <!--                            && deliverySupportedRange != 'CITY_SPECIFIC' && deliverySupportedRange != 'RADIUS_BASED'-->
+    <!--                            && deliverySupportedRange != 'POLYGON_BASED' && deliverySupportedRange != 'COUNTRY_SPECIFIC'}"-->
+    <!--                                    class="form-control" id="stateId"-->
+    <!--                                    th:onchange="removeRequiredMessage(this.value)">-->
+    <!--                            </select>-->
+
+                                <input th:if="${deliverySupportedRange == 'RADIUS_BASED'
+                                                || deliverySupportedRange == 'POLYGON_BASED' || deliverySupportedRange == 'COUNTRY_SPECIFIC'}"
+                                       type="text"
+                                       onchange="removeRequiredMessage(this.value)"
+                                       class="form-control" id="stateId"
+                                       th:placeholder="#{delivery_location_picker.text.modal.province.placeholder}">
+
+                                <span class="highlightErr hide ml-2" id="highlightStateErr" style="color:red;font-weight:bold;float:right">
+                                    <i class="fa fa-exclamation-circle fa-sm" ></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="localityId" id="citySuburbId" >
+                                <span th:text="#{delivery_location_picker.modal.address.city.label}"> </span>
+                                <span style="color:red;font-weight:bold"> *</span>
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <select th:onchange="removeRequiredMessage(this.value)"
+                                        th:if="${deliverySupportedRange == 'CITY_SPECIFIC'}" class="form-control"
+                                        id="localityId">
+                                </select>
+                                <input th:if="${deliverySupportedRange != 'CITY_SPECIFIC'}" type="text"
+                                       th:onchange="removeRequiredMessage(this.value)"
+                                       class="form-control" id="localityId"
+                                       th:placeholder="#{delivery_location_picker.selection.modal.city.placeholder}">
+                                <span class="highlightErr hide ml-2" id="highlightCityErr" style="color:red;font-weight:bold;float:right">
+                                    <i class="fa fa-exclamation-circle fa-sm" ></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 form-group"
+                             id="zipCOdeDiv"
+                             th:classappend="${commonResponse.appTheme.deliverySupportedRange !=null and commonResponse.appTheme.deliverySupportedRange == 'COUNTRY_SPECIFIC'
+                             ? 'col-md-6 col-lg-6' : 'col-md-12 col-lg-12'}">
+                            <label for="zipCodeAreaId" th:text="#{delivery_location_picker.modal.address.zip.label}"></label>
+                            <select th:if="${deliverySupportedRange == 'ZIPCODE_SPECIFIC'}" class="form-control"
+                                    id="zipCodeAreaId" th:onchange="removeRequiredMessage(this.value)">
+                            </select>
+                            <input th:if="${deliverySupportedRange != 'ZIPCODE_SPECIFIC'}" type="text"
+                                   class="form-control" id="zipCodeAreaId"
+                                   th:placeholder="#{delivery_location_picker.selection.modal.address.zipcode.placeholder}">
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 col-lg-6 form-group" id="countrySpeceficDiv"
+                             th:if="${commonResponse.appTheme.deliverySupportedRange != null and
+                                        commonResponse.appTheme.deliverySupportedRange == 'COUNTRY_SPECIFIC'}">
+                            <input type="hidden" id="deliveryCountriesJsonStr"
+                                   th:value="${deliveryCountriesJsonStr}">
+                            <label for="countryspecificId" >
+                                <span th:text="#{delivery_location_picker.modal.address.country.label}"></span>
+                                <span style="color:red;font-weight:bold"> *</span>
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <select
+                                        class="form-control" id="countryspecificId">
+                                    <option th:data-default='default' th:text="#{delivery_location_picker.modal.address.select.country.label}"></option>
+                                    <option th:each="deliveryCountry:${deliveryCountries}"
+                                            th:data-delivery-charge="${deliveryCountry.deliveryCharge}"
+                                            th:data-min-order-amount="${deliveryCountry.minOrderAmount}"
+                                            th:data-delivery-time-in-mins="${deliveryCountry.maxDeliveryTimeInMinutes}"
+                                            th:data-default='not-default'
+                                            th:text="${deliveryCountry.country}">
+
+                                    </option>
+
+                                </select>
+                                <span class="highlightErr hide ml-2" id="highlightCountryErr" style="color:red;font-weight:bold;float:right">
+                                    <i class="fa fa-exclamation-circle fa-sm" ></i>
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <div id="address_label_area" class="col-12 col-sm-6 col-lg-12 form-group mb-3">
+                            <div class="input-group mt-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-tag font-size-medium"></i></span>
+                                </div>
+                                <input type="hidden" id="addressId">
+                                <input type="text" class="form-control" id="addressInputId"
+                                       th:onchange="removeRequiredMessage(this.value)"
+                                       th:placeholder="#{delivery_location_picker.modal.save_address.suggestion.label}"
+                                       aria-label="address">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="card-body mb-0 pt-0 pb-0 help-block help-error hide" id="error-delivery-view">
+                    <label class="help-block help-error"><i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                        <span th:text="#{delivery_location_picker.modal.save_address.error.message}"></span></label>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="row m-0 w-100">
+                        <div class="col-12 px-0 d-flex">
+                            <button type="button" id="cancel-delivery-button" data-dismiss="modal"
+                                    class="btn btn-outline-secondary w-50 mr-3"
+                                    th:text="#{delivery_location_picker.modal.cancel.button}">
+                            </button>
+                            <input type="hidden" id="operation-type">
+                            <button type="button" id="confirm-delivery-button"
+                                    onclick="updateAddressesForSetting();"
+                                    class="btn btn-primary w-100"
+                                    th:text="#{delivery_location_picker.modal.confirm.button}">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="remove_account_address" tabindex="-1" role="dialog" aria-hidden="false">
+        <div class="modal-dialog general-modal" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title font-weight-bold"
+                        th:text="#{consumer.profile.location.address.delete.modal.title}"></h5>
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="content mb-0">
+                        <input type="hidden" name="lineItemId" id="lineItemId">
+                        <div class="mb-0">
+                            <span th:text="#{consumer.profile.location.address.delete.modal.start.label}+' '"> </span>
+                            <span id="address-label" style="font-weight: bold;"></span>
+                            <span th:text="' '+#{consumer.profile.location.address.delete.modal.end.label}"> </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row m-0 w-100">
+                        <div class="col-12 px-0 d-flex">
+                            <input type="hidden" id="addressIdForDelete">
+                            <button type="button" class="btn btn-outline-secondary w-50 mr-3" data-dismiss="modal"
+                                    th:text="#{consumer.profile.account.modal.cancel.btn}"></button>
+                            <button type="button" id="remvItmBtn" class="btn btn-primary w-50" onclick="deleteAddress()"
+                                    data-dismiss="modal"
+                                    th:text="#{consumer.profile.account.modal.confirm.btn}"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

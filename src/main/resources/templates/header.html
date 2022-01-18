@@ -1,0 +1,59 @@
+    <head th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="apple-touch-icon" type="image/png" href="http://tb-merchant.applova.io/applova/app-images/73_15758993/app-icon.png">
+        <link rel="image_src" type="image/png" href="http://tb-merchant.applova.io/applova/app-images/73_15758993/app-icon.png">
+<!--        <link rel="icon" type="image/icon" th:href="${'https:'+ #strings.arraySplit(commonResponse.appTheme.iconImageUrl, ':')[1]}">-->
+        <title>Reservation</title>
+        <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/components/font-awesome.min.css}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+              integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+              crossorigin="anonymous" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+        <link rel="stylesheet" th:href="@{/assets/css/jquery-ui-0.0.7-RC1.min.css}">
+
+
+        <style>
+                .banner-location-set:before {
+                    background-color: var(--main-theme-color);
+                }
+
+                .anchor .anchor-link:hover:after {
+                    background-color: var(--main-theme-color);
+                }
+
+
+
+                .nav-link:hover {
+                    color: var(--main-theme-color);
+                }
+
+                .hide {
+                    display: none !important;
+                }
+
+                .cart-toggle .nav-link:hover svg path {
+                    stroke: var(--main-theme-color);
+                }
+
+                .btn-primary.disabled, .btn-primary:disabled {
+                    color: #fff;
+                    background-color: var(--main-theme-color);
+                    border-color: var(--main-theme-color);
+                }
+
+                .help-error .fa {
+                    font-size: 14px;
+                }
+
+                .sortFont{
+                   font-weight : normal;
+                }
+
+
+        </style>
+    </head>

@@ -1,0 +1,325 @@
+<style>
+    body::-webkit-scrollbar-thumb {
+        outline: unset;
+        background-color: #cccccc;
+    }
+    body::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 0px;
+        background-color: #F5F5F5;
+    }
+    .mini-cart {
+        padding: 0;
+    }
+    .mini-cart .cart-title,
+    .mini-cart .cart-items,
+    .mini-cart .cart-footer {
+        padding: 20px 18px 20px 18px;
+    }
+    .mini-cart .cart-title {
+        margin-bottom: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+    }
+    .mini-cart .cart-items {
+        height: calc(100vh - 211px);
+    }
+    .mini-cart .cart-items::-webkit-scrollbar-thumb {
+        background-color: #b8b8b8;
+        border-radius: 66px;
+    }
+    .mini-cart .cart-items::-webkit-scrollbar {
+        width: 6px;
+    }
+    .mini-cart .cart-items::-webkit-scrollbar-track {
+        background-color: #ebebeb;
+        -webkit-border-radius: 10px;
+        border-radius: 0px;
+    }
+    .mini-cart .cart-items .cart-item:last-child {
+        margin-bottom: 0;
+    }
+    .reward-progress-banner {
+        padding: 0px 18px;
+        height: 70px;
+        background: #fdf9e6;
+        color: #28a745;
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        position: relative;
+    }
+    .reward-progress-banner > div {
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+    .reward-progress-banner i {
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .reward-progress-banner p {
+        padding-right: 26px;
+    }
+    .mini-cart.mini-cart__reward-active .cart-items {
+        height: calc(100vh - 286px);
+    }
+    .mini-cart .cart-title .cart-toggle {
+        color: #2b2b2b;
+        font-size: 20px;
+        text-shadow: unset;
+        opacity: 1;
+        background: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 100px;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%);
+        right: 22px;
+        top: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+    .mini-cart .cart-title .cart-toggle:focus {
+        outline: none;
+    }
+    .mini-cart .cart-title .cart-toggle:hover {
+        background-color: #e9e9e9;
+    }
+
+    .reward-progress-banner .banner-close {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        right: 0;
+    }
+
+    .reward-progress-banner .banner-close .btn {
+        font-size: 22px !important;
+        color: #6c757d;
+    }
+
+    .quick-cart .modal-body .details-area .card-body h3.font-weight-bold.mb-2 {
+        padding-right: 1.5rem;
+    }
+
+    @media (max-width:768px) {
+        .quick-cart .details-area .close.custom {
+            width: 45px !important;
+            height: 45px !important;
+            font-size: 32px !important;
+        }
+        .quick-cart .modal-body .details-area .card-body h3.font-weight-bold.mb-2 {
+            padding-right: 0;
+        }
+    }
+
+    @media (max-width:576px) {
+        .reward-progress-banner {
+            height: 76px
+        }
+        .reward-progress-banner {
+            font-size: 15px;
+        }
+        .mini-cart .cart-items {
+            height: calc(100vh - 324px);
+        }
+        .mini-cart.mini-cart__reward-active .cart-items {
+            height: calc(100vh - 400px);
+        }
+    }
+
+</style>
+
+
+<div class="cart-title" xmlns:th="http://www.thymeleaf.org">
+
+    <input type="hidden" id="rewardsIntegrationEnabled"
+           th:value="${commonResponse.appTheme.rewardsIntegrationEnabled}">
+    <input type="hidden" id="deliveryNavigationDateId">
+    <input type="hidden" id="openHoursNavigationId">
+    <input type="hidden" id="isCustomerEnrolledForRewards" th:value="${isCustomerEnrolledForRewards}">
+
+    <h4 class="d-flex align-items-center"><a id="toggle-cart" class="cart-toggle theme-color"
+                                             th:classappend="${commonResponse.appTheme.themeColor == '#ffffff' ? 'white-theme-support':''}"><span>›</span></a>
+        <span th:text="#{nav_bar.item.cart.label}"></span></h4>
+
+    <a href="#" th:if="${not #lists.isEmpty(shoppingCart.purchases)}"
+       class="btn btn-sm btn-light text-danger"
+       th:classappend="${commonResponse.appTheme.themeColor == '#ffffff' ? 'white-theme-support':''}"
+       data-toggle="tooltip" data-placement="top"
+       data-content="Remove all items from cart" onclick="showCartItemClearModal()">
+        <i class="far fa-trash-alt mr-2"></i><span th:text="#{shopping.cart.modal.clear_all.button.label}"></span></a>
+</div>
+
+<div class="reward-progress-banner" id="#reward-progress-banner"
+     th:if="${commonResponse.appTheme.rewardsIntegrationEnabled
+         and shoppingCart.cartRewardInfo != null
+         and commonResponse.loggedIn}"
+     xmlns:th="http://www.thymeleaf.org">
+    <div class="msg-progress" th:if="${!shoppingCart.cartRewardInfo.discountAmountReached}" id="rewardNotRichedDiv">
+        <i class="fas fa-gift"></i>
+        <p class="m-0">
+            You're just
+
+
+            <strong th:text="${commonResponse.appTheme.currency}+''+${#numbers.formatDecimal(shoppingCart.cartRewardInfo.pendingDiscountAmount, 1,'COMMA', 2, 'POINT')}"></strong>
+            away from getting
+            <strong th:text="${commonResponse.appTheme.currency}+''+${#numbers.formatDecimal(shoppingCart.cartRewardInfo.discountAmount, 1,'COMMA', 2, 'POINT')}"></strong>
+            off from your order
+        </p>
+    </div>
+    <div class="msg-complete"
+         th:if="${shoppingCart.cartRewardInfo.discountAmountReached}" id="rewardRichedDiv">
+        <i class="fas fa-check-circle"></i>
+        <p class="m-0">
+            Yay! You're getting
+            <strong th:text="${commonResponse.appTheme.currency}+''+${#numbers.formatDecimal(shoppingCart.cartRewardInfo.discountAmount, 1,'COMMA', 2, 'POINT')}"></strong>
+            off from your order
+        </p>
+    </div>
+    <div class="banner-close">
+        <button class="btn banner-close" aria-label="Close" onclick="clearRewardItems()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+</div>
+
+
+<div class="cart-items" id="cart-items" xmlns:th="http://www.thymeleaf.org">
+    <input type="hidden" id="purchasesStr" th:value="${purchasesStr}">
+
+
+
+    <div class="cart-item" th:each="purchase : ${shoppingCart.purchases}">
+        <div class="item-img" th:classappend="${purchase.image == null} ? 'img-container-item product-no-img' : ''">
+            <img th:src="${purchase.image}"
+                 th:alt="alter" th:if="${purchase.image != null}">
+            <img class="placeholder-cart" th:src="@{/assets/img/placeholder-product-mini.svg}" th:alt="alter"
+                 th:classappend="${commonResponse.appTheme.themeColor == '#ffffff'? 'white-theme-support': 'hide'}"
+                 th:if="${purchase.image == null}">
+            <img th:if="${purchase.image == null}" class="cart-img placeholder-cart"
+                 th:classappend="${commonResponse.appTheme.themeColor == '#ffffff'? 'hide': ''}"
+                 th:src="@{/assets/img/product-placeholder-mini-white.svg}" th:alt="alter">
+
+        </div>
+        <div class="item-detail">
+            <div class="detail-body">
+                <div class="row m-0">
+                    <div class="col-6 col-md-7 px-0">
+                        <h6 class="text-wrap" th:text="${purchase.productName}"></h6>
+                    </div>
+                    <div class="col-6 col-md-5 px-0 text-right">
+                        <h6 class="font-weight-bold"
+                            th:text="${commonResponse.appTheme.currency} + ${#numbers.formatDecimal((purchase.itemPrice * purchase.count),1,'COMMA',2,'POINT')}">
+                        </h6>
+                    </div>
+                </div>
+                <p class="unit-price"
+                   th:text="${commonResponse.appTheme.currency} + ${#numbers.formatDecimal(purchase.itemPrice,1,'COMMA',2,'POINT')}"></p>
+            </div>
+
+            <div class="item-list" th:if="${not #lists.isEmpty(purchase.variantSizeAndAddOns)}">
+                <ul>
+                    <li th:each="variantSizeAndAddOn : ${purchase.variantSizeAndAddOns}"
+                        th:text="${variantSizeAndAddOn}"></li>
+                </ul>
+            </div>
+
+            <div class="item-note-container" th:if="${purchase.note != null and purchase.note != ''}">
+                <span class="note-label" th:text="#{shopping.cart.modal.note.label}"></span>
+                <span th:text="${purchase.note}"></span>
+            </div>
+
+            <div class="item-actions">
+                <div class="input-group input-qty justify-content-end justify-content-md-start">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-sm btn-light" type="button"
+                                th:attr="onclick=|changeQuantity('DECREASE','${purchase.lineItemId}','${purchase.count}')|">
+                            -
+                        </button>
+                    </div>
+                    <input type="text" class="form-control"
+                           th:value="${purchase.count}" th:id="'qnt_'+${purchase.lineItemId}"
+                           th:oninput="changeItemQuantityInCartItem(event,[[${purchase.lineItemId}]])"
+                           th:onkeypress="return allowOnlyNumberInCartItem(event,this,[[${purchase.lineItemId}]]);"
+                           th:onchange="changeQuantityInCartItem([[${purchase.lineItemId}]], this.value);">
+
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-light" type="button"
+                                th:attr="onclick=|changeQuantity('INCREASE','${purchase.lineItemId}','${purchase.count}')|">
+                            +
+                        </button>
+                    </div>
+                </div>
+
+                <div class="action-btn-area d-flex">
+
+                    <button class="btn btn-sm btn-light p-0 mr-2" data-toggle="tooltip" title="Edit Item"
+                            th:attr="onclick=|editCartItem('${purchase.lineItemId}' , '${purchase.productId}','${purchase.variantId}')|">
+                        <i class="far fa-edit text-muted"></i>
+                    </button>
+                    <!-- Favorite Button - Cart -->
+                    <button class="btn btn-sm btn-light btn-fav p-0 mr-2"  data-toggle="tooltip"
+                            title="Add to Favorite" th:if="${commonResponse.loggedIn && !#lists.contains(existingFavouriteProductIdsInCart, purchase.cartItemId)}"
+                            th:attr="onclick=|showCartItemAddFavoriteModal('${purchase.lineItemId}' , '${purchase.productId}','${purchase.variantId}')|"
+                            th:id="'add-favourite-button-'+${purchase.cartItemId}">
+
+                    <i class="far fa-heart"></i>
+                    </button>
+
+                    <button class="btn btn-sm btn-light" data-toggle="tooltip"
+                            th:attr="onclick=|showCartItemRemoveModal('${purchase.lineItemId}' , '${purchase.productId}')|"
+                            title="Delete from cart">
+                        <i class="far fa-trash-alt text-danger"></i>
+
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+        <div class="row empty-container m-0 h-100 align-items-center" xmlns:th="http://www.thymeleaf.org"
+             th:if="${#lists.isEmpty(shoppingCart.purchases)}">
+            <div class="col-12">
+                <div class="empty-msg-section">
+                    <div class="img-container text-center mb-4">
+                        <img class="img-fluid" th:src="@{/assets/img/cart-empty-icon.svg}" width="60%">
+                    </div>
+                    <div class="msg-container text-center">
+                        <h4 class="page-title mb-2" th:text="#{shopping.cart.modal.empty.message.head}"></h4>
+                        <p th:text="#{shopping.cart.modal.empty.message.label}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+<div class="cart-footer" xmlns:th="http://www.thymeleaf.org">
+    <div class="cart-total"><p th:text="#{shopping.cart.modal.total.label}"></p>
+        <p id="totCartPrice"
+           th:text="${commonResponse.appTheme.currency} + ${#numbers.formatDecimal(shoppingCart.totalCartPrice,1,'COMMA',2,'POINT')}"></p>
+    </div>
+    <div class="cart-main-actions d-flex">
+        <a th:href="'/webstore-v2/'+${businessId}" class="btn btn-secondary w-100"
+           th:text="#{shopping.cart.modal.continue_shopping.button.label}">
+        </a>
+
+        <a href="#" class="btn w-100 ml-2"
+           th:classappend="${commonResponse.appTheme.themeColor == '#ffffff' ? 'btn-white-theme-primary':'btn-primary'}"
+           id="checkout"
+           th:if="${not #lists.isEmpty(shoppingCart.purchases)}"
+           th:onclick="proceedCheckoutView()" th:text="#{shopping.cart.modal.proceed_checkout.button.label}">
+        </a>
+    </div>
+
+    <div class="cart-powered-by text-center mt-auto d-none">
+        <small class="text-muted"><span th:text="#{footer.brand.power.by}"></span>
+            <img th:src="@{/assets/img/applova-main-logo-small.png}"></small>
+    </div>
+</div>
+

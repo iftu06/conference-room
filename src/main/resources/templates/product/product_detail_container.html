@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="header :: header"></head>
+
+
+<body class="nav-active" th:id="${commonResponse.digitalMenuEnabled? 'digital-menu':''}">
+
+<div th:replace="navigation :: navigation"></div>
+
+<!--<link rel="stylesheet" th:href="@{/assets/css/pages/addOn.min.css}">-->
+
+<main role="main" class="wrapper">
+    <input type="hidden" name="isProductDetailsPage" id="isProductDetailsPage"
+           th:value="true">
+    <div th:replace="product/product_detail :: product_detail" id="product_detail_sec"></div>
+
+    <div class="container page-section-home pb-5 pt-0 pt-md-5 featured-product-details" th:if="${!commonResponse.digitalMenuEnabled}">
+
+       <div class="row cart-wrapper mb-4">
+            <!--<span th:if="${#lists.isEmpty(recommendedProduct)}">-->
+                <div class="col-12 px-0" th:if="${not #lists.isEmpty(recommendedProductsOrFeaturedProducts)}">
+                    <th:block th:if="${isExistProductRecommendation}">
+                        <h4 class="page-title mb-4" >
+                            <span th:text="${titleMessage}" th:if="${titleMessage != null and titleMessage != ''}"></span>
+                            <span th:text="#{recommendation.upsell.header}"
+                                  th:if="${titleMessage == null or titleMessage == '' and recommendType == 'UP_SELL'}"></span>
+                            <span th:text="#{recommendation.cross_sell.header}"
+                                  th:if="${titleMessage == null or titleMessage == '' and recommendType == 'CROSS_SELL'}"></span>
+                        </h4>
+
+                    </th:block>
+                    <th:block th:if="${!isExistProductRecommendation}">
+                        <h4 class="page-title mb-4" th:text="#{home.featured.products}"></h4>
+                    </th:block>
+                </div>
+                <div class="col-12 owl-carousel item-slider nav-arrows-top px-0 mb-4 mb-md-0">
+                   <div class="item w-100" th:each="product : ${recommendedProductsOrFeaturedProducts}">
+                        <div class="card card-item h-100">
+                                <div class = "card-img-product " th:classappend="${product.images == null or #lists.isEmpty(product.images) ? 'product-no-img':''}">
+                                    <a th:href="@{'/'+${businessId}+'/products/'+${product.productId}}" class="product-detail-link">
+                                        <img class="w-100" th:src="${product.images[0]}"
+                                             th:alt="alter" th:if="${product.images != null and not #lists.isEmpty(product.images)}">
+
+                                        <h5 th:if="${product.images == null or #lists.isEmpty(product.images)}"
+                                            class="card-title-placeholder" th:text="${product.name}">
+                                        </h5>
+                                        <img th:if="${product.images == null or #lists.isEmpty(product.images)}" id="product-placeholder-black-featured"
+                                             class="placeholder-img" th:src="@{/assets/img/placeholder-product-black.svg}" th:alt="alter"
+                                             th:classappend="${appTheme.themeColor == '#ffffff' ? '' :'hide'}">
+                                        <img th:if="${product.images == null or #lists.isEmpty(product.images)}" id="product-placeholder-white-featured"
+                                             th:classappend="${appTheme.themeColor == '#ffffff' ? 'hide' :''}"
+                                             class="placeholder-img" th:src="@{/assets/img/product-placeholder-white.svg}" th:alt="alter">
+                                    </a>
+                                </div>
+
+                                <div class="card-body product-content">
+                                    <div class = "product-detail">
+                                        <h5 class="card-title" th:text="${product.name}"
+                                            th:if="${product.variants.name == '[base]'}" ></h5>
+                                        <h5 class="card-title" th:text="${product.name+'-'+product.variants.types[0].name}"
+                                            th:if="${product.variants.name != '[base]'}"></h5>
+
+                                        <a href="product_detail.html" class="card-text"
+                                           th:href="@{'/'+${businessId}+'/products/'+'/'+${product.productId}}"
+                                           th:text="#{add_to_cart.card.more.details}"/>
+
+                                        </a>
+                                    </div>
+                                    <div class="card-footer px-0" >
+
+                                        <p th:text="${commonResponse.appTheme.currency}+${#numbers.formatDecimal(product.displayPrice, 1,'COMMA', 2, 'POINT')}"
+                                           th:if="${!commonResponse.appTheme.productPricingDisabled}"/>
+
+                                        <button data-toggle="modal"
+                                                th:classappend="|${product.allVariantOutOfStock ? disabled : ''}
+                                                ${commonResponse.appTheme.productPricingDisabled ? 'w-100' : ''}  |"
+                                                th:disabled="${product.allVariantOutOfStock}"
+                                                th:onclick="getProduct([[${product.productId}]])"
+                                                class="btn btn-primary ml-auto"
+                                                th:if="${commonResponse.purchaseAllowed and !isUpsell}"
+                                                th:text="${product.allVariantOutOfStock} ? #{add_to_cart.modal.stock_out.button.label} : #{add_to_cart.modal.add_to_cart.button.label}">
+                                        </button>
+
+                                        <button data-toggle="modal"
+                                                th:classappend="|${product.allVariantOutOfStock ? disabled : ''}
+                                                ${commonResponse.appTheme.productPricingDisabled ? 'w-100' : ''}  |"
+                                                th:disabled="${product.allVariantOutOfStock}"
+                                                th:onclick="getProductForUpSellCrossSell([[${product.productId}]],
+                                                            [[${product.variants.types[0].sku}]],[[${variantKey}]],
+                                                            [[${upCrossProductId}]],[[${isUpsell}]])"
+                                                class="btn btn-primary ml-auto"
+                                                th:if="${commonResponse.purchaseAllowed and isUpsell}"
+                                                th:text="${product.allVariantOutOfStock} ? #{add_to_cart.modal.stock_out.button.label} : #{add_to_cart.modal.add_to_cart.button.label}">
+                                        </button>
+
+                                    </div>
+                                </div>
+                        </div>
+
+                </div>
+            </div>
+       </div>
+            <!--</span>-->
+        </div>
+</main>
+
+
+<!-- Sign in Modal -->
+
+
+<div th:replace="footer :: footer"></div>
+
+<script th:inline="javascript">
+   var addOnLabel = {};
+   var themeColor = /*[[${appTheme.themeColor}]]*/ 'default';
+
+      $(document).ready(function () {
+        $(".nav_menu li").removeClass("active");
+        $("#minSelectionErrMsgDiv").hide();
+        var product = /*[[${product}]]*/ 'default';
+        var addOns = product.addOns;
+        var variantTypes = product.variants.types;
+        product.variants.types.forEach(function(variantType){
+            variant[variantType.sku] = variantType.price.amount
+        });
+        var variantName = $("#variant_name_det").val();
+        if (variantName == '[base]') {
+            $("#product_variant_det").hide();
+        }
+
+        addOns.forEach(function (addOnItr) {
+            var addOnName = addOnItr.name.replace(/[\/]+/g, "_");
+            addOnName = addOnName.replace(/[ ]+/g, "_");
+            var addonId = addOnItr.addonId;
+            addOnLabel[addonId] = addOnItr.name;
+            var minSelectionsRequired = addOnItr.minSelectionsRequired;
+            addOn[addonId] = {};
+            addOn[addonId]['minSelectionsRequired'] = minSelectionsRequired;
+            addOn[addonId]['type'] = {};
+            addOnItr.types.forEach(function (addOnType) {
+                var subType = addOnType.subTypes[0];
+
+                if (subType["defaultSelection"] == true) {
+                    var subTypeSku = subType["sku"];
+                    var subTypePrice = subType["price"]["amount"];
+
+                    var maxSelectionsAllowed = addOnItr.maxSelectionsAllowed;
+                    insertAddOnDet(addonId, subType, maxSelectionsAllowed,minSelectionsRequired)
+                }
+
+            });
+
+            showMinSelectionRequiredDet(addonId,minSelectionsRequired);
+
+        });
+    })
+
+
+</script>
+
+<script th:inline="javascript">
+
+
+                    $( document ).ready(function() {
+                        var isGoogleAnalyticsEnabled = document.getElementById("isGoogleAnalyticsEnabled").value;
+                        if (isGoogleAnalyticsEnabled === "true") {
+                            var productId = $("#productIdDet").val();
+                            var productName = $("#modal_product_name").val();
+                            var categoryName = $("#categoryId").val();;
+                            var price = $("#modal_product_price_st_det").val();
+
+                            var products = {
+                                item_id: productId,
+                                item_name: productName,
+                                item_category:categoryName,
+                                price:price,
+                                currency:currency
+                            };
+
+                            //Prepare ecommerce event params
+                            var ecommerce_products = {
+                                currency: currency,
+                                value: price,
+                                items: [products]
+                            };
+
+                            firebase.analytics().logEvent(firebase.analytics.EventName.VIEW_ITEM,ecommerce_products);
+                        }
+                    });
+</script>
+
+
+
+</body>
+</html>

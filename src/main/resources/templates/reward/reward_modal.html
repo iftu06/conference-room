@@ -1,0 +1,263 @@
+<style>
+    .quick-cart .modal-body .footer-area {
+        box-shadow: 0 0px 2px rgb(0 0 0 / 30%), 0 4px 0px rgb(0 0 0 / 30%);
+    }
+    .quick-cart .modal-body > .row > .col-12.col-md-7.px-0 {
+        box-shadow:0px 0 2px 0px rgb(0 0 0 / 30%)
+    }
+    .quick-cart .details-area .close.custom {
+        color: #2b2b2b;
+        font-size: 21px;
+        text-shadow: unset;
+        opacity: 1;
+        background: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 100px;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%);
+        right: 22px;
+        top: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+    .quick-cart .details-area .close.custom:focus {
+        outline: none;
+    }
+    .quick-cart .details-area .close.custom:hover {
+        background-color: #e9e9e9;
+    }
+    .pts-label-header-details {
+        color: var(--primary-theme-color) !important;
+    }
+    .pts-cart-btn,
+    .product-price-btn {
+        font-size: 15px;
+    }
+    .rewards-active .product-price-btn,
+    .pts-cart-btn,
+    .rewards-active .price-label-header-details,
+    .rewards-active .cart-total-popup > .d-none.d-md-block,
+    .rewards-active .mobile-qty-cart,
+    .pts-label-header-details {
+        display: none !important;
+    }
+    .rewards-active .pts-cart-btn,
+    .rewards-active .pts-label-header-details {
+        display: block !important;
+    }
+    .rewards-active .cart-total-popup > .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .special-note-product {
+        border-radius: 6px;
+        padding: 16px;
+        font-weight: normal !important;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+    }
+    .special-note-product .note-title,
+    .special-note-product .note-desc {
+        width: 100%;
+    }
+    .special-note-product .note-title {
+        font-size: 16px;
+    }
+    .special-note-product .note-desc {
+        font-size: 15px;
+    }
+    .special-note-product .note-icon {
+        height: 30px;
+        width: 30px;
+        border-radius: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+    }
+    .reward-disclaimer .note-icon {
+        background-color: #6c757d;
+        color: #ffffff;
+        font-size: 14px;
+    }
+    .reward-disclaimer {
+        color: #2b2b2b;
+        background-color: #fcfcfc;
+        border: 1px solid #dae0e5;
+    }
+    .rewards-active .reward-disclaimer {
+        display: flex;
+    }
+    .rewards-info-section__modal .reward-info-group label {
+        margin: 0;
+    }
+    .rewards-info-section__modal .reward-info-group {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    @media (max-width:768px) {
+        .special-note-product .note-icon-container {
+            display: none;
+        }
+    }
+
+    @media (max-width:576px) {
+        .quick-cart .details-area .card-text {
+            font-size: 15px;
+        }
+    }
+
+     .hide {
+        display: none;
+    }
+
+</style>
+
+<input type="hidden" id="rewardsRuleId">
+<input type="hidden" id="external-third-party-id">
+<input type="hidden" id="rewards-rule-name">
+
+
+<div class="modal fade quick-cart" id="rewards-redeem-modal"
+     th:fragment="reward_modal"
+     tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+     xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content overflow-hidden">
+            <div class="modal-body p-0 rewards-active">
+                <div class = "row m-0">
+                    <div class = "col-12 col-md-5 px-0">
+                        <div class = "img-container-modal img-perfect-fit h-100 w-100" style="background-image: url(placeholder-rewards-modal.png)"></div>
+                    </div>
+                    <div class = "col-12 col-md-7 px-0">
+                        <div class = "details-area">
+                            <div class="row m-0">
+                                <button type="button" class = "close custom" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <div class="col-12 px-0 mb-3">
+                                    <div class="card-body p-0">
+                                        <h3 class="font-weight-bold mb-2" id="redeem-item-name">Free Signature Cappuccino w/ Hot Pretzel</h3>
+                                        <h4 class="font-weight-600 mb-2">
+                                            <span class = "price-label-header-details" id="min-order-value">$6.90</span>
+                                            <span class = "pts-label-header-details" id="redeem-item-points">500 Points</span>
+                                        </h4>
+                                        <div class = "special-note-product reward-disclaimer my-3" id="disclaimerCard">
+                                            <div class = "note-icon-container pr-3">
+                                                <div class = "note-icon">
+                                                    <i class="fas fa-info"></i>
+                                                </div>
+                                            </div>
+                                            <div class = "row m-0">
+                                                <div class = "note-title">
+                                                    <strong th:text="#{rewards.campaign.redeem.card.modal.disclaimer.title}"></strong>
+                                                </div>
+                                                <div class = "note-desc" id="disclaimerText">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="card-text text-justify">
+                                            Espresso shots topped with hot water create a light layer of crema culminating in this wonderfully rich cup with depth and nuance.
+                                            Pro Tip: For an additional boost, ask your barista to add an extra shot.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 px-0">
+
+                                    <div class = "rewards-info-section__modal">
+                                        <div class = "row reward-info-group">
+                                            <div class = "col-4">
+                                                <label class = "font-weight-600">Order Limit:</label>
+                                            </div>
+                                            <div class = "col-8 text-right">
+                                                <label>Limited to One Per Order</label>
+                                            </div>
+                                        </div>
+                                        <div class = "row reward-info-group">
+                                            <div class = "col-6">
+                                                <label class = "font-weight-600">Minimum Order Value:</label>
+                                            </div>
+                                            <div class = "col-6 text-right">
+                                                <label>Over $20</label>
+                                            </div>
+                                        </div>
+                                        <div class = "row reward-info-group">
+                                            <div class = "col-4">
+                                                <label class = "font-weight-600">Valid Until:</label>
+                                            </div>
+                                            <div class = "col-8 text-right">
+                                                <label>Until Further Notice</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 px-0 d-block d-md-none border-top mobile-qty-cart">
+                                    <form>
+                                        <div class = "quantity-row text-center mt-4">
+                                            <div class="font-weight-600 mb-3 qty-label">Quantity</div>
+                                            <div class = "d-flex input-qty justify-content-center justify-content-md-start">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-sm btn-light" type="button">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                                <input type="text" class="form-control h-auto" value="1">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-sm btn-light" type="button">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "modal-footer footer-area border-top animate__animated animate__slideInUp">
+                            <div class = "container-fluid m-0 p-0">
+                                <div class = "row cart-total-popup align-items-center">
+                                    <div class = "col-md-6 mb-md-0 mb-3 text-left d-none d-md-block">
+                                        <form>
+                                            <div class = "quantity-row">
+                                                <div class = "d-flex input-qty justify-content-center justify-content-md-start">
+                                                    <div class="input-group-prepend">
+                                                        <button class="btn btn-sm btn-light" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" class="form-control h-auto" value="1">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-sm btn-light" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class = "col-12 col-md-6">
+                                        <button class="btn btn-primary w-100 snackbar-alert">
+                                            <span>Redeem Reward</span>
+                                            <span><strong>
+                                                <span class = "product-price-btn">$6.20</span>
+                                                <span class = "pts-cart-btn">500 Points</span>
+                                            </strong></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

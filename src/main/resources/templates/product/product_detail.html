@@ -1,0 +1,399 @@
+<style>
+.offer-tag.alcohol-label {
+    border-radius: 0px 20px 20px 0px;
+    left: 0;
+    right: unset;
+    background-color: #ffffff;
+    color: var(--primary-theme-color);
+    padding: 10px 18px 10px 12px;
+    display: flex;
+}
+.offer-tag.alcohol-label i {
+    font-size: 22px;
+}
+
+.category-listing.list-view .card-responsive-wrapper .card-item .offer-tag.alcohol-label {
+    top: 12px;
+    padding: 10px 14px 10px 8px !important;
+}
+
+.category-listing.list-view .card-responsive-wrapper .card-item .offer-tag.alcohol-label i {
+    font-size: 18px;
+}
+
+@media(max-width:768px){
+    .product-details-wrapper .quick-cart .details-area {
+        padding-top: unset;
+        padding-left: 16px;
+    }
+}
+
+@media (max-width:576px) {
+    .main-container-menu .offer-tag.alcohol-label i {
+        font-size: 18px;
+    }
+    .main-container-menu .offer-tag.alcohol-label {
+        padding: 10px 14px 10px 8px;
+        top: 10px;
+    }
+    .product-details-wrapper .quick-cart .details-area {
+        padding-top: 24px;
+        padding-left: unset;
+    }
+}
+</style>
+
+        <div class="container page-section-home pt-0" xmlns:th="http://www.thymeleaf.org"
+             th:fragment="product_detail">
+<!--            <input type="text" id="upsellCrossSellProduct" value="">-->
+            <div class="row">
+                <div class="container-fluid mx-0">
+                    <div class="row cart-wrapper product-details-wrapper">
+                        <div class="col-12 px-0" th:if="${loadingType != null and loadingType == 'category'}">
+                            <nav aria-label="breadcrumb" th:if="${not #lists.isEmpty(linkMaps)}">
+                                <ol class="breadcrumb bg-white pt-0 px-0 mt-3 mt-md-0 pb-0 pb-md-2">
+                                    <li class="breadcrumb-item" th:each="linkMap : ${linkMaps}">
+                                        <a th:href="${linkMap.get('link')}" th:text="${linkMap.get('page')}"></a>
+                                    </li>
+                                    <li class="breadcrumb-item active" aria-current="page" th:text="${product.name}"></li>
+                                </ol>
+                            </nav>
+                        </div>
+                        
+                        <div class="col-12 px-0">
+                            <div class="card quick-cart p-0 border-0">
+                                <div class = "row m-0">
+                                    <div class = "col-12 col-md-5 pl-0">
+                                        <div class = "product-images-container" th:classappend="${#lists.isEmpty(product.images) ? 'no-image' : ''}">
+
+                                            <div class="offer-tag alcohol-label" th:if="${product.alcoholicProduct}">
+                                                <i class="fas fa-glass-martini"></i>
+                                            </div>
+
+                                            <div class="owl-carousel nav-arrows-top mb-3 product-images-main" id="sync1">
+                                                <div th:if="${not #lists.isEmpty(product.images)}" th:each="product_image : ${product.images}" class="img-container-item"> <img  th:src="${product_image}" alt=" "></div>
+                                            </div>
+
+                                            <div class="owl-carousel product-images-sub" id="sync2">
+                                                <div th:each="product_image : ${product.images}" class="img-container-item"> <img class="card-img-top" th:src="${product_image}" alt=" "></div>
+
+                                            </div>
+                                            <div  th:if="${#lists.isEmpty(product.images)}" class="no-image-carousel" id="sync3">
+                                                <div th:if="${#lists.isEmpty(product.images)}" class = "img-container-item product-no-img">
+                                                    <h5 class="card-title-placeholder" th:text="${product.name}"></h5>
+                                                        <img class="placeholder-img" id="product-placeholder-black" th:src="@{/assets/img/placeholder-product-black.svg}" alt="">
+                                                        <img class="placeholder-img" id="product-placeholder-white" th:src="@{/assets/img/product-placeholder-white.svg}" alt="">
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-12 col-md-7 pl-0 pr-0 pl-md-3 pr-0">
+                                        <div class = "details-area">
+                                            <div class="row m-0">
+                                                <div class="col-12 px-0 mb-4">
+                                                    <div class="card-body p-0">
+                                                        <input type="hidden" name="isProductDetailsPage" id="isProductDetailsPage"
+                                                               value="true">
+                                                        <input type="hidden" class="form-control-sm" id="productIdDet"
+                                                               th:value="${product.productId}">
+                                                        <input type="hidden" id="categoryId"
+                                                               th:value="${product.categories[0]}">
+                                                        <input type="hidden" class="form-control-sm" id="modal_product_name"
+                                                               th:value="${product.name}">
+
+                                                        <h3 class="font-weight-bold mb-2"
+                                                            th:text="${product.name}"></h3>
+
+                                                        <h4 class="font-weight-600 mb-2" th:if="${!commonResponse.appTheme.productPricingDisabled}"
+                                                            th:text="${commonResponse.appTheme.currency}+${#numbers.formatDecimal(product.displayPrice, 1,'COMMA', 2, 'POINT')}">
+                                                        </h4>
+
+                                                        <div class="special-note-product alcohol-indicator my-3" th:if="${product.alcoholicProduct}">
+                                                            <div class="note-icon-container pr-3">
+                                                                <div class="note-icon">
+                                                                    <i class="fas fa-glass-martini"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row m-0">
+                                                                <div class="note-title">
+                                                                    <strong id="alcholicTex" th:text="#{product.modal.alcoholic.product}"></strong>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="special-note-product my-3" id="disclaimerCard"
+                                                             th:if="${productAlertMessageText != null}">
+                                                            <div class="note-icon-container pr-3">
+                                                                <div class="note-icon">
+                                                                    <i class="fas fa-info"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row m-0">
+                                                                <div class="note-title">
+                                                                    <strong th:text="${productAlertMessageTitle}"></strong>
+                                                                </div>
+                                                                <div class="note-desc" id="disclaimerText" th:text="${productAlertMessageText}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <p class="card-text text-justify" th:remove="tag" th:utext="${product.description}">
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 px-0">
+                                                    <div id="accordion" class="cutom-accordian enable-arrow">
+                                                        <input class="form-control" type="hidden" th:if="${product.variants != null and product.variants.name =='[base]'}"
+                                                               id="baseVariantDet" th:value="${product.variants.types !=null and not #lists.isEmpty(product.variants.types)
+                                                               ? product.variants.types[0].sku : ''}">
+
+                                                        <div class="card" th:if="${product.variants.types != null and not #lists.isEmpty(product.variants.types) and product.variants.name!='[base]'}">
+                                                            <div class="card-header accordion-heading" id="size" data-toggle="collapse" data-target="#size" aria-expanded="true" aria-controls="size">
+
+                                                                <div class = "title-indicator d-flex flex-column">
+                                                                    <span class = "font-weight-600" th:text="${product.variants.name}">
+                                                                    </span>
+                                                                </div>
+
+                                                            </div>
+                        
+                                                            <div id="size" class="ad-on-wrapper collapse show" aria-labelledby="size"
+                                                                data-parent="#accordion">
+                                                                <div class="card-body pb-0">
+                                                                    <div class="add-on-section">
+                                                                        <div class = "row m-0 w-100">
+
+                                                                            <div class = "col-12 px-0 add-on-item" th:each="variantType,itr : ${product.variants.types}">
+                                                                                <div class = "row m-0 w-100">
+                                                                                    <div class = "col-8 px-0">
+                                                                                        <div class="form-check form-check-inline">
+
+                                                                                            <input class="form-check-input" type="radio" name="product_det_variant_radio"
+                                                                                                   th:checked="${itr.index == 0}"
+                                                                                                   id="exampleRadios" th:value="${variantType.sku}" onchange="calculateTotalDet()">
+
+                                                                                            <label class="form-check-label m-0" for="inlineCheckbox1" th:text="${variantType.name}"></label>
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class = "col-4 text-right px-0">
+                                                                                        <label class="form-check-label m-0"
+                                                                                               th:text="${variantType.price.currency.symbol}+ ${#numbers.formatDecimal(variantType.price.amount, 1,'COMMA', 2, 'POINT')}"></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                
+                                                        <div class="card" th:if="${not #lists.isEmpty(product.addOns)}" th:each="addOn,iter : ${product.addOns}">
+                                                            <div class="card-header accordion-heading collapsed"
+                                                                 th:attr="data-target='#collapseTwo'+${addOn.addonId}"
+                                                                 id="headingOne" data-toggle="collapse"  aria-expanded="true" aria-controls="collapseOne">
+                                                                <div class = "title-indicator d-flex flex-column">
+                                                                    <span class = "font-weight-600" th:text="${addOn.name}">Cream</span>
+                                                                    <span class = "small text-muted" th:if="${addOn.maxSelectionsAllowed != null}">
+                                                                        <span th:text="#{add_to_cart.modal.addon.select.upto.message}"></span>
+                                                                        <strong th:text="${addOn.maxSelectionsAllowed}"> </strong>
+                                                                         <span th:text="#{add_to_cart.modal.addon.select.upto.item.label}"> </span>
+                                                                        <span th:if="${addOn.maxSelectionsAllowed} > 1">(s)</span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="select-indicator">
+
+                                                                    <span class = "mr-2" th:if="${addOn.minSelectionsRequired != null and addOn.minSelectionsRequired > 0}">
+                                                                        <span class="label label-warning" th:id="'addOn_det_required_span_'+${addOn.addonId}">Required</span>
+                                                                    </span>
+
+                                                                    <span class = "mr-2" th:id="'addOn_det_optional_span_'+${addOn.addonId}"
+                                                                      th:if="${addOn.minSelectionsRequired == null or addOn.minSelectionsRequired == 0}">
+                                                                        <span class="label label-muted" th:text="#{add_to_cart.modal.addon.optional}">
+                                                                        </span>
+                                                                    </span>
+
+                                                                    <span class = "mr-2 d-none" th:id="'addOn_det_selected_span_'+${addOn.addonId}">
+                                                                        <span class="label label-success">
+                                                                            <i class="fas fa-check-circle font-size-small mr-1"></i>
+                                                                            <span th:text="#{add_to_cart.modal.addon.selected}"></span>
+                                                                        </span>
+                                                                    </span>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="ad-on-wrapper collapse"
+                                                                 th:id="'collapseTwo'+${addOn.addonId}"
+                                                                 aria-labelledby="headingOne" data-parent="#accordion">
+                                                                <div class="card-body pb-0">
+                                                                    <div class="add-on-section">
+                                                                        <div class = "row m-0 w-100">
+
+                                                                            <div class = "col-12 px-0 add-on-item" th:each="addOnType : ${addOn.types}" th:if="${!addOn.multiSelectable}">
+                                                                                <div class = "row m-0 w-100">
+                                                                                    <div class = "col-8 px-0">
+                                                                                        <div class="form-check form-check-inline">
+                                                                                            <input th:class="'form-check-input '+${addOn.addonId}+'_det_class'" type="checkbox" th:name="${addOn.addonId}+'_check_box'"
+                                                                                                   th:id="'check_det_'+${addOnType.subTypes[0].sku}"
+                                                                                                   th:checked="${addOnType.subTypes[0].defaultSelection}"
+                                                                                                   th:onclick="insertAddOnDet([[${addOn.addonId}]],[[${addOnType.subTypes[0]}]],
+                                                                                                    [[${addOn.maxSelectionsAllowed}]],[[${addOn.minSelectionsRequired}]])"
+                                                                                                   th:value="${addOnType.subTypes[0].sku}">
+                                                                                            <input type="hidden" class="form-control-sm" id="maxSelectionsAllowed"
+                                                                                                   th:value="${addOn.maxSelectionsAllowed}">
+                                                                                            <label class="form-check-label m-0" th:for="'check_'+${addOnType.subTypes[0].sku}" th:text="${addOnType.name}"></label>
+
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class = "col-4 text-right px-0">
+                                                                                        <label class="form-check-label m-0" th:text="${addOnType.subTypes[0].price.currency.symbol}+${#numbers.formatDecimal(addOnType.subTypes[0].price.amount, 1,'COMMA', 2, 'POINT')}"></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-12 px-0 add-on-item add-on-qty-active" th:each="addOnType : ${addOn.types}" th:if="${addOn.multiSelectable}">
+                                                                                <div class="row m-0 w-100">
+                                                                                    <div class="col-8 px-0">
+                                                                                        <div class="form-check form-check-inline">
+                                                                                            <div class="input-group input-qty justify-content-end justify-content-md-start">
+                                                                                                <!--decrease quantity-->
+                                                                                                <div class="input-group-prepend">
+                                                                                                    <button class="btn btn-sm btn-light" type="button" th:id="'addOn_quantity_'+${addOnType.subTypes[0].sku}"
+                                                                                                            th:onclick="increaseAddOnSubTypeQntDet([[${addOn.addonId}]],
+                                                                                    [[${addOnType.subTypes[0].sku}]],[[${addOnType.subTypes[0].price.amount}]],'DECREASE',[[${addOnType.subTypes[0].defaultSelection}]]
+                                                                                    ,[[${addOn.maxSelectionsAllowed}]],[[${addOn.minSelectionsRequired}]])">
+                                                                                                        <i class="fas fa-minus"></i>
+                                                                                                    </button>
+                                                                                                </div>
+
+                                                                                                <input type="text" class="form-control" th:id="${addOnType.subTypes[0].sku}+'_multi'"
+                                                                                                       th:if="${addOnType.subTypes[0].defaultSelection}" th:value="1">
+                                                                                                <input type="text" class="form-control" th:id="${addOnType.subTypes[0].sku}+'_multi'"
+                                                                                                       th:if="${!addOnType.subTypes[0].defaultSelection}" th:value="0">
+                                                                                                <!--increase quantity-->
+                                                                                                <div class="input-group-append">
+                                                                                                    <button class="btn btn-sm btn-light" type="button" th:id="'addOn_quantity_'+${addOnType.subTypes[0].sku}"
+                                                                                                            th:onclick="increaseAddOnSubTypeQntDet([[${addOn.addonId}]],
+                                                                                    [[${addOnType.subTypes[0].sku}]],[[${addOnType.subTypes[0].price.amount}]],'INCREASE',[[${addOnType.subTypes[0].defaultSelection}]]
+                                                                                    ,[[${addOn.maxSelectionsAllowed}]],[[${addOn.minSelectionsRequired}]])">
+                                                                                                        <i class="fas fa-plus"></i>
+                                                                                                    </button>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <label class="form-check-label m-0" th:for="'check_'+${addOnType.subTypes[0].sku}" th:text="${addOnType.name}"></label>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class = "col-4 text-right px-0">
+                                                                                        <label class="form-check-label m-0" th:text="${addOnType.subTypes[0].price.currency.symbol}+${#numbers.formatDecimal(addOnType.subTypes[0].price.amount, 1,'COMMA', 2, 'POINT')}"></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>                             
+                                                </div>
+
+                                                <div class="col-12 px-0 item-note mb-4 pt-3 border-top" th:if="${isLineItemCustomerNotesEnabled}">
+                                                    <div class = "title-indicator d-flex flex-column mb-3">
+                                                        <span class = "font-weight-600" th:text="#{add_to_cart.modal.special.instruction.head}"></span>
+                                                        <span class = "small text-muted" th:text="#{add_to_cart.modal.special.instruction.label}"></span>
+                                                    </div>
+                                                    <textarea id="lineItemNoteDet" class="form-control item-note-textarea" placeholder = "Add instructions here..." aria-label="With textarea"></textarea>
+                                                </div>
+
+
+                                                <div th:if="${commonResponse.purchaseAllowed}">
+                                                    <div class="col-12 px-0 d-block d-md-none border-top mobile-qty-cart" th:if="${product.allVariantOutOfStock == false}">
+                                                        <form>
+                                                            <div class = "quantity-row text-center">
+                                                                <div class="font-weight-600 mb-3 qty-label">Quantity</div>
+                                                                <div class = "d-flex input-qty justify-content-center justify-content-md-start">
+                                                                    <div class="input-group-prepend">
+                                                                        <button class="btn btn-sm btn-light" type="button" onclick="decreaseQuantityDet()">
+                                                                            <i class="fas fa-minus"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <input type="text" class="form-control h-auto"
+                                                                           onkeypress="return allowOnlyNumberDet(event,this);"
+                                                                           id="prodQntDetMob" oninput="changeItemQuantityDet(event)" onfocusout="checkQntValidityDet()"
+                                                                           value="1">
+                                                                    <div class="input-group-append">
+                                                                        <button class="btn btn-sm btn-light" type="button" onclick="increaseQuantityDet()">
+                                                                            <i class="fas fa-plus"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class = "modal-footer footer-area border-top animate__animated animate__slideInUp px-0 pb-md-0" >
+                                            <div class = "container-fluid m-0 p-0">
+                                                <div th:if="${commonResponse.purchaseAllowed}" class = "row cart-total-popup align-items-center">
+                                                    <div class = "col-md-6 mb-md-0 mb-3 text-left d-none d-md-block" th:if="${product.allVariantOutOfStock == false}">
+                                                        <form>
+                                                            <div class = "quantity-row">                                    
+                                                                <div class = "d-flex input-qty justify-content-center justify-content-md-start">
+                                                                    <div class="input-group-prepend">
+                                                                        <button class="btn btn-sm btn-light" type="button" onclick="decreaseQuantityDet()">
+                                                                            <i class="fas fa-minus"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <input type="text" class="form-control h-auto"
+                                                                           onkeypress="return allowOnlyNumberDet(event,this);"
+                                                                           id="prodQntDet" oninput="changeItemQuantityDet(event)" onfocusout="checkQntValidityDet()"
+                                                                           value="1">
+                                                                    <div class="input-group-append">
+                                                                        <button class="btn btn-sm btn-light" type="button" onclick="increaseQuantityDet()">
+                                                                            <i class="fas fa-plus"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>     
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class = "col-12 col-md-6">
+
+
+                                                        <button class="btn btn-primary w-100 snackbar-add"
+                                                                th:classappend="${product.allVariantOutOfStock} ? disabled : ''"
+                                                                th:onclick="checkProductRecommendationInDetailsPage([[${product.productId}]])">
+                                                            <span th:text="${product.allVariantOutOfStock} ? #{add_to_cart.modal.stock_out.button.label} : #{add_to_cart.modal.add_to_cart.button.label}"></span>
+                                                            <span th:if="${!commonResponse.appTheme.productPricingDisabled}">
+                                                                <strong id="modal_product_price_st_det" th:text="${commonResponse.appTheme.currency}+${#numbers.formatDecimal(product.displayPrice, 0,'COMMA', 2, 'POINT')}"></strong>
+                                                            </span>
+                                                        </button>
+                                                        <input id="productPrice" type="hidden">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+

@@ -1,0 +1,159 @@
+<nav class="navbar navbar-main navbar-expand-lg d-flex flex-column px-0"
+     th:fragment="navigation" xmlns:th="http://www.thymeleaf.org">
+
+
+    <div class = "container-fluid nav-container nav-container-1 px-0 h-100 pt-3">
+
+
+        <div class = "main-logo-container nav-1">
+            <a class="navbar-brand d-flex align-items-center px-0 py-0" >
+            </a>
+        </div>
+
+        <div class = "nav-2 d-none d-lg-block" >
+            <ul class="navbar-nav justify-content-center nav_menu" th:id="navigationUl">
+
+                <li class="nav-item hide-on-scroll active" id="home_li">
+                    <a class="nav-link" href="/reservation/reservation-dash" th:text="#{nav_bar.item.home.label}">
+                    </a>
+                </li>
+
+                <li class="nav-item hide-on-scroll" id="menu_li">
+
+                    <a class="nav-link" href="/reservation/room">
+                        Room
+                    </a>
+                </li>
+
+
+
+
+                <li class="nav-item hide-on-scroll " id="purchase_li">
+                    <a class="nav-link"  href="/reservation/reservation-view">
+                        Reservation
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class = "nav-3" >
+            <ul class="navbar-nav align-items-center w-100 justify-content-lg-end justify-content-start">
+
+
+
+
+                <li class="nav-item mr-4 d-none d-lg-block" id="sign_in_menu">
+                    <div class="dropdown user-dropdown">
+                        <a class="btn btn-outline-primary d-flex align-items-center"
+                           th:href="@{/logout}">
+                            Log Out
+                        </a>
+
+                    </div>
+
+                </li>
+
+
+            </ul>
+        </div>
+
+        <div id="mySidenav" class="sidenav animate__animated">
+            <a href="javascript:void(0)" class="closebtn p-0 font-weight-normal" onclick="closeNav()">&times;</a>
+            <div class = "sidenav-header px-3">
+                <div class = "sidenav-content d-none flex-column align-items-start" >
+                    <div class = "link-indicator mb-1 d-flex align-items-center">
+                        <div class = "icon-container">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class = "text-container">
+                            <h4 class = "font-weight-600 mb-0">Guest</h4>
+                        </div>
+                    </div>
+                    <div class = "link-text">
+                        <p class = "font-weight-normal mb-0 text-muted text-truncate">You are signed in as a Guest</p>
+                    </div>
+                </div>
+                <div class = "sidenav-content no-guest h-100" >
+                    <div class = "nav-logo-container">
+                        <img class="mobile-nav-logo mb-0">
+                    </div>
+                </div>
+
+                <div class="sidenav-content d-flex flex-column align-items-start" >
+                    <div class="link-indicator mb-1 d-flex align-items-center">
+                        <div class="icon-container hide">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="text-container">
+                            <h4 class="font-weight-600 mb-0">
+                                <span th:text="#{nav_bar.item.hi.label}"></span>
+                                <span class="font-weight-600" th:text="${session.consumerName}"></span>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="link-text">
+                        <p class="text-muted m-0 font-size-small text-truncate" th:text="${session.consumerEmail}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class = "sidenav-body">
+                <div class = "guest-links">
+                    <div class = "row m-0 h-100 align-items-center" >
+                        <div class = "col-6  text-center" >
+                            <a class = "nav-link px-0" href="#" data-toggle="modal"
+                               data-target="#loginModal" th:text="#{nav_bar.item.sign_in.label}">
+                                 </a>
+                        </div>
+
+                        <div class = "col-6  text-center" >
+                            <a class = "nav-link px-0" href="#" data-toggle="modal"
+                               data-target="#registerModal" th:text="#{sign_in.modal.register_now.label}">
+                            </a>
+                        </div>
+
+
+
+
+                        <div class = "col-6 text-center" >
+                            <a class = "nav-link px-0" href="#" onclick="logOut(true)" th:text="#{nav_bar.item.sign_out.label}"> </a>
+                        </div>
+                    </div>
+                </div>
+                <div class = "main-links py-3" th:id="navigation_div_mob">
+                    <a class = "nav-link active"
+                    th:text="#{nav_bar.item.home.label}" id="home_mob_anch">
+
+                    </a>
+
+                    <a class = "nav-link"
+                    th:text="#{nav_bar.item.menu.label}" id="menu_mob_anch">
+
+                    </a>
+
+                    <a class = "nav-link" id="menu_mob_anch">
+                        Menu
+                    </a>
+
+
+
+                    <a class = "nav-link" href="/reservaion/reservation-view"  id="purchase_mob_anch">Reservation</a>
+
+
+                </div>
+            </div>
+            <div class = "sidenav-footer d-flex flex-column px-3 text-center justify-content-center">
+                <small><span th:text="#{footer.brand.power.by.applova}"></span></small>
+            </div>
+        </div>
+
+        <div class = "digital-menu-opener" >
+            <button class="btn btn-primary filter-toggle">
+                <i class="fas fa-bars mr-2"></i> Menu
+            </button>
+        </div>
+
+    </div>
+
+
+</nav>

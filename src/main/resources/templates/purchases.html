@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header"></head>
+
+<div th:replace="navigation :: navigation"></div>
+
+<body class="nav-active">
+    <div id="purchaseViewId">
+        <main role="main" class="wrapper">
+            <div class="container-fluid">
+            <div class="row">
+                <div class="container">
+                    <div class="content-wrapper mb-5">
+                        <div class="row items-center oh-title mb-4">
+                            <p class="w-100"></p>
+                            <div class="col-12 col-md-4">
+                                <h5 class="page-title mb-0 mt-3" th:text="#{purchase.history.page.order.summary}"></h5>
+                            </div>
+                            <div class="col-12 col-md-8 filter-wrapper items-center flex-wrap">
+                                <ul class="filters ml-0 ml-md-auto mr-3 purchase-ul">
+                                    <li class="text-secondary" th:text="#{purchase.history.page.order.sort.by}"></li>
+                                    <li class="text-success" id="oldestLiId">
+                                        <a
+                                           th:onclick="setActiveColor('ASC')" id="oldestId"
+                                           th:text="#{purchase.history.page.order.oldest}">
+                                        </a>
+                                    </li>
+                                    <li id="newestLiId">
+                                        <a
+                                           th:onclick="setActiveColor('DESC')" id="newestId"
+                                           th:text="#{purchase.history.page.order.newest}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                           th:onclick="setActiveColor('COMPLETED')" id="completedId"
+                                           th:text="#{purchase.history.page.sort.order.completed}">
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="form-group m-0">
+                                    <!--<label for="my-select"></label>-->
+                                    <select id="sortByStatus" class="custom-select rounded-all pr-5" name=""
+                                            th:onchange="loadPurchaseHistoryEntry([[${commonResponse.businessId}]])">
+                                        <option selected th:text="#{purchase.history.page.sort.order.more}"></option>
+                                        <option id="PENDING" th:text="#{purchase.history.page.sort.order.placed}"></option>
+                                        <option id="ACCEPTED"
+                                                th:text="#{purchase.history.page.sort.order.accepted}"></option>
+                                        <option id="READY" th:text="#{purchase.history.page.sort.order.ready}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <th:block th:if="${errorMessage != null}">
+                            <div class="error">
+                                <p th:text="${errorMessage}"></p>
+                            </div>
+                        </th:block>
+
+                        <th:block
+                                th:with="sdf = ${new java.text.SimpleDateFormat('yyyy-MM-dd''T''HH:mm:ssZ')}">
+                            <div class="row">
+                                <div class="col-12 col-md-6 mb-4" th:each="purchase, loopIndex: ${purchaseHistoryList}">
+                                    <div class="custom-card"
+                                         th:with="expr_result = ${purchase.getPurchaseStatus()}">
+                                        <div class="card-top">
+
+                                            <div class="row ">
+                                                <div class="col-12 od-section items-center"
+                                                     th:if="${expr_result == 'PENDING'}">
+                                                    <img class="img-status"
+                                                         th:src="@{/assets/img/ico-order-placed.svg}"
+                                                         alt="">
+                                                    <div class="od-item">
+                                                        <strong><span
+                                                                th:text="#{purchase.history.page.order.no} + '#'+ ${purchase.getTransactionId()}">
+                                                            </span></strong>
+                                                        <input type="hidden" id="transactionId" th:value="${purchase.getTransactionId()}">
+                                                        <small>
+                                                        <!--<span th:text="${#dates.format(sdf.parse(purchase.getPurchaseDate()),
+                                                            'MMMM dd yyyy, hh:mm a')}">
+                                                        </span>-->
+                                                            <span th:text="${purchase.getPurchaseDate()}">
+                                                        </span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="od-status placed" style="alignment: right"
+                                                         th:text="#{purchase.history.page.status.order.placed}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 od-section items-center"
+                                                     th:if="${expr_result == 'ACCEPTED'}">
+                                                    <img class="img-status"
+                                                         th:src="@{/assets/img/ico-order-accepted.svg}"
+                                                         alt="">
+                                                    <div class="od-item">
+                                                        <strong>
+                                                            <span
+                                                                th:text="#{purchase.history.page.order.no} + '#' + ${purchase.getTransactionId()}">
+                                                            </span>
+                                                        </strong>
+                                                        <small>
+                                                        <!--<span th:text="${#dates.format(sdf.parse(purchase.getPurchaseDate()),
+                                                            'MMMM dd yyyy, hh:mm a')}">
+                                                        </span>-->
+                                                        <span th:text="${purchase.getPurchaseDate()}">
+                                                        </span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="od-status accepted" style="alignment: right"
+                                                         th:text="#{purchase.history.page.status.order.accepted}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 od-section items-center"
+                                                     th:if="${expr_result == 'COMPLETED'}">
+                                                    <img class="img-status"
+                                                         th:src="@{/assets/img/ico-order-completed.svg}"
+                                                         alt=""/>
+                                                    <div class="od-item">
+                                                        <strong>
+                                                            <span th:text="#{purchase.history.page.order.no} + '#' + ${purchase.getTransactionId()}"></span>
+                                                        </strong>
+                                                        <small>
+                                                        <!--<span th:text="${#dates.format(sdf.parse(purchase.getPurchaseDate()),
+                                                            'MMMM dd yyyy, hh:mm a')}">-->
+                                                        <span th:text="${purchase.getPurchaseDate()}">
+                                                        </span>
+                                                    </span></small>
+                                                    </div>
+                                                    <div class="od-status completed" style="alignment: right"
+                                                         th:text="#{purchase.history.page.status.order.completed}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 od-section items-center"
+                                                     th:if="${expr_result == 'REJECTED'}">
+                                                     <img class="img-status"
+                                                         th:src="@{/assets/img/ico-order-rejected.svg}"
+                                                         alt="">
+                                                    <div class="od-item">
+                                                        <strong>
+                                                        <span th:text="#{purchase.history.page.order.no} + '#' + ${purchase.getTransactionId()}">
+                                                        </span>
+                                                        </strong>
+                                                        <small>
+                                                        <!--<span th:text="${#dates.format(sdf.parse(purchase.getPurchaseDate()),
+                                                            'MMMM dd yyyy, hh:mm a')}">-->
+                                                        <span th:text="${purchase.getPurchaseDate()}">
+                                                        </span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="od-status rejected" style="alignment: right"
+                                                         th:text="#{purchase.history.page.status.order.rejected}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 od-section items-center"
+                                                     th:if="${expr_result == 'READY'}">
+                                                    <img class="img-status"
+                                                         th:src="@{/assets/img/ico-order-ready.svg}"
+                                                         alt="">
+                                                    <div class="od-item">
+                                                        <strong>
+                                                            <span th:text="#{purchase.history.page.order.no} + '#' + ${purchase.getTransactionId()}">
+                                                        </span>
+                                                        </strong>
+                                                        <small>
+                                                        <!--<span th:text="${#dates.format(sdf.parse(purchase.getPurchaseDate()),
+                                                            'MMMM dd yyyy, hh:mm a')}">
+                                                        </span>-->
+                                                        <span th:text="${purchase.getPurchaseDate()}">
+                                                        </span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="od-status ready" style="alignment: right"
+                                                         th:text="#{purchase.history.page.status.order.ready}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 od-section items-center"
+                                                     th:if="${expr_result == 'VOID'}">
+                                                    <img class="img-status"
+                                                         th:src="@{/assets/img/ico-order-void.svg}"
+                                                         alt="">
+                                                    <div class="od-item">
+                                                        <strong>
+                                                        <span th:text="#{purchase.history.page.order.no} + '#' + ${purchase.getTransactionId()}">
+                                                        </span>
+                                                        </strong>
+                                                        <small>
+                                                        <!--<span th:text="${#dates.format(sdf.parse(purchase.getPurchaseDate()),
+                                                            'MMMM dd yyyy, hh:mm a')}">
+                                                        </span>-->
+                                                        <span th:text="${purchase.getPurchaseDate()}">
+                                                        </span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="od-status void" style="alignment: right" th:text="#{purchase.history.page.status.order.void}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 od-section items-center"
+                                                     th:unless="${expr_result}">
+                                                    <span class="order-unknown" th:text="#{purchase.history.page.status.order.unknown}"></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="card-body pb-0">
+                                            <div class="row">
+                                                <div class="col-12 col-md-6 px-0">
+                                                    <div class="row m-0">
+                                                        <ul class="col-12 od-list">
+                                                            <li>
+                                                                <span class="od-list-title" th:text="#{purchase.history.page.order.by}"></span>
+                                                                <p th:if="${purchase.getCollectionMethod() != null
+                                                                    && purchase.getCollectionMethod() == 'PICK_UP'}">
+                                                                    <span th:text="${purchase.getCollectionInfo().getCollectorName()}"></span>
+                                                                </p>
+                                                                <p th:if="${purchase.getCollectionMethod() == 'DELIVER'}">
+                                                                    <span th:text="${purchase.getDeliveryInfo() != null
+                                                                        ? purchase.getDeliveryInfo().getCollectorName()
+                                                                        : ''}">
+                                                                    </span>
+                                                                </p>
+                                                            </li>
+                                                        </ul>
+                                                        <ul class="col-12 od-list">
+                                                            <li>
+                                                                <span class="od-list-title" th:text="#{purchase.history.page.order.on}"></span>
+                                                                <!--<p th:text="${#dates.format(sdf.parse(purchase.getPurchaseDate()),
+                                                                    'MMMM dd yyyy, hh:mm a')}"></p>-->
+                                                                <p th:text="${purchase.getPurchaseDate()}"></p>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-md-6 px-0">
+                                                    <div class="row m-0">
+                                                        <span th:if="${purchase.getCollectionMethod() == 'DELIVER'}">
+                                                        <ul class="col-12 od-list">
+                                                            <li>
+
+                                                                    <span class="od-list-title" th:text="#{purchase.history.page.order.delivery.address}">
+
+                                                                    </span>
+                                                                    <p th:if="${purchase.getDeliveryInfo() != null}">
+                                                                        <span th:text="${purchase.getDeliveryInfo().getDeliveryAddress().getLine1()
+                                                                                + ' ' + purchase.getDeliveryInfo().getDeliveryAddress().getLine2()
+                                                                                + ' ' + purchase.getDeliveryInfo().getDeliveryAddress().getCity()
+                                                                                + ' ' + purchase.getDeliveryInfo().getDeliveryAddress().getZip()
+                                                                                + ' ' + purchase.getDeliveryInfo().getDeliveryAddress().getState()
+                                                                                + ' ' + purchase.getDeliveryInfo().getDeliveryAddress().getCountry()
+                                                                                }">
+                                                                        </span>
+                                                                    </p>
+
+                                                            </li>
+                                                        </ul>
+                                                        </span>
+                                                        <ul class="col-12 od-list">
+                                                            <li th:if="!${pickOrDeliveryTimeDisabled}">
+                                                                <span th:if="${purchase.getCollectionMethod() == 'DELIVER'}">
+                                                                    <div th:if="${expr_result == 'PENDING'
+                                                                        || expr_result == 'READY' || expr_result == 'ACCEPTED'}">
+                                                                        <span class="od-list-title"
+                                                                              th:text="#{purchase.history.page.order.est.delivery.time}">
+                                                                        </span>
+                                                                    </div>
+                                                                    <div th:if="${expr_result == 'COMPLETED' || expr_result == 'VOID'
+                                                                        || expr_result == 'REJECTED'}">
+                                                                        <span class="od-list-title" th:text="#{purchase.history.page.order.delivery.time}"></span>
+                                                                    </div>
+                                                                    <span th:if="${purchase.getDeliveryInfo() != null}">
+                                                                        <th:block
+                                                                                if="${purchase.getDeliveryInfo() != null
+                                                                                && purchase.getDeliveryInfo().getRequestedDeliveryTime() != null}">
+                                                                        <!--<p th:text="${#dates.format(sdf.parse(purchase.getDeliveryInfo().getRequestedDeliveryTime()),
+                                                                            'MMMM dd yyyy, hh:mm a')}"></p>-->
+                                                                        <p th:text="${purchase.getDeliveryInfo()
+                                                                            .getRequestedDeliveryTime()}"></p>
+                                                                        </th:block>
+                                                                    </span>
+                                                                </span>
+
+                                                                <span th:if="${purchase.getCollectionMethod() == 'PICK_UP'}">
+                                                                    <span class="od-list-title" th:text="#{purchase.history.page.order.pickup.time}"></span>
+                                                                        <th:block
+                                                                                if="${purchase.getCollectionInfo().getRequestedCollectionTime() != null}">
+                                                                        <!--<p th:text="${#dates.format(sdf.parse(purchase.getCollectionInfo().getRequestedCollectionTime()),
+                                                                            'MMMM dd yyyy, hh:mm a')}"></p>-->
+                                                                            <p th:text="${purchase.getCollectionInfo().getRequestedCollectionTime()}"></p>
+                                                                        </th:block>
+                                                                </span>
+                                                             </li>
+
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="col-12 col-md-6 px-0">
+                                                        <div class="row m-0">
+                                                            <ul class="col-12 od-list" th:if="${purchase.dynamicEntries != null}">
+                                                                <li class="od-list" th:each="dynamicEntry : ${purchase.dynamicEntries}" th:if="${dynamicEntry.value != null && dynamicEntry.value != ''}">
+                                                                    <span class="od-list-title" th:text="${dynamicEntry.key}+':'"></span>
+                                                                    <p th:text="${dynamicEntry.value}"></p>
+
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="card-footer pt-0">
+                                            <ul class="od-list pl-0 items-center">
+                                                <li class="mr-auto">
+                                                    <span th:text="#{purchase.history.page.order.total.products}">
+                                                    </span>
+                                                    <strong>
+                                                        <span class="mb-1"
+                                                            th:text="${#numbers.formatDecimal(itemCounterList.get(loopIndex.index), 0,'COMMA', 0, 'POINT')}">
+
+                                                        </span>
+                                                    </strong>
+                                                    <p>
+                                                        <span th:text="#{purchase.history.page.order.grand.total.products}">
+                                                        </span>
+                                                        <strong>
+
+                                                            <span
+                                                                th:text="${currency + #numbers.formatDecimal(purchase.getTotalAmount(), 0,'COMMA', 2, 'POINT')}"></span>
+                                                        </strong>
+                                                    </p>
+                                                </li>
+
+                                                <!--th:onclick="reOrderItems([[${purchase}]])">Re-Order-->
+                                                <li class="btn-wraper mt-2 mt-sm-0">
+                                                    <button class="btn btn-primary mr-2" th:if="${commonResponse.purchaseAllowed}"
+                                                            th:onclick="confirmReorderModal([[${purchase}]])"
+                                                            th:text="#{purchase.history.page.order.reorder.label}">
+                                                    </button>
+
+                                                    <span th:if="${trackingUrlList != null && trackingUrlList.get(loopIndex.index) != ''}">
+                                                        <a class="btn btn-primary mr-2"
+                                                           th:href="${trackingUrlList.get(loopIndex.index)}" target="_blank">
+                                                           <i class="fas fa-map-marker-alt mr-2"></i>
+                                                            <span th:text="#{purchase.history.page.order.track.order}"></span>
+                                                        </a>
+                                                    </span>
+
+                                                    <button class="btn btn-secondary" data-toggle="modal"
+                                                        data-target=".view-list-modal"
+                                                        th:onclick="purchaseViewModal([[${businessId}]], [[${purchase.getTransactionId()}]]);"
+                                                            th:text="#{purchase.history.page.order.view.item.button}">
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="overlay" style="display:none;">
+            <div class="spinner"></div>
+            <br/>
+            <span th:text="#{loading.spinner.menu.tab.add.to.cart}"></span>
+        </div>
+
+        <div id="reorderPurchaseModalId" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+             th:fragment="purchaseReorderModal" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog general-modal modal-md">
+                <div id="reorder-loaded-view" class="hide">
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="sortBy" th:value="${sortBy}"/>
+        <input type="hidden" id="selectedValue" th:value="${selectedValue}"/>
+    </main>
+
+
+    <div th:replace="footer :: footer"></div>
+
+        <script>
+            $(document).ready(function () {
+                makeMenuActive("#purchase_li","#purchase_mob_anch");
+
+                var sortBy = $("#sortBy").val();
+
+                if (sortBy == 'ASC') {
+                    $('#newestId').css('font-weight', 'normal');
+                    $('#completedId').css('font-weight', 'normal');
+                    $('#oldestId').css('font-weight', 'bold');
+
+                } else if (sortBy == 'DESC') {
+                    $('#oldestId').css('font-weight', 'normal');
+                    $('#completedId').css('font-weight', 'normal');
+                    $('#newestId').css('font-weight', 'bold');
+
+                } else if (sortBy == 'COMPLETED') {
+                     $('#newestId').css('font-weight', 'normal');
+                     $('#completedId').css('font-weight', 'bold');
+                     $('#oldestId').css('font-weight', 'normal');
+
+                } else {
+                    var selectedValue = $("#selectedValue").val();
+                    $("#sortByStatus").val(selectedValue);
+
+                    $('#oldestId').css('font-weight', 'normal');
+                    $('#completedId').css('font-weight', 'normal');
+                    $('#newestId').css('font-weight', 'bold');
+                }
+
+            });
+    </script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<div id="reorder-loaded-view" class="modal-content" xmlns:th="http://www.thymeleaf.org">
+
+    <script th:inline="javascript">
+        var themeColor = /*[[${commonResponse.appTheme.themeColor}]]*/ 'default';
+        var themeColoredFont = themeColor;
+        if (themeColor === '#ffffff'){
+            themeColoredFont = '#000000';
+            $('.btn-primary').addClass('btn-white-theme-primary').removeClass('btn-primary');
+            $('#mini-product-placeholder-black-available').removeClass('hide');
+            $('#mini-product-placeholder-black').removeClass('hide');
+            $('#mini-product-placeholder-white-available').addClass('hide');
+            $('#mini-product-placeholder-white').addClass('hide');
+        }else {
+            $('#mini-product-placeholder-white-available').removeClass('hide');
+            $('#mini-product-placeholder-white').removeClass('hide');
+            $('#mini-product-placeholder-black-available').addClass('hide');
+            $('#mini-product-placeholder-black').addClass('hide');
+        }
+        console.log(themeColor);
+        $('.btn-primary').css('background-color', themeColor);
+        $('.btn-primary').css('border-color', themeColor);
+    </script>
+
+    <style>
+                .item-table-modal .table-body-checkout {
+                    max-height: unset !important;
+                    overflow-y: unset !important;
+                }
+                .item-table-modal .item .card-horizontal .card-body {
+                    position: relative;
+                }
+                .error-row {
+                    border-radius: 6px;
+                    padding: 22px;
+                    border: 1px solid red;
+                    margin: 0;
+                    background-color: rgba(244,67,54,.05);
+                    color: red;
+                    font-weight: 600;
+                    font-size: 14px;
+                    display: flex;
+                }
+
+                @media (max-width:576px){
+                    .item-table-modal .item-main-row-body {
+                        min-height: 92px;
+                    }
+                }
+
+    </style>
+
+
+    <div class="modal-header justify-content-center">
+        <th:block th:if="${purchaseHistoryEntryList}">
+            <h5 class="modal-title font-weight-bold">
+                <span
+                    th:text="#{purchase.history.page.reorder.modal.available.items}">
+                </span>
+            </h5>
+        </th:block>
+    </div>
+
+    <div class="modal-body">
+          <div class = "row" th:if="${purchaseUnavailableList}">
+                <div class="col-12">
+                    <div class="row mb-4 error-row">
+                        <div class="error-text">
+                            <span
+                                th:text="#{purchase.history.page.reorder.product.unavailable.message}">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+          <div class = "item-table item-table-modal">
+            <div class="table-body-checkout">
+                <div class="row item" th:each="purchase : ${purchaseHistoryEntryList}">
+                    <div class="col-12 pl-0 pr-0 pr-md-3">
+                        <div class="card-horizontal mb-0">
+                            <img th:if="${purchase.getImage() != null}"class="cart-img" th:src="${purchase.getImage()}" alt="">
+                            <img th:if="${purchase.getImage() == null}" id="mini-product-placeholder-black-available"
+                                 class="cart-img placeholder-cart" th:src="@{/assets/img/placeholder-product-mini.svg}" th:alt="alter">
+                            <img th:if="${purchase.getImage() == null}" id="mini-product-placeholder-white-available"
+                                 class="cart-img placeholder-cart hide" th:src="@{/assets/img/product-placeholder-mini-white.svg}" th:alt="alter">
+
+                            <div class="card-body pl-3 pr-0">
+                                <div class = "row m-0 h-100 item-main-row-body">
+                                    <div class = "col-12 col-md-5 px-0">
+                                        <h6 class="card-title mb-2 text-truncate">
+                                            <p th:text="${purchase.getProductName()}"></p>
+                                        </h6>
+
+                                        <ul class="item-list mb-3">
+                                            <th:block th:each="addOns : ${purchase.getAddOns()}">
+                                                <li><span th:text="${addOns.getAddOnName()}"></span></li>
+                                            </th:block>
+                                        </ul>
+                                    </div>
+
+                                    <div class = "col-12 col-md-7 px-0">
+                                        <div class = "row m-0">
+                                            <div class="col-7 pl-0 pr-md-3 pr-0 mb-0 text-left text-md-right d-flex d-md-block flex-column">
+                                                <label class="d-block d-md-none mb-0 font-weight-600"
+                                                    th:text="#{purchase.history.page.order.reorder.price.label}">
+                                                </label>
+
+
+
+                                                <label class="m-0">
+                                                    <p th:text="${commonResponse.appTheme.currency
+                                                    + #numbers.formatDecimal(purchase.getItemPrice(), 0,'COMMA', 2, 'POINT')}"></p>
+                                                </label>
+                                            </div>
+
+                                            <div class="col-5 px-0 mb-0 text-left text-md-right d-flex d-md-block flex-column">
+                                                <label class="d-block d-md-none mb-0 font-weight-600"
+                                                    th:text="#{purchase.history.page.order.reorder.quantity.label}">
+                                                </label>
+
+                                                <label class="m-0">
+                                                    <p th:text="x + ' ' + ${#numbers.formatDecimal(purchase.getCount(), 0,'COMMA', 0, 'POINT')}"></p>
+
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <th:block th:if="${purchaseUnavailableList}">
+                    <div class="row item" th:each="purchase : ${purchaseUnavailableList}">
+                        <div class="col-12 pl-0 pr-0 pr-md-3">
+                            <div class="card-horizontal mb-0">
+                                <img th:if="${purchase.getImage() != null}" class="cart-img" th:src="${purchase.getImage()}" alt="">
+                                <img th:if="${purchase.getImage() == null}" id="mini-product-placeholder-black"
+                                    class="cart-img placeholder-cart hide" th:src="@{/assets/img/placeholder-product-mini.svg}" th:alt="alter">
+                                <img th:if="${purchase.getImage() == null}" id="mini-product-placeholder-white"
+                                    class="cart-img placeholder-cart hide" th:src="@{/assets/img/product-placeholder-mini-white.svg}" th:alt="alter">
+                                <div class="card-body pl-3 pr-0">
+                                    <div class = "row m-0 h-100 item-main-row-body">
+                                        <div class = "col-12 col-md-5 px-0">
+                                                    <h6 class="card-title mb-2 text-truncate"><p
+                                                            th:text="${purchase.getProductName()}"></p>
+                                                    </h6>
+                                                    <ul class="item-list mb-3">
+                                                        <th:block th:each="addOns : ${purchase.getAddOns()}">
+                                                            <li><span th:text="${addOns.getAddOnName()}"></span></li>
+                                                        </th:block>
+                                                    </ul>
+                                        </div>
+                                        <div class = "col-12 col-md-7 px-0">
+                                            <div class = "row m-0">
+                                                <div class="col-12 px-0 mb-0 text-left text-md-right">
+                                                    <label class="m-0 text-danger"><p th:text="${purchase.getNote()}"></p></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="modal-footer border-top">
+        <div class="row m-0 w-100">
+            <div class="col-12 px-0 d-flex">
+                <button type="button" id="confirm-delivery-button" onclick="proceedCheckoutView();" class="btn btn-primary w-100" data-dismiss="modal" style="background-color: rgb(0, 0, 0); border-color: rgb(0, 0, 0);">Continue to Checkout</button>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="modal-footer" th:if="${purchaseHistoryEntryList}">
+        <div class="row m-0 w-100">
+            <div class="col-12 px-0 d-flex">
+                <button type="button" id="confirm-delivery-button"
+                        onclick="proceedCheckoutView();"
+                        class="btn btn-primary w-100" data-dismiss="modal"
+                        th:text="#{purchase.history.page.reorder.confirm.modal.continue.button}"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer" th:if="${purchaseHistoryEntryList == null}">
+        <div class="row m-0 w-100">
+            <div class="col-12 px-0 d-flex">
+                <button type="button" id="cancel-reorder-button" data-dismiss="modal" aria-label="Close"
+                    class="btn btn-primary w-100" th:text="#{purchase.history.page.reorder.confirm.modal.cancel.button}"></button>
+            </div>
+        </div>
+
+        <div class="row m-0 w-100" th:if="${showCustomerArrivedInstructions == true}" >
+                <p> Hello World</p>
+                <div class="col-12 px-0 d-flex">
+                    <i class="fa fa-info-circle"></i><span th:text="#{purchase.history.template.page.order.help.message}"></span>
+                    <a class="link-wrapper-primary link-button-wrapper"
+                       th:href="${appTheme.contactNumbers[0]}">
+                    <span th:text="#{contact_us.modal.label}"/>
+                    </a>
+                </div>
+         </div>
+    </div>
+</div>
+
+

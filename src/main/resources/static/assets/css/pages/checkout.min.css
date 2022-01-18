@@ -1,0 +1,99 @@
+.multiline {
+    float: right;
+    white-space: pre-wrap;
+    clear: both;
+}
+
+
+.ui-datepicker-unselectable.gesloten span.ui-state-default {
+    background:#999999 !important;
+    border-color:#999999 !important;
+    color:#34b25a !important;
+    text-decoration: line-through;
+}
+
+.ui-datepicker-unselectable.verhuurt span.ui-state-default {
+    background:#FF6600!important;
+    border-color:#FF6600 !important;
+    color:#34b25a !important;
+    text-decoration: line-through;
+}
+
+.ui-state-disabled{
+    opacity: 1 !important;
+    color:#34b25a !important;
+}
+
+.error-message {
+    color: #e74c3c;
+    padding: .375rem .75rem;
+}
+
+.error-message-promo {
+    color: #e74c3c;
+    white-space: nowrap;
+    padding: .375rem .75rem;
+}
+
+.rightSideDiv {
+    width: 68%;
+    height: 120px;
+    float:  center;
+    text-align-last: right;
+
+}
+
+.sub-heading {
+    color: #f0b310;
+    line-height: 22px;
+    text-transform: uppercase;
+    font-family: 'Raleway', sans-serif;
+}
+
+.sub-topic {
+    text-transform: capitalize;
+    font-weight: 700;
+}
+
+.sub-topic-border-bottom {
+    text-transform: capitalize;;
+    font-weight: 700;
+    border-bottom: 2px solid #f1f1f1;
+    font-size: 16px;
+    padding-bottom: 8px;
+}
+
+.promo-note {
+    /*font-size: 12px;*/
+    color: #5c5f61;
+    font-weight: bold;
+}
+
+.promo-title {
+    font-size: 12px !important;
+    color: #5c5f61;
+    font-weight: bold;
+}
+
+.promo-message-font-weight-bold {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+}
+
+.address-label-area {
+    border: 1px solid var(--main-theme-color);
+    left: 0;
+    top: 2px;
+    bottom: 0;
+    width: 50%;
+    /*background-color: var(--main-theme-color) !important;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorMessageArea label, .tipping-section .form-group label {
+    font-size: 12.5px
+}
+
+/*# sourceMappingURL=checkout.min.css.map */

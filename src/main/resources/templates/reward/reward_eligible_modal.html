@@ -1,0 +1,111 @@
+
+
+    <style>
+.view-rewards .modal-body {
+	max-height: 500px;
+	overflow-y: auto;
+}
+
+.view-rewards .modal-footer {
+	box-shadow: 0 -1px 3px rgba(0,0,0,0.12), 0 0px 3px rgba(0,0,0,0.24);
+	z-index: 9;
+}
+
+.reward-items .reward-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.reward-items .reward-item:last-child {
+  border-bottom: unset;
+}
+
+.reward-items .reward-item i {
+  font-size: 18px;
+}
+
+.reward-items .reward-item .icon-contact {
+  margin-right: 12px;
+}
+
+.reward-items .reward-item-btn .btn {
+  padding: 6px 24px;
+  font-size: 16px !important;
+  width: 110px;
+}
+
+.reward-item .reward-item-btn .btn-light.active {
+    background-color: var(--primary-theme-color) !important;
+    border-color: var(--primary-theme-color) !important;
+    color: #ffffff !important;
+}
+
+.reward-item .reward-item-details {
+  padding-right: 24px;
+}
+</style>
+
+
+        <div class="modal-content"  xmlns:th="http://www.thymeleaf.org" id="eligible_reward_body">
+
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title font-weight-bold">View Rewards</h5>
+                <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+
+            <div class="modal-body p-0">
+
+                <div class="reward-items row m-0 p-0" >
+
+                    <div class="reward-item col-12"  th:each="reward : ${eligibleRewards}">
+                        <div class = "reward-item-details d-flex align-items-center">
+                            <div class="contact-icon d-none d-md-flex">
+                                <div class="icon-contact">
+                                    <i class="fas fa-gift"></i>
+                                </div>
+                            </div>
+                            <div class="contact-text d-flex flex-column">
+                                <label class="mb-0 font-weight-600" th:text="${reward.ruleName}"></label>
+                                <small class = "text-muted">
+                                    <span th:text="#{rewards.eligible.campaign.detail.text}"></span>
+                                    <span th:text="${currency}+''+${reward.minimumOrderAmount}"></span>
+                                </small>
+                            </div>
+                        </div>
+                        <div class = "reward-item-btn">
+                            <button class="btn btn-light select_reward_btn"
+                                    th:classappend="${reward.alreadyApplied ? 'hide': ''}"
+                                    th:id="'reward-btn-select-'+${reward.ruleId}"
+                                    th:onclick="selectReward([[${reward.ruleId}]],[[${maximumAllowedRedeemableRewardsCount}]])">
+                                Select
+                            </button>
+                            <button class="btn btn-light active reward_active_btn"
+                                    th:classappend="${reward.alreadyApplied ? '': 'hide'}"
+                                    th:id="'reward-btn-remove-'+${reward.ruleId}"
+                                    th:value="${reward.ruleId}"
+                                    th:onclick="removeReward([[${reward.ruleId}]])">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class = "row m-0 w-100">
+                    <div class = "col-12 px-0 d-flex">
+                        <a href = "#" class="btn btn-primary w-100"
+                           onclick="addRewardToCart()">
+                            Confirm
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,18 @@
+
+
+<div id="productModalContainer" class="modal fade quick-cart"  tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+     th:fragment="product_modal" xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog modal-xl" role="document">
+        <div id="overlay" style="display:none;">
+            <div class="spinner"></div>
+            <br/>
+            <span th:text="#{loading.spinner.quick.cart.modal}"></span>
+        </div>
+
+        <div id="product_loaded_view" >
+
+        </div>
+    </div>
+</div>
+
+

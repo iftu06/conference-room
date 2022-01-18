@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header"></head>
+
+
+
+
+<style>
+        .special-notes-container {
+            position:relative;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            top: 0;
+            display: none;
+        }
+        .special-notes-container .specialText {
+            font-size: 16px;
+        }
+        .special-notes-container .specialText a{
+            font-weight: bold;
+            text-decoration: underline;
+            color: #ffffff;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-word;
+            word-break: break-word;
+        }
+        .special-note-active .special-notes-container {
+            display: block;
+        }
+        .banner-custom-width {
+            z-index: 1;
+        }
+        .banner-carousel-area {
+            width: 100%;
+        }
+
+        .special-note-active .banner-main {
+            height: calc(100vh - 216px);
+        }
+
+        .special-note-active .banner-custom-width {
+            height: 100%;
+            align-items: center;
+        }
+
+        @media (min-width: 1200px) {
+            .special-notes-container .container-fluid {
+                width: calc(100% - 150px);
+            }
+        }
+
+        @media (max-width: 1400px) and (min-width: 576px) {
+            .special-notes-container .container-fluid {
+                width: calc(100% - 50px);
+            }
+        }
+
+        @media (max-width:992px) {
+            .special-note-active .banner-main {
+                height: calc(100vh - 188px);
+            }
+        }
+
+        @media (max-width:576px) {
+            .special-note-active .banner-main {
+                height: calc(100vh - 184px);
+                min-height: unset;
+            }
+            .special-notes-container .specialText {
+                font-size: 14px;
+            }
+            .banner-custom-width {
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
+            .banner-main {
+                flex-direction: column;
+                justify-content: flex-start;
+                padding:0;
+            }
+            .banner-content.mb-5 {
+                margin-bottom: 16px !important;
+            }
+            .banner-main .banner-content h1 {
+                margin-bottom: 4px;
+            }
+        }
+
+        @media (max-width:350px) {
+            .special-note-active .banner-main {
+                height: auto;
+            }
+            .special-notes-container {
+                margin-bottom: 24px;
+            }
+            .special-note-active .banner-custom-width {
+                padding-bottom: 24px;
+            }
+        }
+
+        @media (orientation: landscape) and (max-width: 850px) {
+            .special-note-active .banner-main {
+                height: auto;
+            }
+            .banner-custom-width {
+                padding-bottom: 24px;
+            }
+        }
+
+</style>
+
+<body class="nav-active">
+
+<div th:replace="navigation :: navigation"></div>
+
+<main role="main" class="wrapper">
+    <div class="container page-section-home">
+        <div class="row mx-0 header-row">
+            <div class="col-8 col-md-6 px-0">
+                <h4 class="page-title">Featured Products</h4>
+            </div>
+            <div class="col-4 col-md-6 px-0 d-flex justify-content-end view-btn">
+                <a href="menu.html" class="btn btn-outline-secondary">
+                    <span>View All</span>
+                    <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+        <div class="owl-carousel item-slider eq-height nav-arrows-top carousel-featured-products owl-loaded owl-drag">
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="owl-stage-outer"><div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 1264px;"><div class="owl-item active" style="width: 234.667px; margin-right: 18px;"><div class="item w-100">
+                <div class="card card-item h-100">
+                    <div class="offer-tag">-10%</div>
+                    <div class="card-img-product">
+                        <img class="w-100" src="assets/img/pizza-2.jpg" alt="">
+                    </div>
+                    <div class="card-body product-content">
+                        <div class="product-detail">
+                            <h5 class="card-title">Americano - Special coffee</h5>
+                            <a href="detail.html" class="card-text"> More details</a>
+                        </div>
+                        <div class="card-footer px-0">
+                            <p>$3.00</p> <p class="line-through">$3.00</p>
+                            <button data-toggle="modal" data-target="#upselling-modal" class="btn btn-primary ml-auto">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div></div><div class="owl-item active" style="width: 234.667px; margin-right: 18px;"><div class="item w-100">
+                <div class="card card-item h-100">
+                    <div class="offer-tag">-10%</div>
+                    <div class="card-img-product">
+                        <img class="w-100" src="assets/img/pizza-1.jpg" alt="">
+                    </div>
+                    <div class="card-body product-content">
+                        <div class="product-detail">
+                            <h5 class="card-title">Americano - Special coffee</h5>
+                            <a href="detail.html" class="card-text"> More details</a>
+                        </div>
+                        <div class="card-footer px-0">
+                            <p>$3.00</p> <p class="line-through">$3.00</p>
+                            <button data-toggle="modal" data-target="#quick-cart" class="btn btn-primary ml-auto">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div></div><div class="owl-item active" style="width: 234.667px; margin-right: 18px;"><div class="item w-100">
+                <div class="card card-item h-100">
+                    <div class="offer-tag">-10%</div>
+                    <div class="card-img-product">
+                        <img class="w-100" src="assets/img/pizza-1.jpg" alt="">
+                    </div>
+                    <div class="card-body product-content">
+                        <div class="product-detail">
+                            <h5 class="card-title">Americano - Special coffee</h5>
+                            <a href="detail.html" class="card-text"> More details</a>
+                        </div>
+                        <div class="card-footer px-0">
+                            <p>$3.00</p> <p class="line-through">$3.00</p>
+                            <button data-toggle="modal" data-target="#quick-cart" class="btn btn-primary ml-auto">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div></div><div class="owl-item" style="width: 234.667px; margin-right: 18px;"><div class="item w-100">
+                <div class="card card-item h-100">
+                    <div class="offer-tag">-10%</div>
+                    <div class="card-img-product product-no-img">
+                        <h5 class="card-title-placeholder">Americano - Special coffee</h5>
+                        <div class="placeholder-container">
+                            <img class="placeholder-img" src="assets/img/product-placeholder.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="card-body product-content">
+                        <div class="product-detail">
+                            <h5 class="card-title">Americano - Special coffee</h5>
+                            <a href="detail.html" class="card-text"> More details</a>
+                        </div>
+                        <div class="card-footer px-0">
+                            <p>$3.00</p> <p class="line-through">$3.00</p>
+                            <button data-toggle="modal" data-target="#quick-cart" class="btn btn-primary ml-auto">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div></div><div class="owl-item" style="width: 234.667px; margin-right: 18px;"><div class="item w-100">
+                <div class="card card-item h-100">
+                    <div class="offer-tag">-10%</div>
+                    <div class="card-img-product">
+                        <img class="w-100" src="assets/img/pizza-3.jpg" alt="">
+                    </div>
+                    <div class="card-body product-content">
+                        <div class="product-detail">
+                            <h5 class="card-title">Americano - Special coffee</h5>
+                            <a href="detail.html" class="card-text"> More details</a>
+                        </div>
+                        <div class="card-footer px-0">
+                            <p>$3.00</p> <p class="line-through">$3.00</p>
+                            <button data-toggle="modal" data-target="#quick-cart" class="btn btn-primary ml-auto">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div></div></div></div><div class="owl-nav"><button type="button" role="presentation" class="owl-prev disabled"><span aria-label="Previous">‹</span></button><button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span></button></div><div class="owl-dots disabled"></div></div>
+    </div>
+
+
+</main>
+
+<!--&lt;!&ndash; footer &ndash;&gt;-->
+
+<div th:replace="footer :: footer"></div>
+
+</body>
+</html>

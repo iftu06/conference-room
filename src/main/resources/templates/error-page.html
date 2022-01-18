@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<div th:replace="error_header :: header"></div>
+
+<body class="nav-active">
+
+<div th:replace="navigation_checkout :: navigation"></div>
+
+<main role="main" class="wrapper">
+    <div class="container-fluid">
+
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="container">
+                    <div class="cart-wrapper py-5 success-msg-area">
+                        <div class="row m-0 msg-border">
+                            <div class="col-12 px-3 px-md-0">
+                                <div class="card border-0 bg-danger p-4 msg-content">
+                                    <div class="card-img p-4">
+                                        <img class="w-100" th:src="@{/assets/img/ico-wrong.svg}" alt="" height="150px">
+                                    </div>
+                                    <div class="text-center">
+                                        <h4 class="text-white font-weight-bold mb-0">Please Try Again</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 px-3 px-md-0">
+                         <div class="d-flex flex-wrap flex-column h-100 bg-light p-4 msg-content">
+                                <div class = "text-center mb-3">
+                                    <h5 class="font-weight-normal mb-1" th:text="${error.message}"></h5>
+<!--                                    <h5 class="font-weight-bold">Cherrybite - Howard Street</h5>-->
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</main>
+
+<style>
+
+    .navbar-main .navbar-nav .nav-item.active .nav-link {
+        color: var(--main-theme-color) !important;
+    }
+
+</style>
+
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/jquery-ui.js}"></script>
+<script th:src="@{/assets/js/popper.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/app-0.3.0-RC1.js}"></script>
+
+<script th:inline="javascript">
+        var themeColor = /*[[${commonResponse.appTheme.themeColor}]]*/ 'default';
+        var currency = /*[[${commonResponse.appTheme.currency}]]*/ 'default';
+        var cartQnt = /*[[${commonResponse.cartQnt}]]*/ 'default';
+        var businessId = /*[[${commonResponse.businessId}]]*/ 'default';
+        var themeColoredFont = themeColor;
+        if (themeColor === '#ffffff'){
+            themeColoredFont = '#000000';
+            $('.btn-primary').addClass('btn-white-theme-primary').removeClass('btn-primary');
+        }
+        $(".theme-color").css("background-color", themeColor);
+        $('.change-pick').css("color", themeColoredFont);
+        $('.owl-nav button ').css('background-color', themeColor);
+        $('.btn-primary').css('background-color', themeColor);
+        $('.btn-primary').css('border-color', themeColor);
+        $('#sign-title').css("color", themeColor);
+        document.documentElement.style.setProperty('--main-theme-color', themeColor);
+
+
+
+        /*]]>*/
+
+
+
+var active = localStorage.getItem("active");
+if(active){
+    console.log(active);
+    $(".navbar-nav li").removeClass("active");
+    $("#"+active).addClass('active');
+    console.log(themeColor);
+    $("#"+active).css("color", themeColoredFont);
+}
+
+$(".navbar-nav li").on("click", function() {
+console.log("kll");
+$(".navbar-nav li").removeClass("active");
+$(this).addClass("active");
+localStorage.setItem("active",$(this).attr('id'));
+});
+
+
+</script>
+
+
+</body>
+</html>

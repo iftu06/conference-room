@@ -1,0 +1,129 @@
+<style>
+        .check-bill-modal-notice {
+            padding: 10px;
+            background-color: #d9d9d9;
+            color: #636363;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .error-txt{
+            color:#FF0000;
+            font-size:15px;
+        }
+
+        .err-head{
+            margin-bottom: .2rem;
+        }
+
+</style>
+
+        <div class="modal-content" xmlns:th="http://www.thymeleaf.org">
+
+            <div class="modal-header justify-content-center">
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="modal-title font-weight-bold" th:text="#{shopping.cart.stock.out.modal.header}"></h5>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="check-bill-modal-notice">
+                <p class="mb-0" th:text="#{shopping.cart.stock.out.modal.warning.message}"> </p>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-4" th:if="${cartError != null}" th:each="cartErrorItem : ${cartError.alteredItems}">
+
+                        <div class = "row pl-0 pr-0 pr-md-3 mb-2">
+                            <div class="col-8 card-horizontal pull-left">
+                                <img class="cart-img" th:src="${cartErrorItem.image}"
+                                     alt="" th:if="${cartErrorItem.image != null}" style="width: 90px;height: 95px;object-fit: cover;"/>
+                                <img th:if="${cartErrorItem.image == null}" id="mini-product-placeholder-black-disabled"
+                                     class="cart-img placeholder-cart" th:src="@{/assets/img/placeholder-product-mini.svg}"
+                                     th:alt="alter" style="width: 90px;height: 95px;object-fit: cover;">
+                                <img th:if="${cartErrorItem.image == null}" id="mini-product-placeholder-white-disabled"
+                                     class="cart-img placeholder-cart hide" th:src="@{/assets/img/product-placeholder-mini-white.svg}"
+                                     th:alt="alter" style="width: 90px;height: 95px;object-fit: cover;">
+                                <div class="card-body pl-3 pr-0 pt-0">
+                                    <h6 class="card-title mb-2 text-truncate" >
+                                        <strong th:text="${cartErrorItem.productName}"></strong>
+                                    </h6>
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-4 pull-right"
+                                 th:if="${errorType == 'PRODUCT_DISABLED' or
+                             errorType == 'PRODUCT_NOT_FOUND'}" style="text-align:right">
+                                <h6 th:text="#{shopping.cart.stock.out.modal.product.not.available.warning}"></h6>
+                            </div>
+
+                            <div class="col-4 pull-right"
+                                 th:if="${errorType == 'VARIANT_NOT_FOUND'}"
+                                 style="text-align:right">
+                                <h6 th:if="${variantName != '[base] - [base]'}"
+                                    th:text="${cartErrorItem.productName} +' '+${variantName}" class="err-head"></h6>
+                                <h6 th:if="${variantName == '[base] - [base]'}"
+                                    th:text="${cartErrorItem.productName} " class="err-head"></h6>
+                                <span class="error-txt" th:if="${variantName != '[base] - [base]'}" th:text="#{product.review.modal.variant.not.available}"></span>
+                                <span class="error-txt" th:if="${variantName == '[base] - [base]'}" th:text="#{product.review.modal.product.not.available}"></span>
+                            </div>
+
+                            <div class="col-4 pull-right"
+                                 th:if="${errorType == 'PRODUCT_RESERVATION_FILLED'
+                                and cartErrorItem.quantityUpdate != null
+                                and cartErrorItem.quantityUpdate.updatedQuantity != null
+                                and cartErrorItem.quantityUpdate.updatedQuantity ne 0}">
+                                <span style="font-size: 15px">
+                                    <span th:text="#{stock_out.modal.quantity.validation.message.label} + ' ' "></span>
+                                    <br><span th:text="#{stock_out.modal.quantity.validation.message.to.label}"></span>
+                                    <strong th:text="${cartErrorItem.quantityUpdate.updatedQuantity}"/>
+                                    <span th:text="#{stock_out.modal.quantity.validation.message.from.label}"></span>
+                                    <strong th:text="${cartErrorItem.quantityUpdate.oldQuantity}"/>
+                                </span>
+                            </div>
+
+                            <div class="col-4 pull-right" style="text-align:right"
+                                 th:if="${errorType == 'PRODUCT_PRICE_UPDATED'
+                                    and cartErrorItem.priceUpdate != null
+                                    and cartErrorItem.priceUpdate.oldPrice != null
+                                    and cartErrorItem.priceUpdate.updatedPrice != null}">
+                                <span style="font-size: 12px">
+                                    <span th:text="#{stock_out.modal.price.validation.message.label} + ' ' "></span>
+                                    <br><span th:text="#{stock_out.modal.quantity.validation.message.to.label}"></span>
+                                    <strong th:text="${appTheme.currency}+${#numbers.formatDecimal(cartErrorItem.priceUpdate.updatedPrice, 1, 2, 'POINT')}"/>
+                                    <span th:text="#{stock_out.modal.quantity.validation.message.from.label}"></span>
+                                    <strong th:text="${appTheme.currency}+${#numbers.formatDecimal(cartErrorItem.priceUpdate.oldPrice, 1, 2, 'POINT')}"/>
+                                </span>
+                            </div>
+
+                            <div class="col-4 pull-right"
+                                 th:if="${cartErrorItem.quantityUpdate != null
+                    and cartErrorItem.quantityUpdate.updatedQuantity!= null
+                    and cartErrorItem.quantityUpdate.updatedQuantity eq 0}">
+                                <h6 th:text="#{shopping.cart.stock.out.modal.product.out.stock}"></h6>
+                            </div>
+
+                        </div>
+
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row m-0 w-100">
+                    <div class="col-12 px-0 d-flex">
+                        <button type="button"  id="isCheckoutPagebtn" class="btn btn-primary w-100 hide" onclick="removeItemFromCartWhenOutOfStock('true')"
+                                data-dismiss="modal"><span th:text="#{shopping.cart.stock.out.modal.btn.label}"></span>
+                        </button>
+                        <button type="button"  id="isNotCheckoutPagebtn" class="btn btn-primary w-100 hide" onclick="removeItemFromCartWhenOutOfStock('false')"
+                                data-dismiss="modal"><span th:text="#{shopping.cart.stock.out.modal.btn.label}"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>

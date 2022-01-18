@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        clip-path: url(#clip-Web_1920_4);
+      }
+
+      .cls-2 {
+        fill: #f1f1f1;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #f2652a;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4px;
+      }
+
+      .cls-4 {
+        fill: #f2652a;
+        opacity: 0.41;
+      }
+
+      .cls-5 {
+        fill: #fff;
+        font-size: 120px;
+        font-family: OpenSans, Open Sans;
+      }
+    </style>
+    <clipPath id="clip-Web_1920_4">
+      <rect width="1080" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="Web_1920_4" data-name="Web 1920 – 4" class="cls-1">
+    <circle id="Ellipse_5" data-name="Ellipse 5" class="cls-2" cx="510" cy="510" r="510" transform="translate(30 30)"/>
+    <g id="Group_2" data-name="Group 2" transform="translate(-0.5 -0.5)">
+      <path id="ico-cart" class="cls-3" d="M30.42,138.02H374.495a29.1,29.1,0,0,1,29.92,28.3L344.575,491.743a29.1,29.1,0,0,1-29.92,28.3H90.259a29.1,29.1,0,0,1-29.92-28.3L.5,166.324a29.1,29.1,0,0,1,29.92-28.3Zm79.427-56.157S126.669.5,206.3.5s92.32,81.362,92.32,81.362" transform="translate(338.5 280.5)"/>
+      <g id="Group_1" data-name="Group 1">
+        <circle id="Ellipse_6" data-name="Ellipse 6" class="cls-4" cx="130" cy="130" r="130" transform="translate(410 482)"/>
+        <text id="_0" data-name="0" class="cls-5" transform="translate(506 659)"><tspan x="0" y="0">0</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

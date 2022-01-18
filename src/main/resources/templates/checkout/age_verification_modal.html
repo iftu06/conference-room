@@ -1,0 +1,163 @@
+<!--<div class="modal fade" id="verify_age_modal" tabindex="-1" role="dialog"-->
+<!--     aria-hidden="false" xmlns:th="http://www.thymeleaf.org" th:fragment="age_verification_modal">-->
+
+<!--    <div class="modal-dialog general-modal" role="document">-->
+<!--        <div class="modal-content">-->
+
+<!--            <div class="modal-header justify-content-center">-->
+<!--                <h5 class="modal-title font-weight-bold" th:text="#{alcohol.product.modal.title}"></h5>-->
+
+<!--            </div>-->
+
+<!--            <div class="modal-body">-->
+<!--                <div class = "content mb-2">-->
+<!--                    <div class = "mb-0" >-->
+<!--                        <span id="alcoholText1" th:utext="#{alcohol.product.modal.body}"> </span>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class = "content mb-0">-->
+<!--                    <div class = "mb-0" >-->
+<!--                        <span th:text="#{alcohol.product.modal.body.alert}"> </span>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="modal-footer">-->
+<!--                <div class="row m-0 w-100">-->
+<!--                    <div class="col-12 px-0 d-block d-md-flex">-->
+
+
+<!--                        <button type="button" class="btn btn-outline-secondary w-50 mr-3" onclick=""-->
+<!--                                data-dismiss="modal"-->
+<!--                                th:text="#{alcohol.product.modal.cancel}">-->
+<!--                        </button>-->
+
+<!--                        <button type="button" onclick="continueCheckout()"-->
+<!--                                class="btn btn-outline-secondary w-50 mr-3" th:text="#{alcohol.product.modal.accept}">-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--            </div>-->
+
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<style>
+    #snackbar-addons{
+        display: none !important;
+    }
+    .nav-container-2{
+        display: none !important;
+    }
+    nav{
+        height: 100px !important;
+    }
+    nav hr{
+        display: none !important;
+    }
+
+
+
+#verify_age_modal .error-row {
+    border-radius:6px;
+    padding: 22px;
+    border:1px solid red;
+    margin:0px;
+    background-color: rgba(244, 67, 54, 0.05);
+    color:red;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+}
+
+#verify_age_modal .error-row .error-icon {
+	width: 10%;
+	font-size: 30px;
+}
+
+#verify_age_modal .error-row .error-text {
+	width: 90%;
+}
+
+
+#verify_age_modal label {
+	font-size: 14px;
+}
+
+@media (max-width:768px){
+
+	#verify_age_modal .error-row {
+		text-align: center;
+		padding: 16px;
+	}
+	#verify_age_modal .error-row .error-icon {
+		display: none;
+	}
+
+	#verify_age_modal .error-row .error-text {
+		width: 100%;
+	}
+}
+
+
+</style>
+
+
+<div class="modal fade" id="verify_age_modal" tabindex="-1" role="dialog"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="age_verification_modal"
+     aria-modal="true">
+    <div class="modal-dialog general-modal modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title font-weight-bold"
+                    th:text="#{alcohol.product.modal.title}"></h5>
+                <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="row mb-4 error-row">
+                            <div class="error-icon">
+                                <!--                                <i class="fa fa-info-circle"></i>-->
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="error-text">
+                              <span  th:text="#{alcohol.product.modal.body.alert}">
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <p id="alcoholText1" class="text-muted m-0"  th:utext="#{alcohol.product.modal.body}">
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row m-0 w-100">
+                    <div class="col-12 px-0 d-flex button-row">
+                        <button type="button" data-dismiss="modal"
+                                class="btn btn-outline-secondary w-100 mr-0 mr-md-3 mb-3 mb-md-0"
+                                th:text="#{alcohol.product.modal.cancel}"></button>
+                        <button type="button" class="btn btn-primary w-100"
+                                th:text="#{alcohol.product.modal.accept}"
+                                onclick="continueCheckout()">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

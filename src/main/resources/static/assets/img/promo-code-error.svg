@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <clipPath id="clip-promo-code-error">
+      <rect width="1080" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="promo-code-error" clip-path="url(#clip-promo-code-error)">
+    <g id="Group_4" data-name="Group 4" transform="translate(302.953 303.315)">
+      <g id="Group_3" data-name="Group 3">
+        <path id="Path_2" data-name="Path 2" d="M608.045,152.913a31.145,31.145,0,0,0-44.045,0L152.913,564a31.144,31.144,0,1,0,44.043,44.045L608.043,196.961A31.142,31.142,0,0,0,608.045,152.913Z" transform="translate(-143.791 -143.791)" fill="red"/>
+      </g>
+    </g>
+    <g id="Group_10" data-name="Group 10" transform="translate(776.331 303.316) rotate(90)">
+      <g id="Group_3-2" data-name="Group 3">
+        <path id="Path_2-2" data-name="Path 2" d="M608.045,152.913a31.145,31.145,0,0,0-44.045,0L152.913,564a31.144,31.144,0,1,0,44.043,44.045L608.043,196.961A31.142,31.142,0,0,0,608.045,152.913Z" transform="translate(-143.791 -143.791)" fill="red"/>
+      </g>
+    </g>
+    <g id="error" transform="translate(0.8 0.8)">
+      <g id="Group_12" data-name="Group 12" transform="translate(0.2 0.2)">
+        <g id="Group_11" data-name="Group 11">
+          <path id="Path_18" data-name="Path 18" d="M539.6,0C241.933,0,0,241.933,0,539.6s241.933,539.6,539.6,539.6,539.6-241.933,539.6-539.6S837.267,0,539.6,0Zm0,1024.733c-267.267,0-485.133-217.867-485.133-485.133S272.333,54.467,539.6,54.467,1024.733,272.333,1024.733,539.6,806.867,1024.733,539.6,1024.733Z" fill="red"/>
+        </g>
+      </g>
+      <g id="Group_14" data-name="Group 14" transform="translate(336.2 336.2)">
+        <g id="Group_13" data-name="Group 13">
+          <path id="Path_19" data-name="Path 19" d="M347.933,309.133,506.267,150.8c10.133-10.133,10.133-27.867,0-38s-27.867-10.133-38,0L309.933,271.133,151.6,112.8c-10.133-10.133-27.867-10.133-38,0s-10.133,27.867,0,38L271.933,309.133,113.6,466.2c-10.133,10.133-10.133,27.867,0,38a27.55,27.55,0,0,0,38,0L309.933,345.867,468.267,504.2a27.55,27.55,0,0,0,38,0c10.133-10.133,10.133-27.867,0-38Z" transform="translate(-106 -105.2)" fill="red"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,380 @@
+<div class="row m-0 mb-0 justify-content-end mt-3" th:fragment="cart_summary"
+     xmlns:th="http://www.thymeleaf.org" id="cart_summary">
+    <div class="col-12 col-md-7 col-lg-5 pr-0 pl-md-3 pl-0">
+        <input type="hidden" id="selectedRewardIds" th:value="${selectedRewardIds}">
+        <input type="hidden" id="errorResponseId" th:value="${errorMessage}"/>
+        <input type="hidden" id="promoDesHidden" th:value="${promoDescription}"/>
+        <input type="hidden" id="promoCode" th:value="${promoCode}"/>
+        <input type="hidden" id="promoReservationIdHidden" th:value="${checkOutParam.promoReservationId}"/>
+        <input type="hidden" id="hasAnyAlcoholicProducts" th:value="${hasAnyAlcoholicProducts}">
+
+        <div class="container-fluid checkout-final-section border-radius-6">
+            <div class="row m-0">
+                <th:block th:if="${!commonResponse.guestUser}">
+                    <div class="col-12 px-0">
+                        <form class="form-inline mb-4">
+                            <div class="form-group w-100 mb-0">
+                                <div class="row m-0 w-100 d-flex align-items-center">
+                                    <div class="col-12 px-0" id="promoCodeInputId"
+                                         th:if="${promoDiscountAmount == null}">
+                                        <div class="row m-0 promo-code-group">
+                                            <div class="col-12 px-0 mb-3" id="promoCodeErr">
+                                                <div class="card-horizontal align-items-center">
+                                                    <div class="mr-3">
+                                                        <img th:src="@{/assets/img/promo-code-default.svg}" height="46"
+                                                             width="46">
+                                                    </div>
+                                                    <div class="card-body p-0">
+                                                        <label class="mb-0 mb-md-0 justify-content-start font-weight-600"
+                                                               th:text="#{checkout.modal.promo.code.label}">
+                                                        </label>
+                                                        <small th:text="#{checkout.modal.promo.code.message}"></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 text-right px-0 promo-code-group">
+                                                <div class="input-group w-100">
+                                                    <input type="text" class="form-control"
+                                                           th:placeholder="#{checkout.promo.code.apply.placeholder.text}"
+                                                           id="promoCodeId" name="promoCode">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="button"
+                                                                th:onclick="submitPromoCode()"
+                                                                th:text="#{checkout.promo.code.apply.button.title}">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div th:if="${purchaseHistoryEntry.promo != null and purchaseHistoryEntry.promo.promoTitle != null}"
+                                         id="promoDescriptionId" class="col-12 px-0">
+                                        <div class="row m-0 promo-code-group success">
+                                            <div class="col-12 px-0 mb-3">
+                                                <div class="card-horizontal align-items-center">
+                                                    <div class="mr-3">
+                                                        <img th:src="@{/assets/img/promo-code-success.svg}" height="46"
+                                                             width="46">
+                                                    </div>
+                                                    <div class="card-body p-0 text-success">
+                                                        <label class="mb-2 mb-md-0 justify-content-start font-weight-600"
+                                                               th:text="#{checkout.promo.code.success.title}">
+                                                        </label>
+                                                        <small><span
+                                                                th:text="${purchaseHistoryEntry.promo.promoTitle}"></span></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 text-right px-0">
+                                                <input type="text" class="form-control w-100"
+                                                       th:placeholder="#{checkout.promo.code.apply.placeholder.text}"
+                                                       readonly th:value="${purchaseHistoryEntry.promo.promoCode}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 px-0" id="promoCodeRetryId">
+                                        <div class="row m-0 promo-code-group error" th:if="${errorMessage != null}">
+                                            <div class="col-12 px-0 mb-3">
+                                                <div class="card-horizontal align-items-center">
+                                                    <div class="mr-3">
+                                                        <img th:src="@{/assets/img/promo-code-error.svg}" height="46"
+                                                             width="46">
+                                                    </div>
+
+                                                    <div class="card-body p-0 text-danger">
+                                                        <label class="mb-2 mb-md-0 justify-content-start font-weight-600"
+                                                               th:text="#{checkout.modal.tab.invalid.promo.message.title}">
+                                                        </label>
+                                                        <small><span th:text="${errorMessage.message}"></span></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 text-right px-0 promo-code-group">
+                                                <div class="input-group w-100">
+                                                    <input type="text" class="form-control" readonly
+                                                           th:value="${promoCode}">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" type="button"
+                                                                th:onclick="retryPressed()"
+                                                                th:text="#{checkout.modal.tab.promo.retry.button}">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </th:block>
+
+
+                <div class="col-12 mb-3 px-0 d-flex align-items-end justify-content-between border-top pt-3"
+                     th:if="${tipPercentages != null and (isCustomTippingInputDisabled != true)
+                                 and commonResponse.appTheme.isTippingEnabled()
+                                 and tipSelectionPromptDisplay != 'AFTER_PAYMENT_METHOD_SELECTION'}">
+                    <label class="mb-0 font-weight-600 label-lg" th:text="#{checkout.modal.add.tip }"></label>
+                    <a class="nav-link theme-background-color p-0 font-weight-600 d-none d-md-block"
+                       onclick="editTipAmount()" th:text="#{checkout.modal.edit.tip}">
+                    </a>
+
+                </div>
+
+                <div class="col-12 px-0"
+                     th:if="${tipPercentages != null and commonResponse.appTheme.isTippingEnabled()
+                                 and tipSelectionPromptDisplay != 'AFTER_PAYMENT_METHOD_SELECTION'}">
+                    <div class="tipping-section mb-4">
+                        <div class="owl-carousel tip-slider eq-height nav-arrows-top owl-loaded owl-drag">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage"
+                                     style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 386px;">
+                                    <div class="owl-item" th:each="tipPercentage:${tipPercentages}">
+                                        <div class="tip-btn">
+                                            <label class="btn btn-sm btn-outline-secondary w-100 mb-0"
+                                                   th:id="'tip_'+${tipPercentage.key}+'_label'">
+                                                <input type="radio" th:value="${tipPercentage.key}"
+                                                       th:id="'tip_'+${tipPercentage.key}+'_radio'"
+                                                       class="d-none tipPercentage" name="tipPercentage"
+                                                       onclick="addTip(this.id)">
+                                                <p class="m-0 percentage" th:text="${tipPercentage.key}+'%'"></p>
+                                                <p class="m-0" th:id="'tip_'+${tipPercentage.key}"
+                                                   th:text="${tipPercentage.value}"></p>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-12 px-0 form-group mb-0 custom-tip d-none"
+                     id="tipInputDiv" th:if="${tipPercentages != null and commonResponse.appTheme.isTippingEnabled() and
+                                                        tipSelectionPromptDisplay != 'AFTER_PAYMENT_METHOD_SELECTION'}">
+                    <div class="input-group w-100 mb-3">
+
+                        <input type="text" class="form-control"
+                               onkeypress="return allowOnlyNumber(event,this);"
+                               id="tipAmount" th:placeholder="#{checkout.custom.tip.amount.placeholder.text}"
+                               onInput="changeTipAmount()">
+
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" onclick="addTipAndUpdateBillArea('flat')"
+                                    th:text="#{checkout.modal.confirm.tip}">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${commonResponse.appTheme.rewardsIntegrationEnabled
+                    and isCustomerEnrolledForRewards
+                    and availableRewards != null and availableRewards != 0}"
+                     class="col-12 px-0 checkout-reward-section d-flex align-items-center justify-content-between border-top py-3">
+                    <div class="label-group">
+                        <label class="mb-1 font-weight-600 label-lg"
+                               th:text="#{order.summary.area.template.reward}"></label>
+
+                        <span class="active-reward" th:if="${activeRewardCount == null and availableRewards != null}"
+                              th:text="${availableRewards}+' '+${availableRewards > 1 ? 'Rewards Available' : 'Reward Available'}"></span>
+                        <span class="active-reward" th:if="${activeRewardCount != null}"
+                              th:text="${activeRewardCount}+' '+#{rewards.checkout.active.rewards.text}"></span>
+
+                        <!--                                <span class="no-rewards-active d-none"> 2 Rewards Available </span>-->
+                    </div>
+                    <button class="btn btn-outline-primary btn-reward" data-toggle="modal"
+                            th:text="#{checkout.eligible.reward.view.btn}"
+                            data-target="#view-rewards-modal" onclick="viewEligibleRewards()">
+
+                    </button>
+                </div>
+
+                <div class="col-12 px-0">
+                    <form class="border-top pt-3">
+                        <div class="form-group w-100 mb-2">
+                            <div class="row m-0 w-100">
+                                <div class="col-6 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0" th:text="#{checkout.modal.sub.total.label}"></label>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <input type="hidden" id="deliverySubTotal"
+                                           th:value="${purchaseHistoryEntry.subTotalAmount}">
+                                    <label class="mb-2 mb-md-0">
+                                        <span
+                                                th:text="${commonResponse.appTheme.currency} + ${purchaseHistoryEntry.subTotalAmount != null
+                                                  ? #numbers.formatDecimal(purchaseHistoryEntry.subTotalAmount, 1,'COMMA', 2, 'POINT'): '0.00'}">
+
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group w-100 mb-2" th:if="${rewardDiscountAmount != null
+                                                    and commonResponse.appTheme.rewardsIntegrationEnabled
+                                                    and isCustomerEnrolledForRewards}">
+                            <div class="row m-0 w-100">
+                                <div class="col-6 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0"
+                                           th:text="#{order.summary.area.template.reward.discount}"></label>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <input type="hidden" id="rewardDiscountAmount"
+                                           th:value="${rewardDiscountAmount}">
+                                    <label class="mb-2 mb-md-0">
+                                        <span
+                                                th:text="${commonResponse.appTheme.currency}
+                                                + ${#numbers.formatDecimal(rewardDiscountAmount, 1,'COMMA', 2, 'POINT')}">
+
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group w-100 mb-2">
+                            <div class="row m-0 w-100">
+                                <div class="col-6 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0" th:text="#{checkout.modal.service.charge.label}">
+                                    </label>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <label class="mb-2 mb-md-0"><span
+                                            th:text="${commonResponse.appTheme.currency} + ${serviceChargeAmount != null and serviceChargeAmount != '0.00'
+                                              ? #numbers.formatDecimal(serviceChargeAmount, 1,'COMMA', 2, 'POINT'): '0.00'}"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group w-100 mb-3">
+                            <div class="row m-0 w-100" th:each="tax: ${taxSummary}">
+                                <div th:if="${!tax.includedInPrice}" class="col-6 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0" th:text="${tax.name}+' (' +${tax.rate} +'%)'"></label>
+                                </div>
+                                <div th:if="${!tax.includedInPrice}"
+                                     class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <label class="mb-2 mb-md-0"><span
+                                            th:text="${commonResponse.appTheme.currency
+                                              + #numbers.formatDecimal(tax.amount, 1,'COMMA', 2, 'POINT')}"></span></label>
+                                </div>
+                                <div th:if="${tax.includedInPrice}" class="col-10 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0" th:text="${tax.name}+' (' +${tax.rate} +'%)'"></label>
+                                    <span class="inclusive-tax-label"
+                                          th:text="'('+#{checkout.modal.inclusive.tax.label} +' '+${commonResponse.appTheme.currency
+                                            + #numbers.formatDecimal(tax.amount, 1,'COMMA', 2, 'POINT')}+')'"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group w-100 mb-3" th:if="${purchaseHistoryEntry.promo != null
+                                    and purchaseHistoryEntry.promo.amount != null}">
+                            <div class="row m-0 w-100">
+                                <div class="col-6 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0" th:text="#{checkout.modal.promo.label}"></label>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <label class="mb-2 mb-md-0"><span id="promoDiscountId"
+                                                                      th:text="${commonResponse.appTheme.currency}
+                                                                        + ${#numbers.formatDecimal(purchaseHistoryEntry.promo.amount, 1,'COMMA', 2, 'POINT')}"></span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- -->
+                        <div class="form-group w-100 mb-3" th:if="${flatFees != null}" th:each="flatFee:${flatFees}">
+                            <div class="row m-0 w-100">
+                                <div class="col-6 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0" th:text="${flatFee.name}"></label>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <label class="mb-2 mb-md-0"><span id="flatFee"
+                                                                      th:text="${commonResponse.appTheme.currency}
+                                                                      + ${#numbers.formatDecimal(flatFee.amount, 1,'COMMA', 2, 'POINT')}"></span></label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group w-100 mb-3"
+                             th:if="${commonResponse.appTheme.isTippingEnabled() == true
+                                     and tipSelectionPromptDisplay != 'AFTER_PAYMENT_METHOD_SELECTION'}">
+                            <div class="row m-0 w-100">
+                                <div class="col-6 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0" th:text="#{checkout.modal.tip.label}">
+                                    </label>
+                                </div>
+
+                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <label class="mb-2 mb-md-0">
+                                        <span id="tipLabel"
+                                              th:if="${purchaseHistoryEntry != null and purchaseHistoryEntry.tip != null
+                                              and purchaseHistoryEntry.tip.amount != 0.0}"
+                                              th:text="${commonResponse.appTheme.currency} +
+                                                  ${#numbers.formatDecimal(purchaseHistoryEntry.tip.amount, 1,'COMMA', 2, 'POINT')}">
+                                        </span>
+
+                                        <span th:if="${purchaseHistoryEntry == null or purchaseHistoryEntry.tip == null or
+                                        purchaseHistoryEntry.tip.amount == 0.0}"
+                                              th:text="${commonResponse.appTheme.currency + '0.00'}">
+                                        </span>
+
+                                    </label>
+
+                                    <input type="hidden" id="tipHid" th:if="${purchaseHistoryEntry != null}"
+                                           th:value="${#numbers.formatDecimal(purchaseHistoryEntry.tip.amount,
+                                                1, 2, 'POINT')}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group w-100 mb-3"
+                             th:if="${collectionMethod == 'DELIVER' && deliveryCharge != null}">
+                            <div class="row m-0 w-100">
+                                <div class="col-6 d-flex align-items-center px-0">
+                                    <label class="mb-2 mb-md-0" th:text="#{checkout.modal.delivery.charge.label}">
+
+                                    </label>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <label class="mb-2 mb-md-0">
+
+                                       <span id="deliveryChargeUpdated"
+                                             th:text="${commonResponse.appTheme.currency}
+                                             + ${#numbers.formatDecimal(deliveryCharge, 1,'COMMA', 2, 'POINT')}">
+
+                                       </span>
+
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group w-100 mb-0">
+                            <div class="row m-0 w-100 total-area">
+                                <div class="col-6 d-flex align-items-center px-0">
+                                    <h4 class="mb-0" th:text="#{checkout.modal.total.label}"></h4>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                    <h4 class="mb-0"
+                                        th:text="${commonResponse.appTheme.currency} + ${purchaseHistoryEntry.totalAmount != null
+                                        ? #numbers.formatDecimal(purchaseHistoryEntry.totalAmount, 1,'COMMA', 2, 'POINT'): '0.00'}"
+                                        id="totAmount"></h4>
+
+                                    <input type="hidden" id="totValue" th:value="${purchaseHistoryEntry.totalAmount}">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="w-100">
+</div>

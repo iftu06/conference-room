@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header"></head>
+
+<style>
+      .boxed {
+            color : #fff;
+            border: solid 1px;
+            background-color: var(--main-theme-color);
+      }
+
+      .white-theme-support .boxed {
+        color : #ffffff;
+        background-color: #000000;
+      }
+
+      .tipping-section .btn-outline-secondary:hover {
+        color: #fff;
+        background-color: #2b2b2b;
+        border-color: #2b2b2b;
+      }
+
+      .reward-link{
+        color : var(--primary-theme-color);
+        font-weight: 700
+      }
+
+
+    .tipping-row-content .tipping-section {
+      display: flex;
+    }
+
+    .tipping-row-content .tipping-section .tip-btn .percentage {
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .tipping-row-content .title-label {
+      font-size:14px !important;
+      font-weight: 600;
+    }
+
+    .tipping-row-content .tipping-section .tip-btn .btn:hover .text-muted {
+      color:#ffffff !important;
+    }
+
+    .tipping-row-content .tipping-section .tip-btn {
+      width: 20%;
+      margin-right: 8px;
+    }
+
+    .tipping-row-content .tipping-section .tip-btn:last-child {
+      margin-right: 0px;
+    }
+
+    .tipping-section .tip-btn .btn.active {
+      color: #fff !important;
+      background-color: var(--primary-theme-color);
+      border-color: var(--primary-theme-color);
+    }
+
+    .tipping-section .tip-btn .btn.active .text-muted {
+      color: #fff !important;
+    }
+
+    .divider {
+      margin-top: 14px;
+      margin-bottom: 12px;
+    }
+
+    .divider h1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      font-size: 14px;
+      margin: 0px;
+    }
+
+    .divider span {
+      background: transparent;
+      margin: 0 20px;
+    }
+
+    .divider h1:before, .divider h1:after {
+      background: #ced4da;
+      height: 1px;
+      content: '';
+      flex: 1;
+    }
+
+    .tipping-input .input-group-text {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-radius: .25rem;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .tipping-input input.form-control {
+      border-radius: .25rem !important;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+      height: 43px;
+    }
+
+    #tippingModal .modal-body {
+      padding:0;
+    }
+
+    #tippingModal .tipping-row-content {
+      padding:24px;
+    }
+
+    .tipping-info .tip-info-row label {
+      font-weight: 600;
+    }
+
+    .tipping-info .tip-info-row .tip-amount-value {
+      color: #31B752;
+    }
+
+    @media(max-width:576px){
+      .tipping-row-content .tipping-section {
+        display: block;
+      }
+      .tipping-row-content .tipping-section .tip-btn {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 12px;
+      }
+      .tipping-info .tip-info-row label {
+        font-size:14px;
+      }
+    }
+
+
+      .os-section textarea {
+        height: unset !important;
+      }
+      .os-section {
+        top: 105px;
+      }
+      .os-section .form-group:last-child {
+        margin-bottom: 0;
+      }
+      .os-section-inner {
+        position: relative
+      }
+      .os-section-inner {
+        max-height: 720px;
+        overflow-y: auto;
+        position: relative;
+      }
+      .shadow-scroll {
+        position: absolute;
+        height: 10px;
+        width: 95%;
+        bottom: 0;
+        z-index: 10;
+        border-radius: 6px;
+        box-shadow:
+            inset 0px 0px 8px -10px #CCC,
+            inset 0px -11px 8px -10px #CCC;
+      }
+
+      @media (max-width:768px) {
+        .os-section-inner,
+        .item-table .table-body-checkout {
+          max-height: unset !important;
+          overflow: unset;
+        }
+        .item-count-checkout {
+          font-size: 16px;
+        }
+      }
+
+    .checkout-reward-section .label-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .checkout-reward-section .label-group span {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .checkout-reward-section .label-group .active-reward {
+      color: #28a745;
+    }
+
+    .checkout-reward-section .label-group .no-rewards-active {
+      color: #6c757d;
+    }
+
+    .checkout-reward-section .btn-reward {
+      padding: 6px 24px;
+      font-size: 16px !important;
+    }
+
+    .item-slider-cross-sell .product-content{
+        width: calc(100% - 95px);
+    }
+
+    .item-slider-cross-sell .product-content .product-detail .card-title{
+        max-width: 100% !important;
+    }
+
+
+
+
+
+</style>
+
+
+<div id="checkoutViewId" class="mt-3">
+    <body class="nav-active checkout-page">
+
+    <!-- All hidden input in this checkout_hidden_input -->
+    <div th:replace="checkout/checkout_hidden_input :: checkout_hidden_input"></div>
+
+    <div th:replace="navigation_checkout :: navigation_checkout"></div>
+    <div th:replace="confirm_payment :: confirm_payment"></div>
+    <div th:if="${tipPercentages != null and commonResponse.appTheme.isTippingEnabled()
+                and tipSelectionPromptDisplay == 'AFTER_PAYMENT_METHOD_SELECTION'}">
+        <div th:replace="tipping :: tipping"></div>
+    </div>
+
+    <div th:replace="checkout/age_verification_modal :: age_verification_modal"></div>
+
+    <input type="hidden" id="prevSelectedDate" value="">
+    <input type="hidden" id="todayDate" th:value="${todayDate}">
+
+    <main role="main" class="wrapper">
+        <div class="container page-section-home pt-4 pt-md-4">
+
+            <div id="cross_sell_checkout">
+                <div th:replace="checkout/checkout_cross_sell :: checkout_cross_sell"></div>
+            </div>
+
+<!--            <div class="row m-0">-->
+
+<!--            </div>-->
+
+
+            <div class="row m-0">
+                <div class="container-fluid mx-0 px-0">
+                    <div class="mb-0 mb-md-5">
+                        <div class="row m-0">
+                            <input type="hidden" id="fromModeChange" th:value="${fromModeChange}">
+
+                            <div class="col-12 col-lg-9 pr-0 pr-md-3 pl-0" id="totalCostArea">
+                                <!-- Hidden values -->
+                                <input type="hidden" id="pickupOrderPrepTimeMins"
+                                       th:value="${pickupOrderPrepTimeMins}">
+
+                                <input type="hidden" id="isCashOnCollectEnabled"
+                                       th:value="${commonResponse.appTheme.isCashOnCollectEnabled}">
+                                <input type="hidden" id="errorResponseId" th:value="${errorMessage}"/>
+                                <input type="hidden" id="collectionMethod"
+                                       th:value="${collectionMethod}"/>
+                                <input type="hidden" id="deliveryTimeModal" th:value="${deliveryTime}"/>
+                                <input type="hidden" id="disableDatesDelivery"
+                                       th:value="${disableDatesDelivery}">
+                                <input id="country-name" type="hidden"
+                                       th:value="${commonResponse.appTheme.country}"/>
+                                <input type="hidden" id="disableDatesPickUp"
+                                       th:value="${disableDatesPickup}">
+                                <input type="hidden" id="openHoursId" th:value="${openHours}">
+                                <input type="hidden" id="deliveryCurrency"
+                                       th:value="${commonResponse.appTheme.currency}">
+                                <input type="hidden" id="stateIdModal" th:value="${stateIdModal}">
+                                <input type="hidden" id="localityIdModal" th:value="${localityIdModal}">
+                                <input type="hidden" id="zipCodeModal" th:value="${zipCodeModal}">
+                                <input type="hidden" id="addressLineOneModal"
+                                       th:value="${addressLineOneModal}">
+                                <input type="hidden" id="addressLineTwoModal"
+                                       th:value="${addressLineTwoModal}">
+                                <input type="hidden" id="countryIdModal" th:value="${countryIdModal}">
+                                <input type="hidden" id="isContactStoreEnabled"
+                                       th:value="${commonResponse.appTheme.curbSideContactStoreEnabled}">
+                                <input type="hidden" id="deliveryErrorMessage"
+                                       th:value="${deliveryErrorMessage}"/>
+                                <input type="hidden" id="deliveryErrorCode"
+                                       th:value="${deliveryErrorCode}"/>
+                                <input type="hidden" id="earliestMessageHidden"
+                                       th:value="${earliestPickerMessage}">
+                                <input type="hidden" id="tableNumber"
+                                       th:value="${commonResponse.tableNumber}"/>
+                                <input type="hidden" id="tablePayment"
+                                       th:value="#{checkout.modal.tab.payment.modal.payment_type.dine_in.label }">
+                                <input id="noOfFutureDatesAllowed" type="hidden"
+                                       th:value="${noOfFutureShoppingDatesAllowed}"/>
+                                <input id="cartSyncError" type="hidden" th:value="${cartSyncError}"/>
+                                <input type="hidden" id="selectedRewardIds"
+                                       th:value="${selectedRewardIds}">
+
+                                <input id="deliveryId-for-address" type="hidden"
+                                       th:value="${cartCheckBillRequest != null
+                                            && cartCheckBillRequest.deliveryInfo != null
+                                            ? cartCheckBillRequest.deliveryInfo.deliveryArea : ''}">
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <h4 class="page-title" th:text="#{checkout.modal.label}"></h4>
+                                        <h5 class="mb-3 item-count-checkout font-size-large">
+                                            <strong th:text="${#numbers.formatDecimal(totalProduct, 1,'COMMA', 0, 'POINT')}+ ' '"></strong><span
+                                                th:text="#{checkout.modal.items.cart.label}"></span>
+                                        </h5>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 mb-3"
+                                         th:if="${commonResponse.multiStore && (commonResponse.tableNumber eq '')}">
+                                        <div class="store-area-checkout row m-0 border-radius-6 border align-items-center">
+                                            <div class="col-9 px-0">
+                                                <div class="dropdown d-flex align-items-center">
+                                                    <div class="d-flex align-items-center m-0 p-0">
+                                                        <div class="icon-location mr-2">
+                                                            <i class="fas fa-map-marker-alt"></i>
+                                                        </div>
+                                                        <div class="location-label">
+                                                            <div class="text-left d-flex flex-column">
+                                                                <small th:text="#{ordering.from}"></small>
+                                                                <span class="font-weight-600 font-size-medium"
+                                                                      th:if="${#lists.size(#strings.arraySplit(commonResponse.appTheme.businessName, '-')) > 1}"
+                                                                      th:text="${#strings.arraySplit(commonResponse.appTheme.businessName, '-')[1]}">Howard Street, CA</span>
+                                                                <span class="font-weight-600 font-size-medium"
+                                                                      th:if="${#lists.size(#strings.arraySplit(commonResponse.appTheme.businessName, '-')) eq 1}"
+                                                                      th:text="${commonResponse.appTheme.businessName}">Howard Street, CA</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 px-0 d-flex justify-content-end">
+                                                <a class="nav-link theme-background-color p-0 font-weight-600"
+                                                   href="#" data-toggle="modal"
+                                                   data-target="#switch_store_modal"
+                                                   th:text="#{checkout.modal.navigation.modal.change.link}">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="table-responsive-md item-table mb-0 border p-3 border-radius-6">
+                                            <div class="row m-0 table-header-checkout font-weight-bold mb-3 pb-3 border-bottom d-none d-md-flex">
+                                                <div class="col-5 pl-0"
+                                                     th:text="#{checkout.modal.item.name.label}">
+                                                </div>
+                                                <div class="col pl-0"
+                                                     th:text="#{checkout.modal.item.price.label}">
+                                                </div>
+                                                <div class="col-2 pl-0"
+                                                     th:text="#{checkout.modal.item.qty.label}">
+                                                </div>
+                                                <div class="col pl-0"
+                                                     th:text="#{checkout.modal.item.total.label}">
+                                                </div>
+                                                <div class="col px-0 text-right"
+                                                     th:text="#{checkout.modal.item.actions.label}">
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" id="shoppingCartId"
+                                                   th:value="${purchasesStr}">
+                                            <input type="hidden" id="purchaseHistoryEntryId"
+                                                   th:value="${purchaseHistoryEntry}">
+                                            <input type="hidden" id="taxTotal" th:value="${taxTotal}">
+                                            <input type="hidden" id="deliveryCharge"
+                                                   th:value="${deliveryCharge}">
+                                            <input type="hidden" id="currency"
+                                                   th:value="${commonResponse.appTheme.currency}">
+
+
+                                            <div class="table-body-checkout" id="checkout_body">
+                                                <th:block th:if="${shoppingCart != null}">
+                                                    <div class="row item"
+                                                         th:if="${shoppingCart.purchases != null}"
+                                                         th:each="purchase : ${shoppingCart.purchases}">
+
+                                                        <div class="col-12 col-md-5 pl-0 pr-0 pr-md-3">
+                                                            <div class="card-horizontal">
+                                                                <img th:if="${purchase.image != null}"
+                                                                     class="cart-img"
+                                                                     th:src="${purchase.image}" alt="">
+                                                                <img th:if="${purchase.image == null and commonResponse.appTheme.themeColor == '#ffffff'}"
+                                                                     id="mini-product-placeholder-black"
+                                                                     class="cart-img placeholder-cart"
+                                                                     th:src="@{/assets/img/placeholder-product-mini.svg}"
+                                                                     th:alt="alter">
+                                                                <img th:if="${purchase.getImage() == null and commonResponse.appTheme.themeColor != '#ffffff'}"
+                                                                     id="mini-product-placeholder-white"
+                                                                     class="cart-img placeholder-cart"
+                                                                     th:src="@{/assets/img/product-placeholder-mini-white.svg}"
+                                                                     th:alt="alter">
+                                                                <div class="card-body pl-3 pr-0">
+                                                                    <h6 class="card-title mb-2 text-truncate"
+                                                                        th:text="${purchase.productName}"></h6>
+                                                                    <ul class="item-list">
+                                  <span th:each="variantSizeAndAddOn : ${purchase.variantSizeAndAddOns}">
+                                      <li th:text="${variantSizeAndAddOn}"></li>
+                                  </span>
+                                                                    </ul>
+                                                                    <div class="item-note-container mt-3 mb-3 mb-md-0 mr-0 mr-md-3"
+                                                                         th:if="${purchase.note != null and purchase.note != ''}">
+                                                                        <span class="note-label"
+                                                                              th:text="#{shopping.cart.modal.note.label}"></span>
+                                                                        <span th:text="${purchase.note}"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-6 col-md pl-0 d-flex align-items-end align-items-md-start mb-3 mb-md-0">
+                                                            <label class="d-block d-md-none mr-1 mb-0"
+                                                                   th:text="#{checkout.modal.item.price.label}"></label>
+                                                            <label class="m-0" th:text="${commonResponse.appTheme.currency}
+                                + ${#numbers.formatDecimal(purchase.itemPrice,1,'COMMA', 2, 'POINT')}"></label>
+
+                                                            <input type="hidden" class="lineItemPriceInp"
+                                                                   th:id="'lineItemPrice'+${purchase.lineItemId}"
+                                                                   th:value="${#numbers.formatDecimal(purchase.itemPrice * purchase.count,1, 2, 'POINT')}">
+                                                        </div>
+
+                                                        <div class="col-6 col-md-2 pl-0 pr-md-3 pr-0 mb-3 mb-md-0">
+                                                            <div class="td-wrap">
+                                                                <div class="input-group input-qty  justify-content-end justify-content-md-start">
+                                                                    <div class="input-group-prepend">
+                                                                        <button class="btn btn-sm btn-light"
+                                                                                type="button"
+                                                                                th:onclick="changeQuantityAndUpdateBillArea(
+                                            'DECREASE', [[${purchase.lineItemId}]], [[${purchase.count}]]);">-
+                                                                        </button>
+                                                                    </div>
+
+
+                                                                    <input type="number" class="form-control lineItemQntInp"
+                                                                           th:id="'prodQnt'+${purchase.lineItemId}"
+                                                                           th:value="${purchase.count}"
+                                                                           th:oninput="changeItemQuantityInItem(event,[[${purchase.lineItemId}]])"
+                                                                           th:onkeypress="return allowOnlyNumberInItem(event,this,[[${purchase.lineItemId}]]);"
+                                                                           th:onchange="changeQuantityAndUpdateBillArea('CHANGE',
+                                             [[${purchase.lineItemId}]], this.value);"/>
+
+                                                                    <div class="input-group-append">
+                                                                        <button class="btn btn-sm btn-light"
+                                                                                type="button"
+                                                                                th:onclick="changeQuantityAndUpdateBillArea('INCREASE',
+                                             [[${purchase.lineItemId}]], [[${purchase.count}]]);">+
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col pl-0 total-field">
+                                                            <label class="d-block d-md-none mr-1 mb-0"
+                                                                   th:text="#{checkout.modal.item.total.label}">
+                                                            </label>
+                                                            <label class="m-0" th:text="${commonResponse.appTheme.currency}
+                                    + ${#numbers.formatDecimal(purchase.itemPrice * purchase.count,
+                                    1,'COMMA', 2, 'POINT')}">
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col px-0 text-right">
+                                                            <div class="td-wrap td-buttons">
+
+                                                                <button class="btn btn-light mr-2 mr-md-3"
+                                                                        data-toggle="tooltip"
+                                                                        title=""
+                                                                        data-original-title="Edit Preferences"
+                                                                        th:onclick="editCartItem([[${purchase.lineItemId}]],
+                                      [[${purchase.productId}]],
+                                      [[${purchase.variantId}]]);">
+
+                                                                    <i class="far fa-edit text-muted"></i>
+
+                                                                </button>
+
+                                                                <button class="btn btn-light mr-2 mr-md-3"
+                                                                        data-toggle="tooltip"
+                                                                        title=""
+                                                                        data-original-title="Delete from cart"
+                                                                        th:onclick="showCartItemRemoveModalInCheckout([[${purchase.lineItemId}]],
+                                      [[${purchase.productName}]],
+                                      [[${purchase}]],
+                                      [[${#lists.size(shoppingCart.purchases)}]]);">
+                                                                    <i class="far fa-trash-alt text-danger"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cart Summary Total,Subtotal-->
+
+                                        <div id="cart_summary"
+                                             th:replace="checkout/cart_summary :: cart_summary"></div>
+
+                                        <div class="row items-center mb-5 mb-md-4 checkout-btn-section">
+                                            <div class="col-12 col-sm-7 mt-3 mt-md-0">
+                                                <a class="btn btn-outline-secondary"
+                                                   th:href="@{'/'+${commonResponse.businessId}+'/menu'}">
+                                                    <i class="fas fa-long-arrow-alt-left mr-2"
+                                                       style="font-size: 16px;"></i>
+                                                    <span th:text="' ' + #{checkout.modal.back.menu.link}"></span>
+                                                </a>
+                                            </div>
+
+
+                                            <th:block th:if="${purchaseContinueError != 'SHOP_CLOSED'}">
+                                                <div class="col-12 col-sm-5 checkout-info form-inline items-center justify-content-sm-end justify-content-between"
+                                                     th:if="${#lists.size(shoppingCart.purchases) > 0}">
+                                                    <button class="btn btn-primary w-100"
+                                                            data-toggle="modal"
+                                                            type="button" id="checkout-btn"
+                                                            th:onclick="checkAlcoholicThenCheckOut()"
+                                                            th:text="#{checkout.modal.continue.button}">
+                                                    </button>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="modeClicked" th:value="${modeClicked}"/>
+                            <input type="hidden" id="isDeliverySupported"
+                                   th:value="${commonResponse.appTheme.isDeliverySupported}"/>
+
+                            <div class="col-12 col-lg-3 order-first order-lg-last mb-4">
+                                <div class="row os-section">
+                                    <div class="col-12 mb-3 pl-0">
+                                        <ul th:class="'nav ' + ${commonResponse.tableNumber eq '' ? 'nav-pills': ''} + ' checkout-tabs h-100'"
+                                            id="pills-tab-checkout" role="tablist">
+
+                                            <li class="nav-item w-50" id="delivery-li-id"
+                                                th:if="${commonResponse.appTheme.isDeliverySupported && (commonResponse.tableNumber eq '')}">
+                                                <a class="nav-link h-100 p-3 d-flex align-items-center"
+                                                   id="pills-checkout-delivery-tab"
+                                                   th:onclick="changeCollectionMode('DELIVER');"
+                                                   role="tab"
+                                                   aria-controls="pills-delivery"
+                                                   aria-selected="false">
+                                                    <div class="link-icon">
+                                                        <i class="fas fa-shipping-fast"></i>
+                                                    </div>
+                                                    <div class="link-text"
+                                                         th:text="#{checkout.modal.delivery.tab}"
+                                                         th:if="${deliveryCollectionMethodPromptText == null}">
+                                                    </div>
+                                                    <div class="link-text"
+                                                         th:text="${deliveryCollectionMethodPromptText}"
+                                                         th:if="${deliveryCollectionMethodPromptText != null}">
+                                                    </div>
+                                                </a>
+                                            </li>
+
+                                            <li th:class="'nav-item ' + ${commonResponse.tableNumber eq '' ? 'w-50': 'w-100'}"
+                                                id="pickup-li-id"
+                                                th:if="${commonResponse.appTheme.isPickupSupported}">
+                                                <a class="nav-link h-100 active p-3 d-flex align-items-center"
+                                                   id="pills-checkout-pickup-tab"
+                                                   th:onclick="changeCollectionMode('PICK_UP');"
+                                                   role="tab" aria-controls="pills-pickup"
+                                                   aria-selected="true">
+                                                    <div class="link-icon">
+                                                        <i class="fas fa-store"></i>
+                                                    </div>
+                                                    <div class="link-text"
+                                                         th:if="${commonResponse.tableNumber == null or commonResponse.tableNumber == '' and pickUpCollectionMethodPromptText == null}"
+                                                         th:text="#{checkout.modal.pickup.tab}"></div>
+
+                                                    <div class="link-text"
+                                                         th:if="${commonResponse.tableNumber == null or commonResponse.tableNumber == '' and pickUpCollectionMethodPromptText != null}"
+                                                         th:text="${pickUpCollectionMethodPromptText}"></div>
+
+                                                    <div class="link-text"
+                                                         th:if="${commonResponse.tableNumber != null and commonResponse.tableNumber != '' and pickUpCollectionMethodPromptText == null}"
+                                                         th:text="#{checkout.modal.dine_in.tab}">
+                                                    </div>
+                                                </a>
+                                            </li>
+
+
+                                        </ul>
+                                    </div>
+                                    <!--th:href="@{'/'+${commonResponse.businessId}+'/cart/checkout-view?modeClicked=DELIVER'}"-->
+                                    <div class="col-12 pl-0">
+                                        <div class="os-section-inner border-radius-6">
+                                            <form class="row" id="checkError">
+                                                <div th:class="'col-12 border-bottom ' + ${commonResponse.tableNumber ne ''? 'hide': ''}"
+                                                     th:if="${collectionMethod == 'PICK_UP'}">
+                                                    <div class="form-group"
+                                                         th:if="${pickUpSubTypes != null and not #lists.isEmpty(pickUpSubTypes)}">
+                                                        <label style="cursor: unset"
+                                                               class="font-weight-600"
+                                                               th:text="#{checkout.modal.pickup.mode.label}"></label>
+                                                        <select name="pickUpSubType" id="pickupSubtype"
+                                                                class="form-control"
+                                                                th:onchange="changeModeInCheckout([[${commonResponse.businessId}]],'PICK_UP')">
+                                                            <option th:each="pickupSubType : ${pickUpSubTypes}"
+                                                                    th:value="${pickupSubType.get('type')}"
+                                                                    th:text="${pickupSubType.get('display')}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" id="pickOrDeliveryTimeDisabled"
+                                                       th:value="${pickOrDeliveryTimeDisabled}">
+                                                <input type="hidden" id="hideShopClosedMessage"
+                                                       th:value="${hideShopClosedMessage}">
+
+
+                                                <th:block th:if="${purchaseContinueError == 'SHOP_CLOSED'}">
+                                                    <div id="pickup-delivery-disable-area"
+                                                         class="col-12 help-block help-error px-0 px-3"
+                                                         style="padding: 20px;font-weight: bold;text-align: center;">
+                                                        <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                        <span th:text="#{checkout.modal.pickup.delivery.disabled.area}"></span>
+                                                    </div>
+                                                </th:block>
+
+
+                                                <th:block th:if="${purchaseContinueError != 'SHOP_CLOSED'}">
+                                                    <div
+                                                            th:class="'col-12 ' + ${commonResponse.tableNumber ne ''? 'hide': ''}">
+                                                        <p class="font-weight-bold mb-1 mt-3" th:text="${orderNotes}"
+                                                           id="collecOrderNotes"></p>
+                                                    </div>
+
+                                                    <div th:class="'col-12 col-sm-6 col-lg-12 form-group ' + ${commonResponse.tableNumber ne ''? 'hide': ''}">
+                                                        <label style="cursor: unset"
+                                                               th:text="${collectionMessage}"></label>
+                                                        <input type="text" class="form-control" id="deliveryPickerName"
+                                                               th:value="${deliveryPickerName}">
+                                                    </div>
+                                                </th:block>
+
+                                                <th:block
+                                                        th:if="${collectionMethod == 'DELIVER' && purchaseContinueError != 'SHOP_CLOSED'}">
+                                                    <div class="col-12 col-sm-6 col-lg-12 form-group"
+                                                         th:if="${!isDeliveryAddressDisabled}">
+                                                        <label style="cursor: unset"
+                                                               th:text="#{checkout.modal.tab.delivery.preferred.area.label}">
+                                                        </label>
+                                                        <div class="input-group icon-on-form">
+                                                            <input type="text" class="form-control"
+                                                                   th:placeholder="#{checkout.modal.tab.delivery.preferred.area.placeholder.label}"
+                                                                   th:onclick="newOrOldLocationSelectionModal()"
+                                                                   autocomplete="off"
+                                                                   th:value="${preferredStore}" readonly
+                                                                   id="preferredStore">
+                                                            <button class="btn btn-light " type="button"
+                                                                    th:onclick="newOrOldLocationSelectionModal()"
+                                                                    s>
+                                                                <img class="mr-0"
+                                                                     th:src="@{/assets/img/ico-edit-dark.svg}"
+                                                                     alt="">
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12 text-danger px-0"
+                                                         th:if="${deliveryErrorCode != null}">
+                                                        <label class="mb-1"
+                                                               th:text="${deliveryErrorMessage}"
+                                                               id="deliveryErrorMessageId"></label>
+                                                    </div>
+                                                </th:block>
+
+                                                <div th:if="${!pickOrDeliveryTimeDisabled}"
+                                                     th:class="'col-12 form-group ' + ${commonResponse.tableNumber ne ''? 'hide': ''}">
+                                                    <label class="mb-2" style="cursor: unset"
+                                                           th:text="${orderReadyNotes}">
+                                                    </label>
+                                                    <p th:if="${collectionMethod != 'DELIVER'}">
+                                                        <label style="font-size:13px; cursor: unset">
+                                                            <span th:text="#{checkout.modal.order.notes.message.one}"></span>
+                                                            <span
+                                                                    th:text="${pickupOrderPrepTimeMins}"></span>
+                                                            <span th:text="#{checkout.modal.order.notes.message.two}"></span>
+                                                        </label>
+                                                    </p>
+
+                                                    <div class="form-row">
+                                                        <div class="col">
+                                                            <input type="hidden" id="earliestDate"
+                                                                   th:value="${earliestDate}">
+                                                            <div id="date-picker-container">
+                                                                <input type="text" name="date"
+                                                                       id="deliveryTime"
+                                                                       readonly
+                                                                       th:value="${deliveryTime}"
+                                                                       class="datepicker form-control mt-2"
+                                                                       autocomplete="off">
+                                                            </div>
+                                                        </div>
+
+                                                        <input type="hidden" id="tableOrderingTime"
+                                                               value="">
+                                                        <input type="hidden" id="earliestTimeForDineIn"
+                                                               th:value="${earliestTimeForDineIn}">
+                                                        <input type="hidden" id="earliestDateForDineIn"
+                                                               th:value="${earliestDateForDineIn}">
+                                                        <input type="hidden" id="openHoursNavigation"
+                                                               th:value="${openHoursNavigation}">
+                                                        <input type="hidden"
+                                                               id="deliveryTimeOnlyDisabledOrderDeliveryTime"
+                                                               th:value="${deliveryTimeOnlyDisabledOrderDeliveryTime}">
+                                                        <div class="col"
+                                                             th:if="${deliveryTimeOnlyDisabled eq false}">
+                                                            <select id="selectDeliveryHour"
+                                                                    class="form-control mt-2"
+                                                                    name="selectDeliveryHour"
+                                                                    onchange="callCheckBill(this.id)">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <th:block th:if="${pickOrDeliveryTimeDisabled}">
+                                                    <input type="hidden" name="date" id="deliveryTime"
+                                                           th:value="${deliveryTime}">
+                                                    <select id="selectDeliveryHour"
+                                                            class="form-control mt-2 hide"
+                                                            name="selectDeliveryHour">
+                                                    </select>
+                                                </th:block>
+
+
+                                                <th:block th:if="${purchaseContinueError != 'SHOP_CLOSED'}">
+                                                    <div class="col-12 col-sm-6 col-lg-12 form-group"
+                                                         th:if="${collectionMethod == 'PICK_UP' && isPickUpNoteDisabled == false}">
+                                                        <label style="cursor: unset"
+                                                               th:text="#{checkout_pickup.modal.tab.pick_up_notes.instructions.label}">
+                                                        </label>
+                                                        <textarea class="form-control" rows="3"
+                                                                  id="special_instruction"
+                                                                  th:text="${special_instruction}"></textarea>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-6 col-lg-12 form-group"
+                                                         th:if="${collectionMethod == 'DELIVER' && isDeliveryNoteDisabled == false}">
+
+                                                        <label style="cursor: unset"
+                                                               th:text="#{checkout.modal.tab.delivery.instructions.label}">
+                                                        </label>
+
+                                                        <textarea class="form-control" rows="3"
+                                                                  id="special_instruction"
+                                                                  th:text="${special_instruction}"></textarea>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-6 col-lg-12 form-group"
+                                                         th:each="specialNote : ${specialNotes}"
+                                                         th:if="${collectionMethod == 'DELIVER' and specialNote.appearance == 'DELIVERY_NOTES'}">
+
+                                                        <label>
+                                                            <span th:text="${specialNote.label}"> </span>
+                                                            <span style="color:red;font-weight:bold"
+                                                                  th:if="${specialNote.mandatory == true}"> *</span>
+                                                        </label>
+
+                                                        <textarea
+                                                                class="form-control text-area-control dynamic-field"
+                                                                rows="3"
+                                                                th:placeholder="${specialNote.hint}"
+                                                                th:if="${specialNote.uiType == 'TEXT_INPUT'}"
+                                                                th:name="${specialNote.label}"
+                                                                th:id="${specialNote.id}"
+                                                                th:required="${specialNote.mandatory == true} ? 'required' : null"></textarea>
+                                                        <select id="dynamic-opt"
+                                                                th:if="${specialNote.uiType == 'TEXT_DROP_DOWN'}"
+                                                                class="form-control dynamic-field"
+                                                                th:name="${specialNote.label}"
+                                                                th:id="${specialNote.id}"
+                                                                th:required="${specialNote.mandatory == true} ? 'required' : null">
+                                                            <option value=""
+                                                                    th:if="${specialNote.mandatory == false}">
+                                                                Select Notes
+                                                            </option>
+                                                            <option th:each="option:${specialNote.options}"
+                                                                    th:value="${option.value}"
+                                                                    th:text="${option.value}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-12 col-sm-6 col-lg-12 form-group"
+                                                         th:each="specialNote : ${specialNotes}"
+                                                         th:if="${collectionMethod == 'PICK_UP' and specialNote.appearance == 'PICKUP_NOTES'}">
+                                                        <label>
+                                                            <span th:text="${specialNote.label}"> </span>
+                                                            <span style="color:red;font-weight:bold"
+                                                                  th:if="${specialNote.mandatory == true}"> *</span>
+                                                        </label>
+                                                        <textarea
+                                                                class="form-control text-area-control dynamic-field"
+                                                                rows="3"
+                                                                th:placeholder="${specialNote.hint}"
+                                                                th:id="${specialNote.id}"
+                                                                th:name="${specialNote.label}"
+                                                                th:if="${specialNote.uiType == 'TEXT_INPUT'}"
+                                                                th:required="${specialNote.mandatory == true} ? 'required' : null"></textarea>
+                                                        <select th:id="${specialNote.id}"
+                                                                th:name="${specialNote.label}"
+                                                                th:if="${specialNote.uiType == 'TEXT_DROP_DOWN'}"
+                                                                class="form-control dynamic-field"
+                                                                th:required="${specialNote.mandatory == true} ? 'required' : null">
+                                                            <option value=""
+                                                                    th:if="${specialNote.mandatory == false}">
+                                                                Select Notes
+                                                            </option>
+                                                            <option th:each="option:${specialNote.options}"
+                                                                    th:value="${option.value}"
+                                                                    th:text="${option.value}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+
+                                                </th:block>
+
+                                                <!-- Note: Error Block-->
+                                                <div id="error-view-preferred-area"
+                                                     class="col-12 help-block help-error px-0 px-3 hide">
+                                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                    <span th:text="#{checkout.modal.validation.message.preferred.area}"></span>
+                                                </div>
+
+                                                <div id="error-view-collector-name"
+                                                     class="col-12 help-block help-error px-0 px-3 hide">
+                                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                    <span th:text="#{checkout.modal.validation.message.collector.name}"></span>
+                                                </div>
+
+                                                <div id="error-view-business-close"
+                                                     class="col-12 help-block help-error px-0 px-3 hide">
+                                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                    <span th:text="#{checkout.modal.validation.message.business.close}"></span>
+                                                </div>
+
+                                                <div id="error-view-delivery-address"
+                                                     class="col-12 help-block help-error px-0 px-3 hide">
+                                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                    <span th:text="#{checkout.modal.validation.message.delivery.address.invalid}"></span>
+                                                </div>
+
+                                                <div id="error-view-delivery-setup-failed"
+                                                     class="col-12 help-block help-error px-0 px-3 hide">
+                                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                    <span th:text="#{checkout.modal.validation.message.delivery.setup.failed}"></span>
+                                                </div>
+
+                                                <div id="error-view-delivery-date-time"
+                                                     class="col-12 help-block help-error px-0 px-3 hide">
+                                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                    <span th:text="#{checkout.modal.validation.message.pickup.time.one}"></span>
+                                                    <span th:value="${pickupOrderPrepTimeMins}"></span>
+                                                    <span th:text="#{checkout.modal.validation.message.pickup.time.two}"></span>
+                                                </div>
+
+                                                <div id="error-view-delivery-time"
+                                                     class="col-12 help-block help-error px-0 px-3 hide">
+                                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                    <span th:text="#{checkout.modal.validation.message.delivery.time}"></span>
+                                                </div>
+
+                                                <div id="error-general-view"
+                                                     class="col-12 help-block help-error px-0 px-3 hide">
+                                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i>
+                                                    <span th:text="#{error.fill.required.information}"
+                                                          id="comm_err"></span>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="orderModelContainer" class="modal fade alert-modal" tabindex="-1" role="dialog"
+             aria-hidden="true" data-keyboard="false" data-backdrop="static"
+             th:fragment="order_modal"
+             th:classappend="${errorDetails != null or errorDetails != ''? '' : 'success-modal'}">
+            <div class="modal-dialog" role="document">
+                <div id="order_loaded_view" class="hide">
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <div th:replace="checkout/location_modal :: location_modal"></div>
+
+
+
+    <div class="modal fade" id="addressSelectionModal" tabindex="-1" role="dialog" aria-hidden="false">
+        <div class="modal-dialog modal-md general-modal" role="document">
+            <div class="modal-content" id="addressSelectionModalBody">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade product-list-modal next-best-time-modal" tabindex="-1" id="${showBestPopUpMessageId}"
+         role="dialog" aria-modal="true" style="display: block;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container p-0 m-0 w-100 banner-link">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="icon-modal-time d-flex justify-content-center">
+                                    <div class="icon-container">
+                                        <img th:src="@{/assets/img/ico-time-passed-alt.svg}" width="55" height="55">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <h5 class="page-title mb-2" th:text="#{checkout.earliest.modal.time.passed.label}"></h5>
+                                <p class="text-muted" th:text="#{checkout.earliest.modal.time.passed.message}"></p>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="bg-light p-2 border-radius-6 d-flex align-items-center justify-content-center border">
+                                    <div class="mr-3">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="link-text">
+                      <span class="font-weight-600" id="bestPopUpMessageId"
+                            th:text="${earliestPickerMessage}">
+                      </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer footer-area">
+                    <button class="btn btn-primary w-100 m-0" data-dismiss="modal"
+                            th:text="#{checkout.earliest.modal.time.passed.button.okay}">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="footer :: footer"></div>
+
+    <div id="rewardModalContainer" class="modal fade view-rewards"
+         tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+         th:fragment="product_modal" xmlns:th="http://www.thymeleaf.org">
+        <div class="modal-dialog modal-md general-modal" role="document">
+
+            <div id="overlay" style="display:none;">
+                <div class="spinner"></div>
+                <br/>
+                <span th:text="#{loading.spinner.quick.cart.modal}"></span>
+            </div>
+
+            <div id="eligible_reward_body">
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function () {
+        $(".nav_menu li").removeClass("active");
+    });
+
+
+
+
+    </script>
+
+
+    <script th:inline="javascript">
+        $( document ).ready(function() {
+            var isGoogleAnalyticsEnabled = $("#isGoogleAnalyticsEnabled").val();
+
+            if(isGoogleAnalyticsEnabled === "true") {
+                var apiKey = document.getElementById("apiKey").value;
+                var authDomain = document.getElementById("authDomain").value;
+                var databaseURL = document.getElementById("databaseURL").value;
+                var projectId = document.getElementById("projectId").value;
+                var storageBucket = document.getElementById("storageBucket").value;
+                var messagingSenderId = document.getElementById("messagingSenderId").value;
+                var appId = document.getElementById("appId").value;
+                var measurementId = document.getElementById("measurementId").value;
+
+                let isAnalyticsCookieDisabled = document.getElementById("isAnalyticsCookieDisabled").value;
+
+                if (isAnalyticsCookieDisabled === "true") {
+                    window['ga-disable-' + measurementId] = true;
+                }
+
+                var firebaseConfig = {
+                    apiKey: apiKey,
+                    authDomain: authDomain,
+                    databaseURL: databaseURL,
+                    projectId: projectId,
+                    storageBucket: storageBucket,
+                    messagingSenderId: messagingSenderId,
+                    appId: appId,
+                    measurementId: measurementId
+                };
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+            }
+    });
+
+
+
+
+
+    </script>
+
+
+    </body>
+</div>
+</html>
+

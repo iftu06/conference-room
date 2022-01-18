@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/purchases.min.css"],"names":[],"mappings":"AAAA,aAAa,WAAW,CAAC,mBAAY,CAAZ,YAAY,CAAC,2BAAoB,CAApB,4BAAoB,CAApB,qBAAqB,CAAC,uBAAuB,UAAU,CAAC,0BAA0B,eAAe","file":"purchases.min.css","sourcesContent":[".custom-card{height:100%;display:flex;flex-direction:column}.custom-card .card-top{width:100%}.custom-card .card-footer{margin:auto 0 0}"]}

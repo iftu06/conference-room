@@ -1,0 +1,311 @@
+<div id="loaded-view" class="modal-content" xmlns:th="http://www.thymeleaf.org">
+
+    <script th:inline="javascript">
+        var themeColor = /*[[${appTheme.themeColor}]]*/ 'default';
+        var themeColoredFont = themeColor;
+        if (themeColor === '#ffffff'){
+            themeColoredFont = '#000000';
+            $('.placeholder-cart').addClass('white-theme-support');
+            $('.btn-primary').addClass('btn-white-theme-primary').removeClass('btn-primary');
+            $('#mini-product-placeholder-black').removeClass('hide');
+            $('#mini-product-placeholder-white').addClass('hide');
+        }else {
+            $('#mini-product-placeholder-white').removeClass('hide');
+            $('#mini-product-placeholder-black').addClass('hide');
+        }
+        console.log(themeColor);
+        $('.btn-primary').css('background-color', themeColor);
+        $('.btn-primary').css('border-color', themeColor);
+    </script>
+
+    <div class="modal-content">
+        <div class="modal-header justify-content-center">
+                    <h5 class="modal-title font-weight-bold">
+                        <span th:text="#{purchase.history.template.page.order.item.list.label}"></span>
+                    </h5>
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class = "col-12 col-lg-8 mb-3 mb-md-0">
+                    <div class="item-list-purchases border p-3">
+                        <div class = "row item" th:each="purchase : ${purchaseHistoryEntry.getPurchaseEntries()}">
+                            <div class="col-12 col-md-9 px-0">
+                                <div class="card-horizontal">
+                                    <img th:if="${purchase.getImage() != null}" class="cart-img" th:src="${purchase.getImage()}" alt="">
+                                    <img th:if="${purchase.getImage() == null}" id="mini-product-placeholder-black"
+                                         class="cart-img placeholder-cart hide" th:src="@{/assets/img/placeholder-product-mini.svg}" th:alt="alter">
+                                    <img th:if="${purchase.getImage() == null}" id="mini-product-placeholder-white"
+                                         class="cart-img placeholder-cart hide" th:src="@{/assets/img/product-placeholder-mini-white.svg}" th:alt="alter">
+                                    <div class="card-body px-3 py-0">
+                                        <h6 class="page-title mb-2 text-truncate">
+                                            <p th:text="${purchase.getProductName()}"></p>
+                                        </h6>
+                                        <ul class="simple-list small">
+                                            <th:block th:each="addOns : ${purchase.getAddOns()}">
+                                                        <li><span th:text="${addOns.getAddOnName()}"></span></li>
+                                                    </th:block>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "col-12 col-md-3 d-flex flex-row flex-md-column align-items-end justify-content-between px-0">
+                                <label class = "font-size-large mb-0 mb-md-2"
+                                       th:text="${currency
+                                       + #numbers.formatDecimal(purchase.getItemPrice(), 1,'COMMA', 2, 'POINT')
+                                       + ' x' + ' '
+                                       + #numbers.formatDecimal(purchase.getCount(), 1,'COMMA', 0, 'POINT')}">
+
+
+                                </label>
+                                <!--<button data-toggle="modal" data-target="#quick-cart" th:if="${isPurchaseAllowed}"
+                                    class="btn ml-auto" th:classappend="${appTheme.themeColor == '#ffffff' ? 'btn-white-theme-primary':'btn-primary'}"
+                                        th:text="#{add_to_cart.modal.add_to_cart.button.label}">
+
+                                </button>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class = "col-12 col-lg-4 pl-3 pl-md-2">
+                    <div class = "receipt-section mb-3">
+                        <div class = "row receipt-header">
+                            <div class = "col-12">
+                                <h5 class = "mb-1" th:text="#{purchase.history.page.order.on}"><strong
+                                        th:text="|${purchaseHistoryEntry.getTransactionId()}|"></strong>
+                                </h5>
+                                <small><span th:text="${purchasedDate}"></span></small>
+                            </div>
+                            <div class = "col-12">
+                                <th:block th:with="expr_result = ${purchaseHistoryEntry.getPurchaseStatus()}">
+                                    <th:block th:if="${expr_result == 'PENDING'}">
+                                                <div class = "status-label placed mt-2 w-75">
+                                                    <div class = "dot ml-2 mr-2"></div>
+                                                    <div class = "status" th:text="#{purchase.history.page.status.order.placed}"></div>
+                                                </div>
+                                            </th:block>
+                                    <th:block th:if="${expr_result == 'COMPLETED'}">
+                                        <div class="status-label completed mt-2 w-75">
+                                            <div class = "dot ml-2 mr-2"></div>
+                                            <div class = "status" th:text="#{purchase.history.page.status.order.completed}"></div>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${expr_result == 'ACCEPTED'}">
+                                        <div class="status-label accepted mt-2 w-75">
+                                            <div class = "dot ml-2 mr-2"></div>
+                                            <div class="status" th:text="#{purchase.history.page.status.order.accepted}"></div>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${expr_result == 'READY'}">
+                                        <div class="status-label ready mt-2 w-75">
+                                            <div class = "dot ml-2 mr-2"></div>
+                                            <div class="status" th:text="#{purchase.history.page.status.order.ready}"></div>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${expr_result == 'REJECTED'}">
+                                        <div class="status-label rejected mt-2 w-75">
+                                            <div class = "dot ml-2 mr-2"></div>
+                                            <div class="status" th:text="#{purchase.history.page.status.order.rejected}">
+                                            </div>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${expr_result == 'VOID'}">
+                                        <div class="status-label void mt-2 w-75">
+                                            <div class = "dot ml-2 mr-2"></div>
+                                            <div class="status"
+                                                 th:text="#{purchase.history.page.status.order.void}"></div>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:unless="${expr_result}">
+                                        <div class="order-unknown  mt-2 w-75">
+                                            <div class = "dot ml-2 mr-2"></div>
+                                            <div class="status" th:text="#{purchase.history.page.status.order.unknown}"></div>
+                                        </div>
+                                    </th:block>
+                                </th:block>
+                            </div>
+                        </div>
+                        <div class = "row receipt-body">
+                            <div class = "col-12 pt-4">
+                                <div class="form-group w-100 mb-2">
+                                    <div class="row m-0 w-100">
+                                        <div class="col-6 d-flex align-items-center px-0">
+                                            <label class="mb-2 mb-md-0"
+                                                   th:text="#{purchase.history.template.order.total.products}">
+                                            </label>
+                                        </div>
+                                        <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                            <label class="mb-2 mb-md-0"><span th:text="${#numbers.formatDecimal(totalProduct, 1,'COMMA', 0, 'POINT')}"></span></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group w-100 mb-2"
+                                             th:if="${serviceCharge != null && serviceCharge != '0.00'}">
+                                            <div class="row m-0 w-100">
+                                                <div class="col-6 d-flex align-items-center px-0">
+                                                    <label class="mb-2 mb-md-0"
+                                                           th:text="#{purchase.history.template.order.service.charge}">
+                                                    </label>
+                                                </div>
+                                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                                    <label class="mb-2 mb-md-0"
+                                                        th:text="${currency + serviceCharge}">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                <div class="form-group w-100 mb-2"
+                                             th:if="${subTotal != null && subTotal != '0.00'}">
+                                            <div class="row m-0 w-100">
+                                                <div class="col-6 d-flex align-items-center px-0">
+                                                    <label class="mb-2 mb-md-0"
+                                                           th:text="#{purchase.history.template.order.sub.total}">
+                                                    </label>
+                                                </div>
+                                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                                    <label class="mb-2 mb-md-0"
+                                                           th:text="${currency + #numbers.formatDecimal(subTotal, 1,'COMMA', 2, 'POINT')}">
+
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                <div class="form-group w-100 mb-2"
+                                             th:if="${taxAmount != null && taxAmount != '0.00'}">
+                                    <div class="row m-0 w-100" th:each="tax: ${taxSummary}">
+                                        <div th:if="${!tax.includedInPrice}" class="col-6 d-flex align-items-center px-0">
+                                            <label class="mb-2 mb-md-0" th:text="${tax.name}+' (' +${tax.rate} +'%)'"></label>
+                                        </div>
+                                        <div th:if="${!tax.includedInPrice}" class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                            <label class="mb-2 mb-md-0"><span
+                                                    th:text="${currency
+                                                    + #numbers.formatDecimal(tax.amount, 1,'COMMA', 2, 'POINT')}"></span></label>
+
+                                        </div>
+                                        <div th:if="${tax.includedInPrice}" class="col-10 md-flex align-items-center px-0">
+                                            <label class="mb-2 mb-md-0" th:text="${tax.name}+' (' +${tax.rate} +'%)'"></label>
+                                            <span class="inclusive-tax-label" th:text="'('+#{checkout.modal.inclusive.tax.label}
+                                            +' '+${currency
+                                            + #numbers.formatDecimal(tax.amount, 1,'COMMA', 2, 'POINT')}+')'"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group w-100 mb-2"
+                                             th:if="${promoDiscount != null && promoDiscount != '0.00'}">
+                                            <div class="row m-0 w-100">
+                                                <div class="col-6 d-flex align-items-center px-0">
+                                                    <label class="mb-2 mb-md-0"
+                                                        th:text="#{purchase.history.template.order.promo.discount}">
+                                                    </label>
+                                                </div>
+                                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                                    <label class="mb-2 mb-md-0"
+                                                           th:text="${currency + #numbers.formatDecimal(promoDiscount, 1,'COMMA', 2, 'POINT')}">
+
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                <div class="form-group w-100 mb-2"
+                                             th:if="${tipAmount != null && tipAmount!= '0.00'}">
+                                            <div class="row m-0 w-100">
+                                                <div class="col-6 d-flex align-items-center px-0">
+                                                    <label class="mb-2 mb-md-0"
+                                                           th:text="#{purchase.history.template.order.tip.amount}">
+                                                    </label>
+                                                </div>
+                                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                                    <label class="mb-2 mb-md-0"
+                                                           th:text="${currency + #numbers.formatDecimal(tipAmount, 1,'COMMA', 2, 'POINT')}">
+
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group w-100 mb-2"
+                                             th:if="${purchaseHistoryEntry.getCollectionMethod() == 'DELIVER'}">
+                                            <div class="row m-0 w-100">
+                                                <div class="col-6 d-flex align-items-center px-0">
+                                                    <label class="mb-2 mb-md-0"
+                                                           th:text="#{purchase.history.template.order.delivery.charge}">
+                                                    </label>
+                                                </div>
+                                                <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                                    <label class="mb-2 mb-md-0"
+                                                           th:text="${currency + #numbers.formatDecimal(purchaseHistoryEntry.getDeliveryCharge().getAmount(),
+                                                        1,'COMMA', 2, 'POINT')}">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <div class = "row receipt-footer">
+                            <div class = "col-12 mt-auto">
+                                <div class="form-group w-100 mb-0 border-top">
+                                    <div class="row m-0 w-100 total-area pt-3">
+                                        <div class="col-6 d-flex align-items-center px-0">
+                                            <h6 class="mb-0  font-weight-bold">
+                                                <span th:text="#{purchase.history.template.order.grand.total}"></span>
+                                            </h6>
+                                        </div>
+                                        <div class="col-6 d-flex align-items-center justify-content-end pr-0 pl-0 pl-md-3">
+                                            <h6 class="mb-0  font-weight-bold" th:text="${currency
+                                            + #numbers.formatDecimal(totalAmount, 1,'COMMA', 2, 'POINT')}">
+
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "repeat-order-secion">
+                        <div class = "row h-100">
+                            <div class = "col-12">
+                                <button type="button" class="btn btn-secondary w-100 h-100" th:if="${isPurchaseAllowed}"
+                                        th:onclick="confirmReorderModal([[${purchaseHistoryEntry}]])" data-dismiss="modal"
+                                        aria-label="Close" th:text="#{purchase.history.page.order.reorder.label}">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="col-2 col-md-2 ">
+            <p th:text="${currency + purchase.getItemPrice()}"></p>
+        </div>-->
+    </div>
+
+<!--    <div class="modal-footer justify-content-between" th:if="${isContactStoreEnabled}">-->
+<!--        <p> <strong><span th:text="#{purchase.history.page.order.iam.here.message}"></span></strong></p>-->
+<!--        <a th:href="'tel:'+${contactNumbers}" class="btn btn-primary"-->
+<!--                th:text="#{purchase.history.page.order.call.us}">-->
+<!--        </a>-->
+<!--    </div>-->
+
+    <div class="modal-footer justify-content-between" th:if="${showImHere}">
+
+
+        <p th:if="${isContactStoreEnabled}"> <strong><span th:text="#{purchase.history.page.order.iam.here.message}"></span></strong></p>
+        <a th:if="${isContactStoreEnabled}" th:href="'tel:'+${contactNumbers}" class="btn btn-primary"
+           th:text="#{purchase.history.page.order.call.us}">
+        </a>
+
+
+        <p th:unless="${isContactStoreEnabled}"> <strong><span th:text="#{purchase.history.page.order.iam.here.message}"></span></strong></p>
+        <button th:unless="${isContactStoreEnabled}" type="button" class="btn btn-primary" th:onclick="insertCurbOrderCustomerInfo([[${purchaseHistoryEntry.transactionId}]])"
+                th:text="#{purchase.history.page.order.iam.here}" th:classappend="${appTheme.themeColor == '#ffffff' ? 'btn-white-theme-primary':'btn-primary'}">
+        </button>
+    </div>
+
+
+
+</div>

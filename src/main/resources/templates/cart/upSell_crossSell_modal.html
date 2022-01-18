@@ -1,0 +1,103 @@
+
+    <div class="modal-content" id="upselling-modal" xmlns:th="http://www.thymeleaf.org">
+            <div class="modal-header justify-content-center">
+                <th:block th:if="${isExistProductRecommendation}">
+                    <h5 class="modal-title font-weight-bold"
+                        th:if="${titleMessage == null or titleMessage== '' and recommendedType == 'UP_SELL'}"
+                        th:text="#{recommendation.upsell.header}"></h5>
+                    <h5 class="modal-title font-weight-bold"
+                        th:if="${titleMessage == null or titleMessage== '' and recommendedType == 'CROSS_SELL'}"
+                        th:text="#{recommendation.cross_sell.header}"></h5>
+                    <h5 class="modal-title font-weight-bold"
+                        th:if="${titleMessage != null and titleMessage != ''}"
+                        th:text="${titleMessage}"></h5>
+                </th:block>
+
+                <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row category-listing list-view m-0 p-0 category-listing-upsell">
+                    <input type="hidden" id="isRecommendedProductsEmpty" th:value="${isRecommendedProductsEmpty}">
+                    <div class="card-responsive-wrapper" th:each="product : ${recommendedProducts}">
+                        <div class="card card-item h-100">
+                            <div class = "card-img-product">
+                                <img class="w-100" th:src="${product.images[0]}"
+                                     th:alt="alter" th:if="${product.images != null and not #lists.isEmpty(product.images)}">
+
+                                <h5 th:if="${product.images == null or #lists.isEmpty(product.images)}"
+                                    class="card-title-placeholder" th:text="${product.name}">
+                                </h5>
+                                <img th:if="${product.images == null or #lists.isEmpty(product.images)}" id="mini-product-placeholder-black"
+                                     class="placeholder-img list-view placeholder-cart" th:classappend="${commonResponse.appTheme.themeColor == '#ffffff' ? '' :'hide'}"
+                                     th:src="@{/assets/img/placeholder-product-mini.svg}" th:alt="alter">
+                                <img th:if="${product.images == null or #lists.isEmpty(product.images)}" id="mini-product-placeholder-white"
+                                     class="placeholder-img list-view placeholder-cart" th:classappend="${commonResponse.appTheme.themeColor == '#ffffff' ? 'hide' :''}"
+                                     th:src="@{/assets/img/product-placeholder-mini-white.svg}" th:alt="alter">
+                            </div>
+                            <div class="card-body product-content">
+                                <div class = "product-detail">
+                                    <h5 class="card-title" th:text="${product.name}" th:if="${product.variants.name == '[base]'}" style="max-width:273px"></h5>
+                                    <h5 class="card-title" th:text="${product.name+'-'+product.variants.types[0].name}" th:if="${product.variants.name != '[base]'}" style="max-width:273px"></h5>
+                                    <a href="product_detail.html" class="card-text"
+                                       th:href="@{'/'+${businessId}+'/products/'+'/'+${product.productId}}"
+                                       th:text="#{add_to_cart.card.more.details}"/>
+                                    </a>
+                                </div>
+                                <div class="card-footer px-0">
+                                    <div class = "d-flex align-items-end">
+                                        <p th:text="${appTheme.currency}+${#numbers.formatDecimal(product.displayPrice, 1,'COMMA', 2, 'POINT')}"
+                                           th:if="${!appTheme.productPricingDisabled}"/>
+
+                                    </div>
+                                    <!--th:onclick="getProductForCrossSell([[${upCrossProductId}]],[[${product.productId}]],[[${variantKey}]])"-->
+<!--                                    th:onclick="getProduct([[${product.productId}]])"-->
+                                    <button data-toggle="modal"
+                                            th:if="${commonResponse.purchaseAllowed and !product.emptyAddOnAndVariant}"
+                                            th:classappend="|${product.allVariantOutOfStock ? disabled : ''}
+                                            ${commonResponse.appTheme.productPricingDisabled ? 'w-100' : ''}  |"
+                                            th:disabled="${product.allVariantOutOfStock}"
+                                            th:onclick="getProductForUpSellCrossSell([[${product.productId}]],
+                                                        [[${product.variants.types[0].sku}]],[[${variantKey}]],
+                                                        [[${upCrossProductId}]],[[${isUpsell}]])"
+                                            class="btn btn-primary ml-auto"
+                                            th:text="${product.allVariantOutOfStock} ? #{add_to_cart.modal.stock_out.button.label} : #{add_to_cart.modal.add_to_cart.button.label}">
+                                    </button>
+
+                                    <button data-toggle="modal"
+                                            th:if="${commonResponse.purchaseAllowed and product.emptyAddOnAndVariant}"
+                                            th:classappend="|${product.allVariantOutOfStock ? disabled : ''}
+                                            ${commonResponse.appTheme.productPricingDisabled ? 'w-100' : ''}  |"
+                                            th:disabled="${product.allVariantOutOfStock}"
+                                            th:onclick="addItemForCrossSell([[${product.productId}]],
+                                            [[${product.variants.types[0].sku}]],[[${variantKey}]],
+                                            [[${upCrossProductId}]],[[${isUpsell}]])"
+                                            class="btn btn-primary ml-auto"
+                                            th:text="${product.allVariantOutOfStock} ? #{add_to_cart.modal.stock_out.button.label} : #{add_to_cart.modal.add_to_cart.button.label}">
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="recommendedType" th:value="${recommendedType}">
+            <input type="hidden" id="upsellPurchase">
+
+            <div class="modal-footer">
+                <div class = "row m-0 w-100">
+                    <div class = "col-12 px-0 d-flex">
+                        <button data-toggle="modal"
+                                data-dismiss="modal"
+                                class="btn btn-primary w-100"
+                                th:text="#{recommendation.modal.skip.button.label}">
+<!--                                th:onclick="skipRecommendation([[${recommendedForProduct.productId}]],[[${recommendedForProduct.crossSellEnabled}]],[[${commonResponse.businessId}]],'add')">-->
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <clipPath id="clip-ico-inbox-empty">
+      <rect width="1080" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="ico-inbox-empty" clip-path="url(#clip-ico-inbox-empty)">
+    <circle id="Ellipse_5" data-name="Ellipse 5" cx="510" cy="510" r="510" transform="translate(30 30)" fill="#6c757d" opacity="0.07"/>
+    <g id="Group_6" data-name="Group 6" transform="translate(0.347 0.801)">
+      <path id="Icon_awesome-inbox" data-name="Icon awesome-inbox" d="M530.669,172.6,431.916,24.471A44.853,44.853,0,0,0,394.6,4.5H143.6a44.85,44.85,0,0,0-37.317,19.971L7.533,172.6A44.845,44.845,0,0,0,0,197.48V318.451A44.85,44.85,0,0,0,44.85,363.3h448.5a44.85,44.85,0,0,0,44.85-44.85V197.48a44.844,44.844,0,0,0-7.533-24.878ZM151.6,64.3H386.6l79.733,119.6H351.326l-29.9,59.8H216.776l-29.9-59.8H71.871L151.6,64.3Z" transform="translate(231.653 303.699)"/>
+      <circle id="Ellipse_7" data-name="Ellipse 7" cx="97" cy="97" r="97" transform="translate(654 577)" fill="#fff"/>
+      <text id="_0" data-name="0" transform="translate(726 709)" font-size="90" font-family="OpenSans-Bold, Open Sans" font-weight="700"><tspan x="0" y="0">0</tspan></text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="500" viewBox="0 0 500 500">
+  <defs>
+    <clipPath id="clip-no-delivery-ico">
+      <rect width="500" height="500"/>
+    </clipPath>
+  </defs>
+  <g id="no-delivery-ico" clip-path="url(#clip-no-delivery-ico)">
+    <g id="Group_20" data-name="Group 20" transform="translate(-1298.651 -439.652)">
+      <circle id="Ellipse_1" data-name="Ellipse 1" cx="250" cy="250" r="250" transform="translate(1298.651 439.651)" fill="#f6f6f6"/>
+      <g id="Group_19" data-name="Group 19" transform="translate(1406.481 575.564)">
+        <path id="Icon_awesome-truck" data-name="Icon awesome-truck" d="M278.137,156.9h-7.132V108.714a21.4,21.4,0,0,0-6.285-15.11L220.192,49.075a21.4,21.4,0,0,0-15.11-6.285H185.425V21.4A21.4,21.4,0,0,0,164.03,0H21.4A21.4,21.4,0,0,0,0,21.4V164.03a21.4,21.4,0,0,0,21.4,21.4h7.132a42.79,42.79,0,0,0,85.581,0h57.054a42.79,42.79,0,0,0,85.581,0h21.4a7.153,7.153,0,0,0,7.132-7.132V164.03A7.153,7.153,0,0,0,278.137,156.9ZM71.317,206.82a21.4,21.4,0,1,1,21.4-21.4A21.4,21.4,0,0,1,71.317,206.82Zm142.634,0a21.4,21.4,0,1,1,21.4-21.4A21.4,21.4,0,0,1,213.952,206.82Zm35.659-92.712H185.425V64.186h19.657l44.529,44.529Z" transform="translate(0 0)" fill="#b5b5b5"/>
+        <path id="Icon_material-do-not-disturb" data-name="Icon material-do-not-disturb" d="M66.379,3a63.379,63.379,0,1,0,63.379,63.379A63.4,63.4,0,0,0,66.379,3Zm0,114.082a50.689,50.689,0,0,1-50.7-50.7A50.084,50.084,0,0,1,26.387,35.323l71.048,71.048A50.084,50.084,0,0,1,66.379,117.082Zm39.992-19.647L35.323,26.387A50.084,50.084,0,0,1,66.379,15.676a50.689,50.689,0,0,1,50.7,50.7A50.084,50.084,0,0,1,106.371,97.435Z" transform="translate(23.135 14.359)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

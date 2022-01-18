@@ -1,0 +1,23 @@
+<form th:fragment="roomFragment"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <input type="hidden" class="form-control" id="room_id">
+
+    <div class="form-group">
+        <label for="room_name" class="font-weight-600">Room Name</label>
+        <input type="text" class="form-control" id="room_name" aria-describedby="emailHelp"
+               placeholder="Enter Room Name">
+        <small id="room_name_h" class="form-text text-muted">Enter Room Name</small>
+    </div>
+    <div class="form-group">
+        <label for="room_num" class="font-weight-600">Room Number</label>
+        <input type="text" class="form-control" id="room_num" aria-describedby="emailHelp"
+               placeholder="Enter Room Number">
+        <small id="room_num_h" class="form-text text-muted">Enter Room Number</small>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="saveRoom()">Submit</button>
+</form>
+
+
+

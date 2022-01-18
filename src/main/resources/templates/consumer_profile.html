@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: header"></head>
+
+<style>
+    #snackbar-addons{
+        display: none !important;
+    }
+    .nav-container-2{
+        display: none !important;
+    }
+    nav{
+        height: 100px !important;
+    }
+    nav hr{
+        display: none !important;
+    }
+
+    .theme-color-font {
+      font-size: 18px;
+      color: var(--primary-theme-color);
+      font-weight:bold
+    }
+
+    .contactSupport a{
+        color: var(--primary-theme-color);
+        text-decoration: none;
+    }
+
+
+
+
+</style>
+
+<body>
+
+<div th:replace="navigation :: navigation"></div>
+
+<main role="main" class="wrapper wrapper-alt">
+    <div class="container page-section-home page-section-profile pt-4 pt-md-5">
+        <div class="row">
+
+
+            <div class="col-12">
+                <h4 class="font-weight-bold mb-4" th:text="#{consumer.profile.account.setting.title}">
+                </h4>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-3">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-card">
+                            <ul class="nav nav-tabs d-block border-0" role="tablist" id="tablist">
+                                <li class="account-detail active" id="account-detail-li"
+                                    onclick="changeTab(this, '#account-details')">
+                                    <a href="#account-details" aria-controls="account-details" role="tab"
+                                       data-toggle="tab">
+                                        <i class="fa fa-id-card"></i><span
+                                            class="settings-titles"
+                                            th:text="#{consumer.profile.account.details.label}"></span>
+                                    </a>
+                                </li>
+
+                                <li class="account-detail" id="change-password-li"
+                                    onclick="changeTab(this, '#change-password')">
+                                    <a href="#change-password" aria-controls="change-password" data-toggle="tab">
+                                        <i class="fa fa-lock"></i><span class="settings-titles"
+                                                                        th:text="#{consumer.profile.account.change.password.label}"></span>
+                                    </a>
+                                </li>
+
+                                <li class="account-detail" id="edit-address-li"
+                                    onclick="changeTab(this, '#edit-address')">
+                                    <a href="#edit-address" aria-controls="edit-address" role="tab" data-toggle="tab">
+                                        <i class="fa fa-map-marker-alt"></i><span
+                                            class="settings-titles"
+                                            th:text="#{consumer.profile.account.edit.addresses.label}"></span>
+                                    </a>
+                                </li>
+
+                                <li class="account-detail" id="email-notifications-li"
+                                    onclick="changeTab(this, '#email-notifications')">
+                                    <a href="#email-notifications" aria-controls="email-notifications" role="tab"
+                                       data-toggle="tab">
+                                        <i class="fa fa-bell"></i><span
+                                            class="settings-titles"
+                                            th:text="#{consumer.profile.account.email.notifications.label}"></span>
+                                    </a>
+                                </li>
+
+                                <li class="account-detail" id="account-deactivation-li"
+                                    onclick="changeTab(this,'#account-deactivation')"
+                                    th:if="#{profile.delete.enabled} ">
+                                    <a href="#account-deactivation" aria-controls="account-deactivation" role="tab"
+                                       data-toggle="tab">
+                                        <i class="fa fa-minus-circle"> </i><span class="settings-titles"
+                                                                                 th:text="#{account.delete.modal.label}"></span></a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-9" id="setting-tabs">
+
+                <div id="account-details" class="tab-content-card">
+
+                    <div class="row mb-4 header-row">
+
+                        <div class="col-12 col-md-7">
+                            <h4 class="font-weight-600 mb-1" th:text="#{consumer.profile.account.details.label}"></h4>
+                            <p class="text-muted mb-0" th:text="#{consumer.profile.account.details.description}"></p>
+                        </div>
+
+                        <div class="col-12 col-md-5">
+                            <div class="action-btn-row hide" id="account-edit-btn-div">
+                                <button class="btn btn-outline-primary w-50 discard-btn mr-3" type="button"
+                                        th:text="#{consumer.profile.account.discard.btn}"
+                                        onclick="hideSettingbtn('#account-edit')">
+                                </button>
+                                <button class="btn btn-primary w-50 save-btn" type="button"
+                                        th:text="#{consumer.profile.account.save.btn}"
+                                        onclick="updateUserDetails()">
+                                </button>
+                            </div>
+
+                            <div class="edit-btn-row" id="account-edit-btn">
+                                <button class="btn btn-primary w-50 edit-btn" type="button"
+                                        th:text="#{consumer.profile.account.edit.btn}"
+                                        onclick="showAccountSetings('#account-edit')">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row content-row disabled" id="account-edit-body">
+                        <div class="col-12 disabled">
+                            <div class="form-group">
+                                <label class="font-weight-600"
+                                       th:text="#{consumer.profile.account.email.address.label}"></label>
+                                <div class="help-block help-error d-none" id="invalid-error">
+                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                        th:text="#{consumer.profile.email.notvalied.error}"></span>
+                                </div>
+                                <div class="help-block help-error d-none" id="empty-error">
+                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                        th:text="#{consumer.profile.email.notempty.error}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="font-weight-600"
+                                       th:text="#{consumer.profile.account.name.label}"> </label>
+                                <input type="text" class="form-control" name="firstName"
+                                       id="firstName"
+                                       onclick="hideErrorMsg('#account-name-error')">
+                                <div class="help-block help-error d-none" id="account-name-error-empty">
+                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                        th:text="#{consumer.profile.name.notempty.error}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-0">
+                                <label class="font-weight-600"
+                                       th:text="#{consumer.profile.account.mobile.number.label}"></label>
+                                <div class="input-group mb-3">
+                                <div class="input-group-text"
+                                     style="display:grid; place-items:center; width: 55px; height: 45px;
+                                        border-top-right-radius: 0px !important;
+                                        border-bottom-right-radius: 0px !important;
+                                        border-top-left-radius: 6px !important;
+                                        border-bottom-left-radius: 6px !important;" >
+                                    <div class="input-group-prepend">
+                                    </div>
+                                </div>
+
+                                <input type="text" data-number="true" class="form-control"
+                                       style="border-top-left-radius: 0px !important;
+                                            border-top-right-radius: 6px !important;
+                                            border-bottom-right-radius: 6px !important;
+                                            border-bottom-left-radius: 0px !important;"
+                                       id="msisdn">
+                                </div>
+                                <div class="help-block help-error d-none" id="invalid-error">
+                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                        th:text="#{consumer.profile.mobile.number.notvalied.error}"></span>
+                                </div>
+                                <div class="help-block help-error d-none" id="empty-msisdn-error">
+                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                        th:text="#{consumer.profile.mobile.number.notempty.error}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12" >
+                            <p class="contactSupport" style="margin-bottom: 0px;margin-top: 4px;">
+                                <small style="color:#777777;"><span
+                                        th:utext="#{rewards.mobile.number.change.contact.detail(${contactEmailId})}"></span></small>
+                            </p>
+                        </div>
+
+                        <div class="col-sm-12" id="account-birthday">
+                            <div class="form-group mb-0">
+                                <label th:text="#{sign_up.modal.birthday.label}"/></label>
+
+
+                                <div class="help-block help-error d-none" id="invalid-birthdate">
+                                    <i class="fa fa-exclamation-circle fa-lg mr-2"></i> <span
+                                        th:text="#{consumer.profile.invalid.birthdate.error}"></span>
+                                </div>
+
+                                <span id="update-profile-birthday-status"
+                                      class="input-group-addon input-status hide"
+                                      style="padding-right: 14px;">
+                                            <i class="fa fa-exclamation-circle fa-lg "></i>
+                               </span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div id="change-password" class="tab-content-card hide">
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <h4 class="font-weight-600 mb-1"
+                                th:text="#{consumer.profile.account.change.password.label}"></h4>
+                            <p class="text-muted mb-0"
+                               th:text="#{consumer.profile.account.change.password.description}"></p>
+                        </div>
+                        <div class="col-12">
+                            <div class="text-right">
+                                <button class="btn btn-primary" type="button" data-toggle="modal"
+                                        onclick="openChangePasswordModal()"
+                                        data-target="#changePassword"
+                                        th:text="#{consumer.profile.account.change.password.label}">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="edit-address" class="tab-content-card hide">
+                    <div class="row header-row">
+                        <div class="col-12 col-md-7">
+                            <h4 class="font-weight-600 mb-1"
+                                th:text="#{consumer.profile.account.edit.addresses.label}"></h4>
+                            <p class="text-muted m-0"
+                               th:text="#{consumer.profile.account.edit.addresses.description}"></p>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class="edit-btn-row hide" id="address-edit-btn-div">
+                            </div>
+                            <div class="edit-btn-row" id="address-edit-btn">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="edit-btn-text" th:value="#{consumer.profile.account.edit.btn}">
+                    <input type="hidden" id="delete-btn-text" th:value="#{consumer.profile.account.delete.btn}">
+                    <input type="hidden" id="add-btn-text" th:value="#{consumer.profile.account.add.address.label}">
+                    <div class="row content-row" id="address-edit-body">
+                        <div class="col-12 col-md-4">
+                            <a class="address-container add" data-toggle="modal" data-target="#locationModal"
+                               onclick="openLocationAddModal()">
+                                <div class="row">
+                                    <div class="col-12 text-center text-muted">
+                                        <div class="icon-container mb-3">
+                                            <i class="fas fa-plus-circle"></i>
+                                        </div>
+                                        <h5 class="font-weight-600"
+                                            th:text="#{consumer.profile.account.add.address.label}"></h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <div id="email-notifications">
+                    <div class="tab-content-card hide">
+                        <div class="row header-row">
+                            <div class="col-12 col-md-7">
+                                <h4 class="font-weight-600 mb-1" style="margin-bottom: 6px;margin-top:0px;"
+                                    th:text="#{consumer.profile.account.email.notifications.label}"></h4>
+                                <p class="text-muted m-0"
+                                   th:text="#{consumer.profile.account.email.notification.description}"></p>
+                            </div>
+                            <div class="col-12 col-md-5">
+                                <div class="edit-btn-row hide" id="email-notification-edit-btn-div">
+                                    <button class="btn btn-outline-primary w-50 discard-btn mr-3" type="button"
+                                            th:text="#{consumer.profile.account.discard.btn}"
+                                            onclick="hideSettingbtn('#email-notification-edit')">
+                                        Disacrd
+                                    </button>
+                                    <button class="btn btn-primary w-50 save-btn" type="button"
+                                            th:text="#{consumer.profile.account.save.btn}"
+                                            onclick="updateEmailNotificationPreferences()">
+                                        Save
+                                    </button>
+                                </div>
+
+                                <div class="edit-btn-row" id="email-notification-edit-btn">
+                                    <button class="btn btn-primary w-50 edit-btn" type="button"
+                                            th:text="#{consumer.profile.account.edit.btn}"
+                                            onclick="showSettingBtns('#email-notification-edit')">
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row content-row disabled" id="email-notification-edit-body">
+                            <div class="col-12">
+                                <div class="form-group mb-4">
+                                    <label class="check-container">
+                                        <span th:text="#{consumer.profile.account.send.me.promotional.email.label}"></span>
+                                        <input type="checkbox"
+                                               id="email-promotions-preference">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content-card hide">
+                        <div class="row header-row">
+                            <div class="col-12 col-md-7 mb-3"
+                            >
+                                <h4 class="font-weight-600 mb-1" style="margin-bottom: 6px;margin-top:0px;"
+                                    th:text="#{consumer.profile.account.sms.notifications.label1}"></h4>
+                                <p class="text-muted m-0"
+                                   th:text="#{consumer.profile.account.sms.notifications.label2}"></p>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <ul style="margin-bottom:0px;padding-left: 17px;padding-right: 17px;">
+                                    <li>
+                                        <div class="text-row" style="margin-bottom:20px">
+                                            <p style="margin-bottom:2px"><b
+                                                    th:text="#{consumer.profile.account.sms.notifications.opt.out}"></b>
+                                            </p>
+                                            <p style="margin:0px">Text <span class="theme-color-font">STOP</span> to
+                                                stop
+                                                receiving SMS notifications</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="text-row">
+                                            <p style="margin-bottom:2px">
+                                                <b th:text="#{consumer.profile.account.sms.notifications.request.help}">To
+                                                    Request Help</b>
+                                            </p>
+                                            <p style="margin:0px">Text <span class="theme-color-font">HELP</span> to
+                                                receive
+                                                further support</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="account-deactivation" class="tab-content-card hide">
+                    <div class="row" >
+                        <div class="col-12 mb-4">
+                            <h4 class="font-weight-600 mb-1"
+                                th:text="#{account.delete.modal.label}"></h4>
+                            <p class="text-muted m-0"
+                               th:text="#{consumer.profile.account.deactivation.description}"></p>
+                        </div>
+                        <div class="col-12">
+                            <div class="text-right">
+                                <button class="btn btn-primary" type="button" data-toggle="modal"
+                                        onclick="openDeactivateAccountModal()"
+                                        data-target="#accountDeactivation"
+                                        th:text="#{consumer.profile.account.deactivate.btn}">
+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="overlay" style="display:none;">
+        <div class="spinner"></div>
+        <br/>
+        <span th:text="#{loading.spinner.menu.tab.add.to.cart}"></span>
+    </div>
+</main>
+
+<div th:replace="footer :: footer"></div>
+
+<script th:src="@{/assets/js/consumer_profile-0.9.0-RC1.js}"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $(".nav_menu li").removeClass("active");
+        $(".main-links a").removeClass("active");
+        $("#account_setting_li").addClass('active');
+        $("#account_setting_li").css("color", themeColor);
+
+    });
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<div th:fragment="roomList"
+     xmlns:th="http://www.thymeleaf.org" id="roomList">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Room Name</th>
+                <th scope="col">Room Num</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.roomName}"></td>
+                <td th:text="${room.roomNum}"></td>
+                <td><button type="button" class="btn btn-primary" th:onclick="getRoom([[${room.roomId}]])">Edit</button></td>
+            </tr>
+        </tbody>
+
+    </table>
+
+</div>
+
+
+
+

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="63" height="63" viewBox="0 0 63 63">
+  <defs>
+    <clipPath id="clip-ico-reward-unlocked">
+      <rect width="63" height="63"/>
+    </clipPath>
+  </defs>
+  <g id="ico-reward-unlocked" clip-path="url(#clip-ico-reward-unlocked)">
+    <g id="giftbox" transform="translate(0.179 -0.242)">
+      <g id="Group_79" data-name="Group 79" transform="translate(0 0.448)">
+        <g id="Group_78" data-name="Group 78" transform="translate(0 0)">
+          <path id="Path_189" data-name="Path 189" d="M58.724,12.629H54.151A7.276,7.276,0,0,0,55.266,9.47a8.133,8.133,0,0,0-13.546-6.9L35.946,7.8a6.136,6.136,0,0,0-9.076.006L21.088,2.57a8.133,8.133,0,0,0-13.546,6.9,7.274,7.274,0,0,0,1.115,3.157H4.1a4.1,4.1,0,0,0-4.1,4.1v6.146A2.049,2.049,0,0,0,2.049,24.92H60.773a2.049,2.049,0,0,0,2.049-2.049V16.726A4.1,4.1,0,0,0,58.724,12.629Zm-33.459-.683v.683H15.628a4.033,4.033,0,0,1-1.7-7.691,3.943,3.943,0,0,1,4.412.668l6.929,6.28C25.266,11.906,25.265,11.926,25.265,11.946ZM51.2,8.926a4.15,4.15,0,0,1-4.21,3.7H37.556v-.683c0-.024,0-.048,0-.072l6.821-6.183a4.1,4.1,0,0,1,3.876-.99A3.986,3.986,0,0,1,51.2,8.926Z" transform="translate(0 -0.448)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_81" data-name="Group 81" transform="translate(4.097 29.017)">
+        <g id="Group_80" data-name="Group 80">
+          <path id="Path_190" data-name="Path 190" d="M33.391,233.291v30.045a4.1,4.1,0,0,0,4.1,4.1H56.607V233.291Z" transform="translate(-33.391 -233.291)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_83" data-name="Group 83" transform="translate(35.508 29.017)">
+        <g id="Group_82" data-name="Group 82">
+          <path id="Path_191" data-name="Path 191" d="M289.391,233.291v34.142h19.12a4.1,4.1,0,0,0,4.1-4.1V233.291Z" transform="translate(-289.391 -233.291)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

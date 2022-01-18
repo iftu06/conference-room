@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<div th:replace="header :: header" xmlns:th="http://www.thymeleaf.org"></div>
+
+
+
+<body class="no-nav" xmlns:th="http://www.thymeleaf.org">
+
+<style>
+.nav-pills .nav-item:last-child .nav-link.first-avail-btn,
+ .nav-pills .nav-item:first-child .nav-link.first-avail-btn{
+        border-top-left-radius: 6px !important;
+        border-bottom-left-radius: 6px !important;
+        border-top-right-radius: 6px !important;
+        border-bottom-right-radius: 6px !important;
+    }
+
+</style>
+
+<main role="main" class="wrapper">
+
+    <div class="container-fluid">
+        <div class="row bg-overlay banner-main-locate img-perfect-fit"
+             th:style="'background-image:url(' + ${appTheme.starterScreenBackgroundUrl} + ');'">
+            <div class="container locate-store">
+                <div class="row center-items mvh-wrapper">
+                    <div class="col-12 col-md-5">
+                        <ul class="simple-list menu-items-inline" th:if="${!commonResponse.loggedIn}">
+                            <li><a class="text-primary" href="#" data-toggle="modal"
+                                   data-target="#loginModal">
+                                <span th:text="#{change_store.modal.sign.in.link}" class="text-primary-span"></span></a>
+                            </li>
+                            <li><a href="#" data-toggle="modal" data-target="#registerModal"
+                                   onclick="hideLoginAndFetchCountryCode()">
+                                <span th:text="#{change_store.modal.register.link}"></span></a>
+                            </li>
+                        </ul>
+
+                        <div class="store-msg">
+
+                            <a th:href="'/webstore-v2/'+${commonResponse.businessId}">
+                                <img th:src="@{${commonResponse.appTheme.brandLogoUrl}}" alt="">
+                            </a>
+                            <div th:if="!(${commonResponse.appTheme.iOSAppPublishLink} == 'NO_IOS_LINK'
+                                    and ${commonResponse.appTheme.androidAppPublishLink} == 'NO_ANDROID_LINK')">
+
+                                <h1 th:text="#{home.get.app}+' ' + ${#strings.substringBefore(commonResponse.appTheme.businessName,' -')} +' '+#{home.app}"></h1>
+                                <p th:text="${appInfo.get('secondaryText').get('en')}"></p>
+                                <div class="inline-items mt-3 mt-sm-4">
+                                    <a th:href="${commonResponse.appTheme.iOSAppPublishLink}"
+                                       th:if="${commonResponse.appTheme.iOSAppPublishLink} != 'NO_IOS_LINK'">
+                                        <img th:src="@{/assets/img/appstore-download.png}" alt="">
+                                    </a>
+                                    <a th:href="${commonResponse.appTheme.androidAppPublishLink}"
+                                       th:if="${commonResponse.appTheme.androidAppPublishLink} != 'NO_ANDROID_LINK'">
+                                        <img th:src="@{/assets/img/google-play.png}" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-7">
+                        <div class="card cart-locate pb-2">
+                            <div class="card-rounded-header border-0">
+                                <p th:if="${storeListHeader != null and storeListHeader != ''}" class="page-title w-100"
+                                   th:text="${storeListHeader}"></p>
+                                <p th:if="${storeListHeader == null or storeListHeader == ''}" class="page-title w-100"
+                                   th:text="#{change_store.select.label}"></p>
+
+                                <div class="input-group icon-on-form w-100" id="searchDiv">
+                                    <input type="text" class="form-control locate-store-search" id="searchBar" placeholder="Search Store"
+                                           onkeyup="getSearchValue()">
+
+                                </div>
+
+                                <div class="inline-items locate-type justify-content-between mt-0">
+                                    <div class="inline-items locate-type w-100 border-bottom">
+                                        <ul class="nav nav-pills mb-3" id="pills-tab-store" role="tablist">
+
+                                            <li class="nav-item"
+                                                th:classappend="${businessStores.deliveryAvailable == true  ? '':'hide'}">
+                                                <a class="nav-link active" id="pills-delivery-tab-store"
+                                                   data-toggle="pill" href="#pills-delivery-store" role="tab"
+                                                   aria-controls="pills-delivery-store"
+                                                   th:classappend="${!businessStores.pickupAvailable ? 'first-avail-btn':''}"
+                                                   aria-selected="false" onclick="deliverySearchBar()">
+                                                    <i class="fas fa-shipping-fast mr-2" ></i>
+                                                    <span th:if="${deliveryCollectionMethodPromptText == null}"
+                                                          th:text="#{change_store.collection.type.delivery.label}">
+
+                                                    </span>
+
+                                                    <span th:if="${deliveryCollectionMethodPromptText != null}"
+                                                          th:text="${deliveryCollectionMethodPromptText}"></span>
+                                                </a>
+                                            </li>
+
+                                            <input type="hidden" th:value="${businessStores.pickupAvailable}">
+
+                                            <li class="nav-item"
+                                                th:classappend="${businessStores.pickupAvailable == true  ? '':'hide'}">
+                                              <a class="nav-link"
+                                                 id="pick_up_btn" data-toggle="pill" href="#pills-pickup-store"
+                                                 role="tab" aria-controls="pills-pickup-store"
+                                                 th:classappend="${!businessStores.deliveryAvailable ? 'active first-avail-btn':''}"
+                                                 aria-selected="false" onclick="pickupSearchBar()">
+                                                  <i class="fas fa-store mr-2"></i>
+                                                  <span th:if="${pickUpCollectionMethodPromptText == null}"
+                                                          th:text="#{change_store.collection.type.pick_up.label}"></span>
+                                                  <span th:if="${pickUpCollectionMethodPromptText != null}"
+                                                          th:text="${pickUpCollectionMethodPromptText}"></span>
+                                                </a>
+                                            </li>
+
+
+                                        </ul>
+                                        <a class="btn-custom btn-map text-primary mt-2 mt-sm-0 d-none"
+                                           data-toggle="modal"
+                                           data-target=".locate-modal">
+                                            <img th:src="@{/assets/img/ico-pick-map.svg}" alt="">
+                                            <span th:text="' ' + #{change_store.collection.map.label}"
+                                                  class="text-primary-span"></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" id="deliveryStoreInitial" th:value="${businessStores.deliveryStoresJson}">
+                                <input type="hidden" id="pickupStoreInitial" th:value="${businessStores.pickupStoresJson}">
+
+                                <div class="card-rounded-body pb-0 mt-0 px-0">
+                                    <div class="tab-content" id="pills-tabContent">
+
+                                        <div class="tab-pane fade show active" id="pills-delivery-store"
+                                             th:classappend="${businessStores.deliveryAvailable ? '' :'hide'}"
+                                             role="tabpanel" aria-labelledby="delivery_btn">
+                                            <h5 class="mb-4 font-weight-bold" >
+                                                <span th:text="#{change_store.collection.type.delivery.label} + ' '"
+                                                      class="text-primary-span"></span>
+
+                                                <span id="numOfDeliveryAvailableStore" th:text="#{change_store.modal.available.stores.label} + ' (' +${businessStores.numOfDeliveryStores}+ ')'">
+
+                                                </span>
+
+
+
+                                            </h5>
+
+                                            <ul class="simple-list located-list mb-0 pr-4"
+                                                th:classappend="${ isStoreListingEnable and (storeListingKey=='STATE_BASED'
+                                                        or storeListingKey=='ALPHABETICAL,STATE_BASED' ) ? '':'hide'}" id="deliveryStateList">
+
+
+                                                <li th:each="stateName : ${totalStates.get('deliveryStates')}" th:if="totalStates != null">
+                                                    <a class="nav-arrow-right"
+                                                       th:href="@{/{businessId}/state/{stateName}(businessId=${businessId},stateName=${stateName},orderMode='delivery')}">
+
+                                                        <p class="font-weight-600 mb-1"
+                                                           th:text="${stateName}"></p>
+
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+
+
+
+                                            <ul class="simple-list located-list mb-0 pr-4"
+                                                th:classappend="${ !isStoreListingEnable ? '' :'hide'}" id="deliveryStoreList">
+
+                                                <li th:each="store : ${businessStores.deliveryStores}" class="deliveryStoreAndStateList"
+                                                    th:classappend="${!store.visible ? 'hide':''}" th:id="${store.businessId}+'_dl'">
+                                                    <a href="#" class="nav-arrow-right"
+                                                       th:onclick="changeModeToDeliveryThenRedirectToHome([[${store.businessId}]],'DELIVER')">
+                                                        <p class="font-weight-600 mb-1"
+                                                           th:text="${store.storeName}"></p>
+                                                        <p th:text="${store.address}"></p>
+
+                                                    </a>
+                                                    <input type="hidden"  th:value="${store.storeName+store.address}"
+                                                           class="searchDeliveryStoreNameAndAddress">
+                                                </li>
+
+                                            </ul>
+
+
+                                            <div class = "message-container" id="deliveryUnavailable"
+                                                 th:classappend="${businessStores!= null and !businessStores.deliveryAvailable}  ? '':'hide'  ">
+                                                <div class = "mb-3 text-center">
+                                                    <img th:src="@{/assets/img/ico-no-delivery.svg}" class = "img-fluid" width="124px">
+                                                </div>
+                                                <div class = "content-msg mb-4 text-center">
+                                                    <h5 class = "page-title mb-1">Delivery Unavailable.</h5>
+                                                    <p class = "mb-0" id="deliveryUnavailableMessage">
+                                                        We can always schedule it for you. Give us a date and time.
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+
+
+                                            <input type="hidden"  th:value="${isStoreListingEnable}"
+                                                   id="isStoreListingEnable">
+                                            <input type="hidden"  th:value="${storeListingKey}"
+                                                   id="storeListingKey">
+
+                                            <input type="hidden"  th:value="${businessStores.numOfDeliveryStores}"
+                                                   id="numberOfDeliveryStores">
+
+                                            <input type="hidden"  th:value="${businessStores.numOfPickupStores}"
+                                                   id="numberOfPickupStores">
+
+                                            <input type="hidden"  th:value="${isStateListingEnable}"
+                                                   id="isStateListingEnable">
+
+
+
+
+
+
+                                    </div>
+                                        <div class="tab-pane fade" id="pills-pickup-store" role="tabpanel"
+                                             th:classappend="|${businessStores.pickupAvailable == true ? '' :'hide'} ${!businessStores.deliveryAvailable ? 'show active' :''}|"
+
+                                             aria-labelledby="pick_up_btn" th:if="${businessStores != null}">
+                                            <h5 class="mb-4 font-weight-bold" >
+                                                <span th:text="#{change_store.collection.type.pick_up.label} + ' '"
+                                                      class="text-primary-span"></span>
+                                                <span th:id="numOfPickupAvailableStore"
+                                                      th:text="#{change_store.modal.available.stores.label} + ' (' + ${businessStores.numOfPickupStores}+ ')'">
+                                                </span>
+
+                                            </h5>
+
+                                            <ul class="simple-list located-list mb-0 pr-4"
+                                                th:classappend="${ isStoreListingEnable and (storeListingKey=='STATE_BASED' or storeListingKey=='ALPHABETICAL,STATE_BASED' ) ? '':'hide'}" id="pickupStateList">
+
+
+                                                <li th:each="stateName : ${totalStates.get('pickUpStates')}">
+                                                    <a class="nav-arrow-right"
+                                                       th:href="@{/{businessId}/state/{stateName}(businessId=${businessId},stateName=${stateName},orderMode='pickup')}">
+
+                                                        <p class="font-weight-600 mb-1"
+                                                           th:text="${stateName}"></p>
+
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+
+
+                                            <ul class="simple-list located-list mb-0 pr-4"
+                                                th:classappend="${ !isStoreListingEnable ? '' :'hide'}" id="pickupStoreList">
+
+
+                                                <li th:each="store : ${businessStores.pickUpStores}" class="pickupStoreAndStateList"
+                                                    th:classappend="${!store.visible ? 'hide':''}" th:id="${store.businessId}+'_pl'">
+
+                                                    <a href="#" class="nav-arrow-right"
+                                                       th:onclick="getPickupSubTypeOrRedirectToHome([[${store.businessId}]],[[${store.pickUpSubTypeAvailable}]])">
+                                                        <p class="font-weight-600 mb-1"
+                                                           th:text="${store.storeName}"></p>
+                                                        <p th:text="${store.address}"></p>
+                                                        <p class="text-muted"
+                                                           th:text="${store.pickupSubTypeAggregation}"></p>
+
+                                                    </a>
+                                                    <input type="hidden"  th:value="${store.storeName+store.address}"
+                                                           class="searchPickUpStoreNameAndAddress">
+
+                                                    <input type="hidden"  th:value="${orderMode}"
+                                                           id="orderMode">
+
+                                                </li>
+
+                                            </ul>
+
+                                            <div class="message-container" id="pickupUnavailable"
+                                                 th:classappend="${businessStores!= null and !businessStores.pickupAvailable}  ? '':'hide' ">
+                                                <div class="mb-3 text-center">
+                                                    <img th:src="@{/assets/img/ico-no-pickup.svg}" class="img-fluid"
+                                                         width="124px">
+                                                </div>
+                                                <div class="content-msg mb-4 text-center">
+                                                    <h5 class="page-title mb-1">Pickup Unavailable.</h5>
+                                                    <p class="mb-0" id="pickupUnavailableMessage">We can always schedule it for you. Give us a date
+                                                        and time.</p>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="signup_signin :: signup_signin"></div>
+
+
+<!--    <div th:replace="pickup_subtype_modal :: pickup-subtype-modal"></div>-->
+
+<div id="pickupSubTypeModalContainer"
+     class="modal fade pickupModeModal" tabindex="-1" role="dialog" aria-hidden="true"
+     xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog modal-md">
+        <div id="overlay" style="display:none;">
+            <div class="spinner"></div>
+            <br/>
+            <span th:text="#{loading.spinner.locate.store}"></span>
+        </div>
+
+        <div id="pickupSubTypeModal">
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script th:src="@{/assets/js/app-0.3.0-RC1.js}"></script>
+<script th:src="@{/assets/js/util-0.7.0-RC1.min.js}"></script>
+<script th:src="@{/assets/js/registration-0.3.2-RC1.min.js}"></script>
+<script th:src="@{/assets/js/store-0.10.0-RC1.js}"></script>
+
+
+<script th:inline="javascript">
+
+        /*<![CDATA[*/
+
+        var themeColor = /*[[${appTheme.themeColor}]]*/ 'default';
+        var businessId = /*[[${commonResponse.businessId}]]*/ 'default';
+        var themeColoredFont = themeColor;
+        if (themeColor === '#ffffff'){
+            themeColoredFont = '#000000';
+            $('.nav-link').addClass('white-theme-support');
+            // $('.btn-primary').addClass('white-theme-support');
+            $('.btn-primary').addClass('btn-white-theme-primary').removeClass('btn-primary');
+        }
+        $('.text-primary-span').css('color', themeColoredFont);
+        $('.change-pick').css("color", themeColor);
+        $('.owl-nav button ').css('background-color', themeColor);
+        $('.product-no-img').css("background-color", themeColor);
+        document.documentElement.style.setProperty('--main-theme-color', themeColoredFont);
+        document.documentElement.style.setProperty('--primary-theme-color', themeColor);
+
+        /*]]>*/
+
+
+
+</script>
+
+</body>
+</html>

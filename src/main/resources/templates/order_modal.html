@@ -1,0 +1,387 @@
+
+
+<style>
+      .success-modal .modal-header h5 {
+        font-weight: bold;
+        font-size: 20px;
+        margin-top: 12px;
+        margin-bottom: 0px;
+      }
+      .success-modal .order-info-row {
+        margin-bottom: 1rem;
+      }
+      .success-modal .order-info-row label {
+        font-weight: 600;
+      }
+      .success-modal .order-info-row:last-child {
+        margin-bottom: 0;
+      }
+      .success-modal .points-section {
+        padding-bottom: 1.5rem;
+        padding-left: .5rem;
+        padding-right: .5rem;
+      }
+      .points-section .card {
+        box-shadow: 0px 1px 4px rgba(0,0,0,0.2);
+      }
+      .points-section .card .icon-container-points {
+          width: 22%;
+          display: flex;
+          align-items: center;
+          justify-content:start;
+      }
+      .points-section .card .main-content {
+          width:78%;
+          text-align: left;
+      }
+      .points-section .card .points-title {
+        font-size: 18px;
+        color: #D8B709;
+      }
+
+      @media(max-width:576px){
+        .success-modal .points-section {
+          padding-bottom: 0;
+        }
+        .points-section .card .icon-container-points {
+          width: 100%;
+          justify-content:center;
+        }
+        .points-section .card .main-content {
+            width:100%;
+            text-align: center;
+            margin-top: 12px;
+        }
+        .success-modal .order-store-location {
+          font-size: 15px;
+        }
+      }
+
+
+    .row-content-rewards-error i {
+            font-size: 15px;
+        }
+    .row-content-rewards-error .btn span {
+            font-weight: 600;
+        }
+    @media (max-width:576px){
+        .row-content-rewards-error p.text-muted {
+            font-size: 15px;
+            }
+        }
+
+
+    /* Curbisde Insutrctions */
+        .curbside-inst-container {
+            padding-bottom: 1.5rem;
+            padding-left: .5rem;
+            padding-right: .5rem;
+        }
+        .curbside-inst-container .card .instruction-title {
+            font-size: 18px;
+            color: var(--primary-theme-color);
+            margin-bottom: 15px;
+        }
+        .curbside-inst-container .card .main-content .text-muted {
+            font-size: 16px;
+            padding-left: 0px;
+            list-style: none;
+            counter-reset: circle-counter;
+        }
+        .curbside-inst-container .card .main-content .text-muted li {
+            margin-bottom: 15px;
+            counter-increment: circle-counter;
+            display: flex;
+            align-items: flex-start;
+        }
+        .curbside-inst-container .card .main-content .text-muted li span {
+            margin-top: -1px;
+        }
+        .curbside-inst-container .card .main-content .text-muted li::marker {
+            font-weight: bold;
+        }
+        .curbside-inst-container .card .main-content .text-muted li:last-child {
+            margin-bottom: 0px;
+        }
+        .curbside-inst-container .card .main-content .text-muted li:before {
+            content: counter(circle-counter);
+            background-color: #ececec;
+            width: 24px;
+            height: 24px;
+            border-radius: 63%;
+            display: inline-block;
+            font-size: 12px;
+            color: #6c757d;
+            text-align: center;
+            margin-right: 12px;
+            position: relative;
+            top: 0px;
+            display: flex;
+            padding: 12px;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+        }
+        @media (max-width: 576px){
+            .curbside-inst-container .card .main-content .text-muted {
+                font-size: 15px;
+            }
+        }
+
+
+
+        #order_loaded_view .modal-body {
+            max-height: 564px;
+        }
+
+        #order_loaded_view .modal-footer {
+            box-shadow: 0px 1px 4px rgb(0 0 0 / 20%);
+            z-index: 20;
+        }
+
+        @media (max-width: 1200px) {
+            #order_loaded_view .modal-body {
+                max-height: 445px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            #order_loaded_view .modal-body {
+                max-height: 50vh;
+            }
+        }
+
+        @media (max-width: 360px) {
+            #order_loaded_view .modal-body {
+                max-height: 48vh;
+            }
+        }
+
+        @media (max-width: 320px) {
+            #order_loaded_view .modal-body {
+                max-height: 37vh;
+            }
+        }
+
+</style>
+
+<input type="hidden" id="errorDetails" th:value="${errorDetails}" xmlns:th="http://www.thymeleaf.org">
+
+<div id="order_loaded_view" class="modal fade alert-modal success-modal" tabindex="-1" role="dialog"
+     data-backdrop="static" xmlns:th="http://www.thymeleaf.org" th:if="${errorDetails == null}">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content">
+
+            <input type="hidden" id="transactionId" th:value="${checkoutData.transactionId}">
+
+            <div class="modal-header">
+                <img th:src="@{/assets/img/ico-success-tick-new.svg}" alt="" width="80" height="80">
+                <h5 th:if="${customPayLaterThankYouMessage != null and customPayLaterThankYouMessage != ''}"
+                    th:text="${customPayLaterThankYouMessage}"></h5>
+                <h5 th:if="${customPayLaterThankYouMessage == null or customPayLaterThankYouMessage == ''}"
+                    th:text="#{checkout_success.order.modal.thanks_message.label}"></h5>
+            </div>
+
+            <div class="modal-body p-0">
+
+                <div class="row m-0">
+
+                    <div class="col-12 px-0" th:if="${isOrderDeliverLevelDisplay}">
+                        <div class="text-center p-4 order-store-location">
+                            <p class="m-0 text-muted hide" id="pickup_header_msg" th:text="#{checkout_success.modal.order.pickup.message}"></p>
+                            <p class="m-0 text-muted hide" id="delivery_header_msg" th:text="#{checkout_success.modal.order.delivery.message}" ></p>
+                            <p class="font-weight-bold mt-1 mb-0 " id="pickup_content_msg" th:text="${checkoutData.address}"></p>
+                            <!--                            <p class="font-weight-bold mt-1 mb-0 hide" id="delivery_content_msg" th:text="${checkoutData.address}"></p>-->
+                        </div>
+                    </div>
+
+                    <div class="col-12 px-0 pb-4">
+                        <div class="px-2 py-4 bg-light">
+                            <div class="row mx-0 order-info-row">
+                                <div class="col-6">
+                                    <label class="m-0 text-muted"
+                                           th:text="#{checkout_success.order.modal.order.number.label}"></label>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <label class="m-0" th:text="${checkoutData.orderNumber}"></label>
+                                </div>
+                            </div>
+                            <div class="row mx-0 order-info-row">
+                                <div class="col-6">
+                                    <label class="m-0 text-muted"
+                                           th:text="#{checkout_success.modal.order_id.label}"></label>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <label class="m-0" th:text="'#'+${checkoutData.transactionId}"></label>
+                                </div>
+                            </div>
+                            <div class="row mx-0 order-info-row">
+                                <div class="col-6">
+                                    <label class="m-0 text-muted"
+                                           th:text="#{checkout_success.modal.order.total.label}"></label>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <label class="m-0"
+                                           th:text="${appTheme.currency}+${#numbers.formatDecimal(checkoutData.total, 1,'COMMA', 2, 'POINT')}"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12"
+                         th:if="${message != null}">
+                        <div class="curbside-inst-container">
+                            <div class="card p-4 border-radius-6" >
+                                <div class="row m-0 row-content-instructions">
+                                    <div class="main-content" >
+                                        <p class="instruction-title">
+                                            <strong th:text="${title}"></strong>
+                                        </p>
+                                        <p><span th:utext="${message}"></span> </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12" id="curbside-instructions"
+                         th:if="${pickupSubtypeInstructions != null and pickupSubtypeInstructions != ''}">
+                        <div class="curbside-inst-container">
+                            <div class="card p-4 border-radius-6" id="subtype-instruction">
+                                <div class="row m-0 row-content-instructions" id="curbside-togo-content-div">
+                                    <div class="main-content" id="curbside-togo-content">
+                                        <p class="instruction-title">
+                                            <strong th:text="${pickupSubtypeTitle}+' '+#{collection.subtype.picker.curbeside.instruction.second}"
+                                                    id="subtype-header"></strong>
+                                        </p>
+                                        <ol class="text-muted m-0">
+                                            <li th:each="pickupSubtypeInstruction : ${pickupSubtypeInstructions}">
+                                                <span th:utext="${pickupSubtypeInstruction}"></span>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12" id="reward-point-paylater"
+                         th:if="${commonResponse.appTheme.rewardsIntegrationEnabled and
+                         commonResponse.loggedIn and isCustomerEnrolledForRewards}">
+                        <div class="text-center points-section">
+                            <div class="card p-4 border-radius-6">
+                                <div class="row m-0 hide" id="reward-success-content">
+                                    <div class="icon-container-points">
+                                        <img th:src="@{/assets/img/ico-loyalty-points.svg}" alt="" width="65"
+                                             height="65">
+                                    </div>
+                                    <div class="main-content">
+                                        <p class="points-title m-0">
+                                            <b>
+                                                <span id="rewardsSuccessTitle"></span>
+                                            </b>
+                                        </p>
+                                        <p class="text-muted m-0" id="rewardPara"
+                                           th:if="${rewardsPayLaterSuccessText != null and rewardsPayLaterSuccessText != ''}"
+                                           th:text="${rewardsPayLaterSuccessText}"/>
+                                        <p class="text-muted m-0" id="rewardPara"
+                                           th:if="${rewardsPayLaterSuccessText == null or rewardsPayLaterSuccessText == ''}"
+                                           th:text="#{rewards.checkout.pay.later.success.message.value}">
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row m-0 row-content-rewards-error reward-spinner"
+                                     id="loding-reward-content" >
+                                    <div class="col-12 px-0">
+                                        <i class='fa fa-spinner fa-spin'></i><span
+                                            th:text="'  '+#{rewards.checkout.success.loading.message}"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="row m-0 row-content-rewards-error hide" id="error-rewards-content">
+                                    <div class="col-12">
+                                        <p class="text-muted m-0" th:text="#{rewards.checkout.error.message.value}"/>
+                                        <button class="btn btn-outline-primary mt-3 px-3"
+                                                onclick="loadPaylaterRewardContent()">
+                                            <i class="fas fa-sync-alt mr-1"></i>
+                                            <span th:text="#{rewards.checkout.retry.button.text}"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row m-0 w-100">
+                    <div class="col-12 px-0 d-block d-md-flex">
+                        <a class="btn w-100  mb-2 mb-md-0" th:href="@{'/'+${businessId}}"
+                           th:classappend="${(appTheme.themeColor == '#ffffff' ? ' btn-white-theme-primary':' btn-primary')
+                                              + (!commonResponse.guestUser ? ' mr-3':'')}">
+                            <span th:text="#{checkout_success.modal.order.view.order.continue.button}"></span>
+                        </a>
+
+                        <a th:href="@{'/'+${businessId}+'/purchase-history?correlationId='+${checkoutData.transactionId}}"
+                           class="btn btn-outline-secondary w-100"
+                           th:if="${!commonResponse.guestUser}">
+                            <span th:text="#{checkout_success.modal.order.view.order.button}"></span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="order_loaded_view" class="modal fade out-of-stock-modal" th:if="${errorDetails != null}"
+     style="padding-right: 0px!important;" xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body pb-0">
+                <div class="container p-0 m-0 w-100">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex align-items-center w-100 justify-content-evenly">
+                                <div class="icon-container" style="width: 100px;height: 100px;border:1px solid red">
+                                    <i class="fas fa-exclamation-triangle text-danger"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center mt-4" id="common_err_body">
+                            <h5 class="page-title mb-2 text-danger"  th:text="#{general.error.header.label}"></h5>
+                            <p class="text-muted mb-0 initial_hide"  th:text="#{general.error.body.msg}" th:if="${errorDetails == null}"></p>
+                            <p class="text-muted mb-2 initial_hide" th:if="${errorDetails != null}" th:text="${errorDetails}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer footer-area">
+                <button class="btn btn-primary w-100 m-0" data-dismiss="modal"
+                        th:text="#{error.modal.btn}"></button>
+            </div>
+        </div>
+    </div>
+</div>

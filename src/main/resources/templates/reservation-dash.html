@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header"></head>
+
+
+<style>
+        .special-notes-container {
+            position:relative;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            top: 0;
+            display: none;
+        }
+        .special-notes-container .specialText {
+            font-size: 16px;
+        }
+        .special-notes-container .specialText a{
+            font-weight: bold;
+            text-decoration: underline;
+            color: #ffffff;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-word;
+            word-break: break-word;
+        }
+        .special-note-active .special-notes-container {
+            display: block;
+        }
+        .banner-custom-width {
+            z-index: 1;
+        }
+        .banner-carousel-area {
+            width: 100%;
+        }
+
+        .special-note-active .banner-main {
+            height: calc(100vh - 216px);
+        }
+
+        .special-note-active .banner-custom-width {
+            height: 100%;
+            align-items: center;
+        }
+
+        @media (min-width: 1200px) {
+            .special-notes-container .container-fluid {
+                width: calc(100% - 150px);
+            }
+        }
+
+        @media (max-width: 1400px) and (min-width: 576px) {
+            .special-notes-container .container-fluid {
+                width: calc(100% - 50px);
+            }
+        }
+
+        @media (max-width:992px) {
+            .special-note-active .banner-main {
+                height: calc(100vh - 188px);
+            }
+        }
+
+        @media (max-width:576px) {
+            .special-note-active .banner-main {
+                height: calc(100vh - 184px);
+                min-height: unset;
+            }
+            .special-notes-container .specialText {
+                font-size: 14px;
+            }
+            .banner-custom-width {
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
+            .banner-main {
+                flex-direction: column;
+                justify-content: flex-start;
+                padding:0;
+            }
+            .banner-content.mb-5 {
+                margin-bottom: 16px !important;
+            }
+            .banner-main .banner-content h1 {
+                margin-bottom: 4px;
+            }
+        }
+
+        @media (max-width:350px) {
+            .special-note-active .banner-main {
+                height: auto;
+            }
+            .special-notes-container {
+                margin-bottom: 24px;
+            }
+            .special-note-active .banner-custom-width {
+                padding-bottom: 24px;
+            }
+        }
+
+        @media (orientation: landscape) and (max-width: 850px) {
+            .special-note-active .banner-main {
+                height: auto;
+            }
+            .banner-custom-width {
+                padding-bottom: 24px;
+            }
+        }
+
+
+
+
+
+</style>
+
+<body class="nav-active">
+
+<div th:replace="navigation :: navigation"></div>
+
+<main role="main" class="wrapper">
+    <div class="container page-section-home">
+        <div class="row mx-0">
+            <div class="col-12">
+                <div class="row">
+                    <div class="card col-5 mr-4" th:each="dashBoardView:${dashBoardViews}">
+                        <div class="card-header" th:text="${dashBoardView.roomName}"></div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Presided By</th>
+                                    <th scope="col">Participants</th>
+                                    <th scope="col">Start</th>
+                                    <th scope="col">End</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="reserveRoom : ${dashBoardView.reserveRoomDtos}">
+                                    <td th:text="${reserveRoom.event.eventTitle}"></td>
+                                    <td th:text="${reserveRoom.event.hostBy}"></td>
+                                    <td th:text="${reserveRoom.event.participants}"></td>
+                                    <td th:text="${reserveRoom.startHour}"></td>
+                                    <td th:text="${reserveRoom.endHour}"></td>
+                                </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div class="card-footer">Footer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</main>
+
+<!--&lt;!&ndash; footer &ndash;&gt;-->
+
+<div th:replace="footer :: footer"></div>
+
+</body>
+</html>

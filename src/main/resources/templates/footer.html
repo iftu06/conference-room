@@ -1,0 +1,189 @@
+
+
+<div th:fragment="footer" xmlns:th="http://www.thymeleaf.org">
+
+    <!-- Sign Up Modal -->
+
+    <div th:replace="signup_signin :: signup_signin"></div>
+
+
+
+
+
+    <div class="modal fade" id="notification-modal" tabindex="-1" role="dialog" aria-hidden="false">
+        <div class="modal-dialog general-modal" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title font-weight-bold" id="notification-title"></h5>
+                    <button type="button" class="close custom" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class = "content mb-0">
+                        <p class = "mb-0" id="notification-message" style="font-size:13px"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class = "row m-0 w-100">
+                        <div class = "col-12 px-0 d-flex">
+                            <a  class="btn btn-primary w-100"
+                                id="notification-action-button">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="curbside_order_confirm" tabindex="-1" role="dialog" aria-hidden="false">
+        <div class="modal-dialog modal-md general-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-transparent">
+                </div>
+                <div class="modal-body address-select-body px-4 pt-0">
+                    <div class = "row m-0 align-items-center">
+                        <div class = "col-12 px-0 text-center">
+                            <div class = "img-container">
+                                <img class = "img-fluid" height = "100" width = "100" th:src = "@{/assets/img/ico-success-small.svg}">
+                            </div>
+                        </div>
+                        <div class = "col-12 px-0">
+                            <div class = "content mt-4 text-center">
+<!--                                <h3 class = "font-weight-bold">Sit tight ! We're Coming.</h3>-->
+                                <p class = "mb-0 font-size-large" id="customer-arrived-success-message"
+                                    th:text="#{curbside.modal.customer.success.message.title}">
+                                </p>
+                            </div>
+                        </div>
+                        <div class = "col-12 px-0 mt-4 text-center">
+                            <a href = "#" class = "btn btn-primary px-5 py-2 font-size-large"
+                               id="customer-arrived-success-button" th:text="#{curbside.modal.customer.success.button.label}">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer bg-secondary">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <a class="navbar-brand h-100 d-flex align-items-center" >
+                        <img class="footer-logo"  >
+                    </a>
+                </div>
+                <div class="col-12 col-md-9 d-flex flex-column justify-content-center">
+                    <ul class="footer-links nav_menu_footer" >
+                        <li id="home_footer_li">
+                            <a>
+                                Home
+                            </a>
+                        </li>
+                        <li id="menu_footer_li">
+
+                            <a>
+                                Menu
+                            </a>
+                        </li>
+
+
+
+                    </ul>
+
+                    <ul class="footer-links">
+                        <li><small
+                                th:text=" ' ' + #{footer.brand.power.by.label} + ' ' + #{footer.brand.name}">
+                            <span th:text="#{footer.brand.name}"></span></small></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> <!-- cdn library should be used -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<!--    <script th:src="@{/assets/js/popper.min.js}"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+<!--    <script th:src="@{/assets/js/owl.carousel.min.js}"></script>-->
+    <script th:src="@{/assets/js/app-0.3.0-RC1.js}"></script>
+    <script th:src="@{/assets/js/moment.min.js}"></script>
+
+    <script th:inline="javascript">
+        var themeColor = '#808000';
+        var themeColoredFont = themeColor;
+
+        document.documentElement.style.setProperty('--theme-background-color', themeColor);
+        $('#product-placeholder-black').addClass('hide');
+        $('#product-placeholder-white').removeClass('hide');
+        $('#mini-product-placeholder-white-disabled').removeClass('hide');
+        $('#mini-product-placeholder-white-failed').removeClass('hide');
+        $('#mini-product-placeholder-black-disabled').addClass('hide');
+        $('#mini-product-placeholder-black-failed').addClass('hide');
+
+
+        $('.change-pick').css("color", themeColoredFont);
+        $('#sign-title').css("color", themeColoredFont);
+
+        document.documentElement.style.setProperty('--main-theme-color', themeColor);
+        document.documentElement.style.setProperty('--primary-theme-color', themeColor);
+
+        /*]]>*/
+
+
+        var active = localStorage.getItem("active");
+        if(active){
+            $(".nav_menu li").removeClass("active");
+            $("#"+active).addClass('active');
+            $("#"+active).css("color", themeColoredFont);
+        }
+
+        $(".nav_menu li").on("click", function() {
+            $(".nav_menu li").removeClass("active");
+            $(this).addClass("active");
+            localStorage.setItem("active",$(this).attr('id'));
+        });
+
+        $(".category").on("click", function() {
+            localStorage.setItem("active","menu_li");
+        });
+
+        $(".navbar-brand").on("click", function() {
+            localStorage.setItem("active","home_li");
+        });
+
+        $(".nav_menu_footer li").on("click", function() {
+            $(".nav_menu li").removeClass("active");
+            var footer_menu_id = $(this).attr('id');
+            if(footer_menu_id == 'home_footer_li'){
+                 localStorage.setItem("active",'home_li');
+            }else if(footer_menu_id == 'menu_footer_li'){
+                localStorage.setItem("active",'menu_li');
+            }else if(footer_menu_id == 'inbox_footer_li'){
+                 localStorage.setItem("active",'inbox_li');
+            }else if(footer_menu_id == 'about_us_footer_li'){
+                localStorage.setItem("active",'about_li');
+            }else if(footer_menu_id == 'contact_footer_li'){
+                localStorage.setItem("active",'contact_li');
+            }
+        });
+
+
+
+
+
+</script>
+
+</div>

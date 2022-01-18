@@ -1,0 +1,65 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="checkout_hidden_input">
+    <input type="hidden" id="rewardsTitleHidden" th:if="${rewardsPayLaterSuccessTitle != null and rewardsPayLaterSuccessTitle != ''}"
+           th:value="${rewardsPayLaterSuccessTitle}">
+
+    <input type="hidden" id="rewardsTitleHidden" th:if="${rewardsPayLaterSuccessTitle == null or rewardsPayLaterSuccessTitle == ''}"
+           th:value="#{rewards.checkout.pay.later.success.title.text}">
+
+    <input type="hidden" id="rewardsIntegrationEnabled" th:value="${commonResponse.appTheme.rewardsIntegrationEnabled}">
+    <input type="hidden" id="rewardsPointsRetrievalWaitTime" th:value="${rewardsPointsRetrievalWaitTime}">
+    <input type="hidden" id="rewardsProvider" th:value="${rewardsProvider}">
+    <input id="isLoggedIn" type="hidden" th:value="${commonResponse.loggedIn}">
+
+    <input type="hidden" id="isCustomTippingInputDisabled"/>
+    <input type="hidden" id="tipSelectionPromptDisplay" th:value="${tipSelectionPromptDisplay}"/>
+    <input type="hidden" id="isTippingEnabled" th:value="${commonResponse.appTheme.isTippingEnabled()}"/>
+    <input type="hidden" id="deliveryTimeForValidation">
+    <input type="hidden" id="isPickupTimeDisabled" th:value="${isPickUpTimeDisabled}">
+    <input type="hidden" id="isDeliveryTimeDisabled" th:value="${isDeliveryTimeDisabled}">
+    <input type="hidden" id="isPickupTime" th:value="${isPickUpTimeDisabled}">
+    <input type="hidden" id="selectDeliveryHourInp" value="00:00 AM" th:if="${isDeliveryTimeDisabled == 'true'}">
+    <input type="hidden" id="purchaseContinueError" th:value="${purchaseContinueError}">
+    <input type="hidden" id="presetDateValue" th:value="${presetDateValue}">
+    <input type="hidden" id="presetTimeValue" th:value="${presetTimeValue}">
+    <input type="hidden" id="isDeliveryTimeOnlyDisabled" th:value="${deliveryTimeOnlyDisabled}">
+    <input type="hidden" id="errorDetails" th:value="${errorDetails}">
+
+    <input type="hidden" id="deliveryLocationMinimumOrderAmountPartOne"
+           th:value="#{delivery_location_picker.modal.delivery_area.minimum.order.error.button}">
+    <input type="hidden" id="deliveryChargeNotePartOne"
+           th:value="#{delivery_location_picker.modal.delivery.charge.message.one}">
+    <input type="hidden" id="deliveryChargeNotePartTwo"
+           th:value="'{deliveryCity}'+' '+ #{delivery_location_picker.modal.delivery.charge.message.two}">
+    <input type="hidden" id="deliveryChargeNotePartThree"
+           th:value="#{delivery_location_picker.modal.delivery.charge.message.three}">
+    <input type="hidden" id="deliveryChargeNotePartFour"
+           th:value="#{delivery_location_picker.modal.delivery.charge.message.four}">
+    <input type="hidden" id="deliverySupportedRange"
+           th:value="${commonResponse.appTheme.deliverySupportedRange}">
+
+    <input type="hidden" id="yearsLabel"
+           th:value="#{checkout_pickup.modal.tab.pick_up_time_year}">
+    <input type="hidden" id="monthsLabel"
+           th:value="#{checkout_pickup.modal.tab.pick_up_time_month}">
+    <input type="hidden" id="daysLabel"
+           th:value="#{checkout_pickup.modal.tab.pick_up_time_day}">
+    <input type="hidden" id="hoursLabel"
+           th:value="#{checkout_pickup.modal.tab.pick_up_time_hour}">
+    <input type="hidden" id="minituesLabel"
+           th:value="#{checkout_pickup.modal.tab.pick_up_time_minute}">
+    <input type="hidden" id="seperatorLabel"
+           th:value="#{checkout_pickup.modal.tab.pick_up_time_separator}">
+    <input type="hidden" id="confirmBtnText"
+           th:value="#{delivery_location_picker.modal.delivery_area.note.button}">
+    <input type="hidden" id="deliveryCountriesJsonStr"
+           th:value="${deliveryCountriesJsonStr}">
+    <input type="hidden" id="paymentMethod" >
+    <input type="hidden" id="isDeliveryAddressDisabled" th:value="${isDeliveryAddressDisabled}">
+    <input type="hidden" id="businessDomain" th:value="${commonResponse.appTheme.businessDomain}">
+    <input type="hidden" id="isCustomerEnrolledForRewards" th:value="${isCustomerEnrolledForRewards}">
+    <input type="hidden" id="isCheckoutPage" value="true">
+    <input type="hidden" id="minRestrictedAgeAlcohol" th:value="${minRestrictedAgeAlcohol}">
+
+
+
+</div>
