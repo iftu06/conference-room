@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+
 /**
  * Created by Divineit-Iftekher on 1/16/2018.
  */
@@ -16,17 +19,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReserveRoomDto {
 
-    private Integer reservationId;
+    public Integer reservationId;
 
-    private String reservationDate;
+    @NotEmpty
+    public String reservationDate;
 
-    private String startHour;
+    public String startHour;
 
-    private String endHour;
+    public String endHour;
 
-    private EventDto event;
+    @Valid
+    public EventDto event;
 
-    private MeetingRoomDto meetingRoom;
+    @Valid
+    public MeetingRoomDto meetingRoom;
 
     public ReserveRoomDto(Reservation reservation) {
         this.reservationId = reservation.getReservationId();
@@ -43,7 +49,5 @@ public class ReserveRoomDto {
         this.meetingRoom.roomName = reservation.getMeetingRoom().getRoomName();
         this.meetingRoom.roomNum = reservation.getMeetingRoom().getRoomNum();
     }
-
-
 
 }

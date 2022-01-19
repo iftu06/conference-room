@@ -28,5 +28,9 @@ public interface ReservationRepository extends CrudRepository<Reservation, Integ
             "       t.startTime >= ?1 order by t.startTime")
     public List<Reservation> findReservableRoomByStartTimeForAdmin(LocalDateTime reservationTime);
 
+    @Query(value = "select t from Reservation t where  " +
+            "       t.startTime <= ?1 and t.endTime >= ?1 and t.meetingRoom.roomId = ?2 order by t.startTime")
+    public List<Reservation> findReservationBetween(LocalDateTime reservationTime,Integer roomId);
+
 
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public class DashBoardView {
     public String roomName;
     public List<ReserveRoomDto> reserveRoomDtos;
+    public String nextMetting;
 }

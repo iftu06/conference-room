@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by Divineit-Iftekher on 1/16/2018.
  */
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MeetingRoomDto {
 
+    @NotNull(message = "Room can not be null")
     public Integer roomId;
 
     public String roomName;

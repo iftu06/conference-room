@@ -10,7 +10,8 @@ var datePickObj = {
 }
 
 function getHours(){
-    return ["09:00 AM","09:05 AM","09:10 AM","09:15 AM"];
+    return ["09:00 AM","09:05 AM","09:10 AM","09:15 AM","09:20 AM","09:25 AM","09:30 AM","09:35 AM",
+            "09:40 AM","09:45 AM","09:50 AM","09:55 AM","10:00 AM"];
 }
 
 function isNotEmpty(field){
@@ -76,6 +77,14 @@ function newReservation(){
 
 }
 
+function hideErrorMsgInitially(){
+    $("#eventTitleErr").addClass("hide");
+    $("#preSidedByErr").addClass("hide");
+    $("#reservationDateErr").addClass("hide");
+    $("#participantErr").addClass("hide");
+    $("#roomIdErr").addClass("hide");
+}
+
 function sendRequestToReserveRoom(reservation){
 
         return new Promise(function(resolve,reject){
@@ -104,7 +113,7 @@ function sendRequestToReserveRoom(reservation){
 
 function saveReservation(){
     var reservation = newReservation();
-    console.log(reservation);
+    hideErrorMsgInitially();
 
     sendRequestToReserveRoom(reservation)
     .then(function(data){
@@ -114,9 +123,46 @@ function saveReservation(){
             .then(function(data){
                 $("#reserveRoomFragment").replaceWith(data);
                 initializeDateAndTime();
+
+
             });
+        }else{
+            var errors = data.response;
+            console.log(errors);
+            errors.forEach(function(error){
+                showError(error);
+            })
         }
     })
+}
+
+function showErrMsg(fieldId,msg){
+    $(fieldId).text(msg);
+    $(fieldId).removeClass("hide");
+}
+
+function showError(error){
+    var field = error.field;
+    var msg = error.message;
+    if(field.includes("eventTitle")){
+        showErrMsg("#eventTitleErr",msg);
+    }
+
+    if(field.includes("participants")){
+        showErrMsg("#participantErr",msg);
+    }
+
+    if(field.includes("hostBy")){
+       showErrMsg("#preSidedByErr",msg);
+    }
+
+    if(field.includes("reservationDate")){
+       showErrMsg("#reservationDateErr",msg);
+    }
+
+    if(field.includes("roomId")){
+       showErrMsg("#roomIdErr",msg);
+    }
 
 }
 

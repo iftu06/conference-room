@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import com.example.demo.ResponseContanier;
+import com.example.demo.Validate.ReservationValidator;
 import com.example.demo.dto.DashBoardView;
 import com.example.demo.dto.MeetingRoomDto;
 import com.example.demo.dto.ReserveRoomDto;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,6 +43,9 @@ public class ReservationsController {
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    ReservationValidator reservationValidator;
+
 
     @GetMapping("/reservation-view")
     public String reservation(Model model) {
@@ -52,8 +57,11 @@ public class ReservationsController {
     @PostMapping(value = "/reserve", produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Object reserveRoom(@AuthenticationPrincipal User user, @RequestBody ReserveRoomDto reserveRoomDto,
+    public Object reserveRoom(@AuthenticationPrincipal User user,
+                              @Valid @RequestBody ReserveRoomDto reserveRoomDto,
                               BindingResult bindingResult) {
+
+        reservationValidator.validate(reserveRoomDto, bindingResult);
         if (bindingResult.hasErrors()) {
             List<Error> errors = bindingResult.getFieldErrors().stream().map(error ->
                     Error.builder().field(error.getField()).message(error.getDefaultMessage()).build())
@@ -78,6 +86,15 @@ public class ReservationsController {
         return "reserveRoomFragment";
     }
 
+    private static String nextMeeting(List<ReserveRoomDto> reservationsDash){
+        if (!reservationsDash.isEmpty() && reservationsDash.size() > 1) {
+            ReserveRoomDto nextMeeting = reservationsDash.get(1);
+            if (nextMeeting != null) {
+                return nextMeeting.getEvent().getEventTitle();
+            }
+        }
+        return "";
+    }
 
     @GetMapping("/reservation-dash")
     public String reservationDashBoard(Model model, @AuthenticationPrincipal User user) {
@@ -90,9 +107,11 @@ public class ReservationsController {
         List<DashBoardView> dashBoardViews = new ArrayList<>();
         while (it.hasNext()) {
             Map.Entry<String, List<ReserveRoomDto>> entry = it.next();
+
             dashBoardViews.add(DashBoardView.builder()
                     .reserveRoomDtos(entry.getValue())
                     .roomName(entry.getKey())
+                    .nextMetting(nextMeeting(entry.getValue()))
                     .build());
         }
 

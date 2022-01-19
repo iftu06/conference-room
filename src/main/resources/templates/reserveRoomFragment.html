@@ -9,13 +9,14 @@
             <label for="eventTitle" class="font-weight-600">Event Title</label>
             <input type="text" class="form-control" id="eventTitle" aria-describedby="emailHelp"
                    placeholder="Enter Title">
-
+            <p id="eventTitleErr" class="form-text error"></p>
         </div>
 
         <div class="form-group">
             <label for="hostBy" class="font-weight-600">Presided by</label>
             <input type="text" class="form-control" id="hostBy" aria-describedby="emailHelp"
                    placeholder="Presided by">
+            <p id="preSidedByErr" class="form-text error"></p>
         </div>
 
         <div class="form-group">
@@ -26,26 +27,24 @@
                 <option value="">Select Room</option>
                 <option th:each="room : ${rooms}" th:value="${room.roomId}" th:text="${room.roomName}"></option>
             </select>
+            <p id="roomIdErr" class="form-text error"></p>
         </div>
 
 
         <div class="form-group" id="date-picker-start">
             <label for="reservationDate" class="font-weight-600">Reservation Date</label>
-            <div class="row">
-                <div class="col-12">
-                    <input type="text" name="reservationDate"
-                           id="reservationDate"
-                           class="datepicker form-control"
-                           autocomplete="off">
-                </div>
+            <input type="text" name="reservationDate"
+                   id="reservationDate"
+                   class="datepicker form-control"
+                   autocomplete="off">
 
+            <p id="reservationDateErr" class="form-text error"></p>
 
-            </div>
         </div>
 
 
         <div class="form-group" id="date-picker-end">
-            <label for="startDate" class="font-weight-600">Time</label>
+            <label for="startHour" class="font-weight-600">Time</label>
             <div class="row">
                 <div class="col-6">
                     <select id="startHour"
@@ -68,6 +67,8 @@
             <label for="participants" class="font-weight-600">Participants</label>
             <textarea class="form-control" rows="3"
                       id="participants"></textarea>
+
+            <p id="participantErr" class="form-text error"></p>
 
         </div>
 
